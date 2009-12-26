@@ -1,0 +1,4 @@
+SOURCES =  $(SRC)myudf.c 
+VERSION = 2d
+PARALLEL_NODE = none
+FLUENT_INC = D:\GS\Fluent.Inc

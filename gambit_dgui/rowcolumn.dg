@@ -1,0 +1,28 @@
+dgui deleteform all
+
+dgui createform "hello" \
+     formtitle "hello" \
+     position 0 \
+     actionbuttons \
+     "OK" "dgui hideitem \"hello\"" ""
+
+
+dgui createitem "hello" rowcolumn \
+     name "hello_rowcolumn" \
+     vertical \
+     nrow 2
+
+dgui createitem "hello_rowcolumn" label \
+     rowchar 60 \
+     labelname "Hello Label." \
+     aligncenter \
+     fontl
+
+dgui createitem "hello_rowcolumn" label \
+     rowchar 60 \
+     labelname "Hello Label." \
+     aligncenter \
+     fontl
+
+dgui showitem "hello"
+

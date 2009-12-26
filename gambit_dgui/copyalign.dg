@@ -1,0 +1,97 @@
+/ *****************************************
+/  @name:   Copy and Align utility
+/  @author: huys (huys03@gmail.com)
+/  @date:   2009/08/19
+/  @description:
+/    Combine the copy and align operation.
+/ *****************************************
+
+$_vertex_first = ""
+$_vertex_second = ""
+$_oldedge_name = ""
+$_newedge_name = ""
+
+macro start "create_newedge"
+     $_vertex_first = $vertex_origin
+     $_vertex_second = $vertex_target
+     $_oldedge_name = $oldedge_labelname
+     $_newedge_name = $newedge_labelname
+
+     if cond ($_vertex_first .eq. "")
+         dgui message "No origin vertex selected!" error
+     else
+         edge copy $_oldedge_name to $_newedge_name
+         edge align $_newedge_name translation $_vertex_first $_vertex_second 
+     endif
+macro end
+
+
+dgui deleteform all
+
+dgui createform "copyalign_form" \
+     formtitle "Copy and Align" \
+     position 0 \
+     actionbuttons \
+       "Apply" "macrorun name \"create_newedge\""  ""\
+       "Reset" ""  ""\
+       "Close" "dgui hideitem \"copyalign_form\"" ""
+
+dgui createitem "copyalign_form" rowcolumn \
+     name "first_row" \
+     horizontal \
+     nrow 3 \
+     noborder
+
+dgui createitem "first_row" label \
+     name "label_method" \
+     labelname "Method:"
+
+dgui createitem "first_row" togglebutton \
+     name "toggle_method" \
+     labelname "" \
+     parameter "toggle_para" \
+     bdefault #t \
+     entrysize 10
+
+dgui createitem "first_row" image pixmap "D:\\edg_cpa.xpm" alignright
+
+dgui createitem "copyalign_form" separator
+
+dgui createitem "copyalign_form" label \
+     labelname "Parameters:"
+
+dgui createitem "copyalign_form" picker \
+     edge \
+     name "edge_old_picker" \
+     labelname "edge:  " \
+     entrysize 5 \
+     parameter "oldedge_labelname" \
+     single
+
+dgui createitem "copyalign_form" picker \
+     vertex \
+     name "vertex_origin_picker" \
+     labelname "origin: " \
+     entrysize 5 \
+     parameter "vertex_origin" \
+     single
+
+dgui createitem "copyalign_form" picker \
+     vertex \
+     name "vertex_target_picker" \
+     labelname "target:" \
+     entrysize 5 \
+     parameter "vertex_target" \
+     single
+
+dgui createitem "copyalign_form" separator
+
+dgui createitem "copyalign_form" textentry \
+     name "edge_new_name" \
+     labelname "Label" \
+     entrysize 10 \
+     tdefault "edge01" \
+     parameter "newedge_labelname"
+
+dgui showitem "copyalign_form"
+

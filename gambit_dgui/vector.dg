@@ -1,0 +1,16 @@
+dgui deleteform all
+
+dgui createform "hello" \
+     formtitle "hello" \
+     position 0 \
+     actionbuttons \
+     "OK" "dgui hideitem \"hello\"" ""
+
+
+dgui createitem "hello" vector \
+     name "hello_vector" \
+     labelname "vector" \
+     parameter "para_vector"
+
+dgui showitem "hello"
+

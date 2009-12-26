@@ -1,0 +1,14 @@
+dgui deleteform all
+
+dgui createform "hello" \
+     formtitle "hello" \
+     position 0 \
+     actionbuttons \
+     "OK" "dgui hideitem \"hello\"" ""
+
+dgui createitem "hello" dialog \
+     name "hello_gialog" \
+     labelname "dialog"
+
+dgui showitem "hello"
+

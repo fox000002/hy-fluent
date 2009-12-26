@@ -1,0 +1,128 @@
+dgui deleteform all
+
+dgui createform "hello" \
+     formtitle "hello" \
+     position 0 \
+     actionbuttons \
+     "OK" "dgui hideitem \"hello\"" ""
+
+dgui createitem "hello" label \
+     rowchar 60 \
+     labelname "Hello Label." \
+     aligncenter \
+     fontl
+
+dgui createitem "hello" separator
+
+dgui createitem "hello" label \
+     rowchar 60 \
+     labelname "Hello Label2. You see it now." \
+     aligncenter \
+     fontl
+
+dgui createitem "hello" image pixmap "C:\\_clarky.xpm" aligncenter
+
+dgui createitem "hello" pushbutton \
+     buttonlabel "Hello Button" \
+     activatecb "dgui message \"You click me!\" information"
+
+dgui createitem "hello" togglebutton \
+     name "hello_toggle" \
+     labelname "Start toggle" \
+     parameter "para_toggle" \
+     bdefault #t \
+     ACTIVATECB  "macrorun name \"macro_toggle\""
+
+macro start "macro_toggle"
+  if cond($para_toggle .eq. #t)
+    dgui message "You toggle on!" information
+  else
+    dgui message "You toggle off!" information
+  endif
+macro end
+
+dgui createitem "hello" radiobuttonbox \
+     name "Box" \
+     labelname "Hello RadioButtonBox" \
+     activatecb "dgui message \"Radio\" information" \
+     tdefault "New" \
+     items \
+     "New" "" "" \
+     "Restart" "" "#f" \
+     parameter "start_option"
+
+dgui createitem "hello" list \
+     name "list" \
+     labelname "Hello list" \
+     items \
+      "News"\
+      "xxx"\
+     parameter "list_para" \
+     SINGLE
+
+dgui createitem "hello" realentry \
+     name "hello_real" \
+     labelname "temperature" \
+     entrysize 10 \
+     rdefault 299 \
+     rmax 1000 \
+     rmin 200 \
+     unit "temperature" \
+     parameter "hello_realpara"
+
+dgui createitem "hello" intentry \
+  name "hello_int" \
+  labelname "Number of Blades" \
+  entrysize 5 \
+  parameter "hello_number" \
+  imin 2
+
+dgui createitem "hello" textentry \
+     name "hello_text" \
+     labelname "Filename" \
+     entrysize 10 \
+     tdefault "default.dat" \
+     parameter "hello_filename" \
+     noteditable
+
+dgui createitem "hello" fileselect \
+     name "hello_filesel" \
+     labelname "Design File:" \
+     entrysize 5 \
+     parameter "datafile" \
+     pattern "*.dat" \
+     tdefault "default.dat"
+
+dgui createitem "hello" picker \
+     face \
+     name "Hello_face_picker" \
+     labelname "face" \
+     entrysize 5 \
+     parameter "hello_face"
+
+dgui createitem "hello" optionmenu \
+     name "hello_fluid" \
+     labelname "Fluid" \
+     parameter "hello_fluid" \
+     items "Water" "water-liquid" "" \
+           "Oil" "engine-oil" "" \
+           "Kerosene" "kerosene-liquid" "" \
+     tdefault "water-liquid"
+
+dgui createitem "hello" vector \
+     name "hello_vector" \
+     labelname "Vector" \
+     parameter "hello_vector"
+
+dgui createitem "hello" rowcolumn \
+    name "xy_container" \
+    horizontal \
+    nrow 2
+
+dgui createitem "hello" rowcolumn \ 
+     name "coef_container" \ 
+     vertical \
+     nrow 4
+ 
+dgui showitem "hello"
+

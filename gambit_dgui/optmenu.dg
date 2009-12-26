@@ -1,0 +1,21 @@
+dgui deleteform all
+
+dgui createform "hello" \
+     formtitle "hello" \
+     position 0 \
+     actionbuttons \
+     "OK" "dgui hideitem \"hello\"" ""
+
+
+dgui createitem "hello" optionmenu \
+     name "hello_fluid" \
+     labelname "Fluid" \
+     parameter "hello_fluid" \
+     items "Water" "water-liquid" "" \
+           "Oil" "engine-oil" "" \
+           "Kerosene" "kerosene-liquid" "" \
+     tdefault "water-liquid"
+
+ 
+dgui showitem "hello"
+

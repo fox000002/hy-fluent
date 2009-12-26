@@ -1,0 +1,86 @@
+$_circle_center = ""
+$_circle_radius = 10
+$_circle_name = ""
+
+macro start "create_circle"
+     $_circle_center = $circle_origin
+     $_circle_radius = $circle_radius
+     $_circle_name = $circle_labelname
+
+     if cond ($_circle_center .eq. "")
+         dgui message "No origin vertex selected!" error
+     else
+         vertex copy $_circle_center to "circ_v1"
+         vertex move "circ_v1" offset $_circle_radius 0 0
+         vertex copy $_circle_center to "circ_v2"
+         vertex move "circ_v2" offset 0 $_circle_radius 0
+         edge create $_circle_name center2points $_circle_center "circ_v1" "circ_v2" circle
+         / vertex delete "circ_v1" "circ_v2"
+     endif
+macro end
+
+
+dgui deleteform all
+
+dgui createform "circle_form" \
+     formtitle "Create Full Circle" \
+     position 0 \
+     actionbuttons \
+       "Apply" "macrorun name \"create_circle\""  ""\
+       "Reset" ""  ""\
+       "Close" "dgui hideitem \"circle_form\"" ""
+
+dgui createitem "circle_form" rowcolumn \
+     name "first_row" \
+     horizontal \
+     nrow 3 \
+     noborder
+
+dgui createitem "first_row" label \
+     name "label_method" \
+     labelname "Method:"
+
+dgui createitem "first_row" togglebutton \
+     name "toggle_method" \
+     labelname "" \
+     parameter "toggle_para" \
+     bdefault #t \
+     entrysize 10
+
+dgui createitem "first_row" image pixmap "D:\\edg_cir.xpm" alignright
+
+dgui createitem "circle_form" separator
+
+dgui createitem "circle_form" label \
+     labelname "Parameters:"
+
+dgui createitem "circle_form" picker \
+     vertex \
+     name "circle_origin_picker" \
+     labelname "origin:" \
+     entrysize 5 \
+     parameter "circle_origin" \
+     single
+
+dgui createitem "circle_form" realentry \
+     name "circle_radius_entry" \
+     labelname "radius" \
+     entrysize 10 \
+     rdefault 10 \
+     rmax 1000 \
+     rmin 0.1 \
+     unit "length" \
+     parameter "circle_radius"
+
+
+dgui createitem "circle_form" separator
+
+dgui createitem "circle_form" textentry \
+     name "circle_name" \
+     labelname "Label" \
+     entrysize 10 \
+     tdefault "circ01" \
+     parameter "circle_labelname"
+
+dgui showitem "circle_form"
+

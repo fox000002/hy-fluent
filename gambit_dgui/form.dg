@@ -1,0 +1,30 @@
+dgui deleteform all
+
+dgui createform "hello" \
+     formtitle "hello" \
+     position 0 \
+     actionbuttons \
+     "OK" "dgui hideitem \"hello\"" ""
+
+dgui createitem "hello" form \
+     name "hello_form"
+
+dgui createitem "hello_form" label name "hello_label" rowchar 60 labelname \
+"In this exercise, you can model the flow over a ClarkY airfoil. The schematic of the problem is as shown in the figure above. Observe how the Lift and Drag coefficients are related to the angle of attack."\ 
+        alignleft \
+        fontm
+
+dgui createitem "hello_form" optionmenu \
+  name "GTP_units" \
+  labelname "Units" \
+  parameter "GTP_units" \
+  items "m" "m" "" \
+        "cm" "cm" "" \
+	"mm" "mm" "" \
+	"in" "in" "" \
+	"ft" "ft" "" \
+  tdefault "m" \
+ top "hello_label"
+
+dgui showitem "hello"
+
