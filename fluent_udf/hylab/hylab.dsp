@@ -90,6 +90,10 @@ SOURCE=.\src\mydialog.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\myext.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\myudf.c
 # End Source File
 # End Group

@@ -89,7 +89,7 @@ FLUENT_LIB = fl_$(PARALLEL_NODE)$(LIB_RELEASE).lib
 
 SRC = .\src^\
 
-CC = cl
+CC = cl /nologo
 
 SED_CMD = $(FLUENT_INC)\ntbin\$(FLUENT_ARCH)\sed.exe
 FLUENT_CMD = $(FLUENT_INC)\ntbin\$(FLUENT_ARCH)\fluent 2d
@@ -111,20 +111,25 @@ MISC_SRCS = $(SRC)mydialog.c
 MISC_SRCS2 = $(MISC_SRCS:.\src\=)
 MISC_OBJS = $(MISC_SRCS2:.c=.obj)
 
+CPP_SRCS = $(SRC)myext.cpp
+CPP_SRCS2 = $(CPP_SRCS:.\src\=)
+CPP_OBJS = $(CPP_SRCS2:.cpp=.obj)
+
 RCC = rc /V /X /I"D:\GS\VC6\VC98\Include"
 
 RC_FILE = .\res\mydialog.rc
 #RC_FILE2 = $(RC_FILE:.\src\=)
 RES_FILE = $(RC_FILE:.rc=.res)
 
-OBJECTS = $(UDF_OBJECT) $(SRC_OBJECT) $(USER_OBJECTS) $(MISC_OBJS)
+OBJECTS = $(UDF_OBJECT) $(SRC_OBJECT) $(USER_OBJECTS) $(MISC_OBJS) $(CPP_OBJS)
 
 INCLUDES= -I$(FLUENT_INC)\fluent$(RELEASE)\$(FLUENT_ARCH)\$(VERSION) \
           -I$(FLUENT_INC)\fluent$(RELEASE)\src \
           -I$(FLUENT_INC)\fluent$(RELEASE)\cortex\src \
           -I$(FLUENT_INC)\fluent$(RELEASE)\client\src \
           -I$(FLUENT_INC)\fluent$(RELEASE)\tgrid\src \
-          -I$(FLUENT_INC)\fluent$(RELEASE)\multiport\src
+          -I$(FLUENT_INC)\fluent$(RELEASE)\multiport\src \
+          -I$(FLUENT_INC)\fluent$(RELEASE)\$(FLUENT_ARCH)\$(VERSION)
 
 LIBS = /Libpath:$(FLUENT_INC)\fluent$(RELEASE)\$(FLUENT_ARCH)\$(VERSION) user32.lib
 
@@ -138,12 +143,15 @@ $(SRC_OBJECT): $(SOURCES)
 	$(CC) $(CFLAGS) $(INCLUDES)  $**
     
 $(MISC_OBJS) : $(MISC_SRCS)
-	$(CC) /c $**
+	$(CC) /c $(INCLUDES) $**
+
+$(CPP_OBJS) : $(CPP_SRCS)
+	$(CC) /c $(INCLUDES) $**
     
 $(RES_FILE) : $(RC_FILE)
 	$(RCC) $**
 	
-$(TARGET): hylab.mak user_nt.udf $(UDF_OBJECT) $(SRC_OBJECT) $(MISC_OBJS) $(RES_FILE)
+$(TARGET): hylab.mak user_nt.udf $(UDF_OBJECT) $(SRC_OBJECT) $(MISC_OBJS) $(CPP_OBJS) $(RES_FILE)
 	@echo # Linking $@ because of $?
 	link  $(LIBS) /dll   /out:$(TARGET) \
 	      $(OBJECTS)  $(FLUENT_LIB) $(RES_FILE)

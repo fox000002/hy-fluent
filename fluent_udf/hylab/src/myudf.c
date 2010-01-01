@@ -120,3 +120,66 @@ DEFINE_RW_FILE(reader,fp)
     printf("Reading UDF data from data file...\n");
     fscanf(fp,"%d",&kount); /* read kount from data file */
 }
+
+
+/***********************************************************************
+ UDFs that operating the grid
+************************************************************************/
+int * g_sgrid = 0;
+
+DEFINE_ON_DEMAND(INIT)
+{
+    int counter;
+    int thread_ID;
+    Thread *t;
+    int i;
+    face_t f;   // index of face of wall
+    cell_t c0;  // index of cell which is adjacent to wall. 也就是B在本例中。
+    thread_ID = 8;  // 这个可以从用户界面得到，在boundary condition窗口下，点击璧面A，然后号  //码显示在ID栏里。
+    counter=0;
+    i=0;
+
+    t = Lookup_Thread(1,thread_ID);//1代表domain id，一般情况都为1。此句得到璧面A的thread.
+
+    // 计算壁面face数量。
+    begin_f_loop(f,t)
+    {
+        c0 = F_C0(f,t);
+        counter ++;
+    }
+    end_f_loop(f,t)
+
+    g_sgrid = (int *) malloc(counter * sizeof(int));
+
+    // 存取所有邻近璧面单元的id到数组a里面。
+    begin_f_loop(f,t)
+    {
+        c0 = F_C0(f,t);
+        g_sgrid[i] = c0;
+        i++;
+    }
+    end_f_loop(f,t)
+}
+
+// 源项
+DEFINE_SOURCE(yourSourceName, c, t, dS, eqn)
+{
+    real source;
+    if(cellTest(c))
+    {
+        //source = your source; //在这里面会用到变量
+        return source;
+    }
+    return 0;
+}
+
+// 判断当前单元是否属于邻近璧面单元
+int cellTest(int dd)
+{
+    int iResult;
+    // code for testing dd, if dd is within array a return 1, otherwise return 0.
+    //...
+    iResult = 0;
+
+    return iResult;
+}
