@@ -1,0 +1,105 @@
+/!
+/! Gambit Script Sample
+/!
+/!
+
+/!
+solver select "fluent 5/6"
+
+
+////////////////////////////////////////////
+/! Variables
+/! Unit: mm
+$diameter_out=60
+$diameter_in=30
+$diameter_fenbu=40
+/
+$height_out=500
+$height_in=400
+$height_fenbu=410
+/
+
+///////////////////////////////////////////
+
+/!
+$radius_out=$diameter_out/2
+$radius_in=$diameter_in/2
+$radius_fenbu=$diameter_fenbu/2
+/!
+vertex create "vertex_O" coordinates 0 0
+vertex create "vertex_A" coordinates $radius_in 0
+vertex create "vertex_B" coordinates $radius_out 0
+
+/!
+vertex copy "vertex_O" to "vertex_O1"
+vertex move "vertex_O1" offset 0 $height_in
+
+vertex copy "vertex_A" to "vertex_A1"
+vertex move "vertex_A1" offset 0 $height_in
+
+
+vertex copy "vertex_O1" to "vertex_C1"
+vertex move "vertex_C1" offset 0 $radius_in
+
+edge create "edge_O1A1C1" center2points "vertex_O1" "vertex_C1" "vertex_A1" minarc arc
+edge create "edge_OO1" straight "vertex_O" "vertex_O1"
+edge create "edge_OA" straight "vertex_O" "vertex_A"
+edge create "edge_O1C1" straight "vertex_O1" "vertex_C1"
+edge create "edge_AA1" straight "vertex_A" "vertex_A1"
+
+face create "face_in" wireframe "edge_O1A1C1" "edge_OO1" "edge_OA" "edge_O1C1" "edge_AA1" real
+
+/!
+vertex copy "vertex_B" to "vertex_B1"
+vertex move "vertex_B1" offset 0 $height_out
+
+vertex copy "vertex_O" to "vertex_O2"
+vertex move "vertex_O2" offset 0 $height_out
+
+vertex copy "vertex_O2" to "vertex_C2"
+vertex move "vertex_C2" offset 0 $radius_out
+
+edge create "edge_AB" straight "vertex_A" "vertex_B"
+edge create "edge_BB1" straight "vertex_B" "vertex_B1"
+edge create "edge_C1C2" straight "vertex_C1" "vertex_C2"
+edge create "edge_O1B1C2" center2points "vertex_O2" "vertex_C2" "vertex_B1" minarc arc
+
+/!!!!
+vertex copy "vertex_C2" to "vertex_D"
+vertex move "vertex_D" offset 7.5
+
+vertex copy "vertex_D" to "vertex_D1"
+vertex move "vertex_D1" offset 0 -10
+
+edge create "edge_DD1" straight "vertex_D" "vertex_D1"
+
+vertex create "vertex_int_D" edgeints "edge_O1B1C2" "edge_DD1" real
+vertex create "vertex_prj_D" project "vertex_int_D" edge "edge_C1C2" splitedge
+
+edge create "edge_XDD" straight "vertex_int_D" "vertex_prj_D"
+
+/!!
+vertex copy "vertex_O2" to "vertex_O3"
+vertex move "vertex_O3" offset 0 10
+
+vertex copy "vertex_O3" to "vertex_E"
+vertex move "vertex_E" offset 0 20
+
+vertex copy "vertex_O3" to "vertex_F"
+vertex move "vertex_F" offset 20
+
+edge create "edge_O3EF" center2points "vertex_O3" "vertex_E" "vertex_F" minarc arc
+
+vertex copy "vertex_E" to "vertex_G"
+vertex move "vertex_G" offset 4
+
+vertex copy "vertex_G" to "vertex_G1"
+vertex move "vertex_G1" offset 0 -10
+
+edge create "edge_GG1" straight "vertex_G" "vertex_G1"
+
+vertex create "vertex_int_G" edgeints "edge_O3EF" "edge_GG1" real
+vertex create "vertex_prj_G" project "vertex_int_G" edge "edge_C1C2" splitedge
+
+edge create "edge_XGG" straight "vertex_int_G" "vertex_prj_G"
+

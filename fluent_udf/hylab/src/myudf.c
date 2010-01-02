@@ -23,7 +23,7 @@ DEFINE_ON_DEMAND(runSchemeProc)
 
 
 /************************************************************************/
-/*   2009.12.26: Sigh!!!! I do not how to use it!                       */
+/*   2009.12.26: Sigh!!!! I do not know how to use it!                  */
 /*   2009.12.26: Aha! Use (%run-udf-apply mode)!                        */
 /************************************************************************/
 DEFINE_EXECUTE_FROM_GUI(sayHello, libhylab, mode)
@@ -183,3 +183,117 @@ int cellTest(int dd)
 
     return iResult;
 }
+
+/*******************************************************************/
+/* UDF for specifying an x-momentum source term in a spatially     */
+/* dependent porous media                                          */
+/*******************************************************************/
+/*
+ * source = -0.5 C_2 \rho y |v_x| v_x
+ */
+#define C2 100.0
+
+DEFINE_SOURCE(xmom_source, c, t, dS, eqn)
+{
+  real x[ND_ND];
+  real con, source;
+  C_CENTROID(x, c, t);
+  con = C2*0.5*C_R(c, t)*x[1];
+  source = -con*fabs(C_U(c, t))*C_U(c, t);
+  dS[eqn] = -2.*con*fabs(C_U(c, t));
+  return source;
+}
+
+/*******************************************************************/
+/*    UDF that initializes particles on a surface injection due    */
+/*    to a surface reaction                                        */
+/*******************************************************************/
+#define       REACTING_SURFACE_ID 2
+#define       MW_H2 2
+#define       STOIC_H2 1
+#define       P_CELL(P) RP_CELL(&((P)->cCell))           /* Non-standard macros */
+#define       P_CELL_THREAD(P) RP_THREAD(&((P)->cCell))
+
+real contact_area(cell_t c, Thread *t, int s_id, int *n);
+
+DEFINE_DPM_INJECTION_INIT(init_bubbles, I)
+{
+    int count,i;
+    real area, mw[MAX_SPE_EQNS], yi[MAX_SPE_EQNS];
+    /* MAX_SPE_EQNS is a Fluent constant in materials.h               */
+    Particle *p;
+    cell_t cell;
+    Thread *cthread;
+    Material *mix, *sp;
+    Message("Initializing Injection: %s\n",I->name);
+    loop(p,I->p)              /* Standard Fluent Looping Macro to get particle
+                                   streams in an Injection */
+    {
+        cell = P_CELL(p);               /* Get the cell and thread that the particle
+                                      is currently in   */
+        cthread = P_CELL_THREAD(p);
+        /* Set up molecular weight & mass fraction arrays */
+        mix = THREAD_MATERIAL(cthread);
+        mixture_species_loop(mix,sp,i)
+        {
+            mw[i] = MATERIAL_PROP(sp,PROP_mwi);
+            yi[i] = C_YI(cell,cthread,i);
+        }
+                                                                                 4-137
+        area = contact_area(cell, cthread, REACTING_SURFACE_ID,&count);
+        /* Function that gets total area of REACTING_SURFACE faces in
+         contact with cell */
+        /* count is the number of contacting faces, and is needed
+         to share the total bubble emission between the faces      */
+        if (count > 0) /* if cell is in contact with REACTING_SURFACE */
+        {
+            P_FLOW_RATE(p) = (area *MW_H2* STOIC_H2 
+                * reaction_rate(cell, cthread, mw, yi))/(real)count;    /* to get correct total flow
+                         rate when multiple faces contact the same cell */
+            P_DIAM(p) = 1e-3;
+            P_RHO(p) = 1.0;
+            P_MASS(p) = P_RHO(p)*M_PI*pow(P_DIAM(p),3.0)/6.0;
+        }
+        else
+        {
+            P_FLOW_RATE(p) = 0.0;
+        }
+    }
+}
+
+real contact_area(cell_t c, Thread *t, int s_id, int *n)
+{
+    int i = 0;
+    real area = 0.0, A[ND_ND];
+    *n = 0;
+    c_face_loop(c,t,i)
+    {
+        if(THREAD_ID(C_FACE_THREAD(c,t,i)) == s_id)
+        {
+            (*n)++;
+            F_AREA(A,C_FACE(c,t,i), C_FACE_THREAD(c,t,i));
+            area += NV_MAG(A);
+        }
+    }
+}
+
+/*****************************************************
+  Simple UDF that uses compiler directives
+*****************************************************/
+DEFINE_ADJUST(where_am_i, domain)
+{
+#if RP_HOST
+  Message("I am in the host process\n");
+#endif /* RP_HOST */
+
+#if RP_NODE
+  Message("I am in the node process with ID %d\n",myid);
+  /* myid is a global variable which is set to the multiport ID for
+     each node */
+#endif /* RP_NODE */
+
+#if !PARALLEL
+  Message("I am in the serial process\n");
+#endif /* !PARALLEL */
+}
+

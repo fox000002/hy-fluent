@@ -1,0 +1,373 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Author: huys
+; Description: Batch setup for the channel case
+; Date: 2008/11/28
+; Revision: 1.2 use new msh from scratch
+; Revision: 1.1 Add "define section"
+; Revision: 1.0 materials from user-defined database
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define mesh_file "whole.msh")
+(define case_out  "whole.cas")
+(define inner_temp 1000)
+(define inlet_vel 4.218)
+(define inlet_temp 298.15)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;Read in the mesh file.
+(ti-menu-load-string (format #f "file/read-case ~a" mesh_file))
+;file/read-case seg1_m.msh;
+
+;Scale it. 0.1mm -> m.
+grid/scale
+;x scale factor [1]
+0.0001
+;y scale factor [1]
+0.0001
+;z scale factor [1]
+0.0001
+
+;Turn on the energy equation
+define/models energy?
+;Enable energy model? [no]
+yes
+;Compute viscous energy dissipation? [no]
+no
+;include pressure work in energy equation? [no]
+no
+;include kinetic energy in energy equation? [no]
+no
+;Include diffusion at inlets? [yes]
+yes
+
+;Specify turbulence model.
+define/models/viscous/ke-standard
+;Enable the standard k-epsilon turbulence model? [no]
+yes
+
+;Select equations to solve.
+solve/set/equations flow
+;Solve Flow equation(s)? [yes]
+yes
+solve/set/equations temperature
+;Solve Energy equation(s)? [yes]
+yes
+solve/set/equations ke
+;Solve Turbulence equation(s)? [yes]
+yes
+
+;Select material database
+define/materials/data-base/database-type
+;Available Types: (fluent-database user-defined)
+;Database Type [fluent-database]
+user-defined
+;Database File [""]
+custom.scm
+
+;Copy your materials
+define/materials/copy
+;Material of type []>
+fluid
+;database-material-name>
+water_var
+;
+define/materials/copy
+;Material of type []>
+solid
+;database-material-name>
+stainless_cnt
+
+;Define boundary conditions
+; Wall
+define/boundary-conditions/wall
+; ...
+inner_wall_b
+;Wall Thickness (m) [0]
+0
+;Use Profile for Heat Generation Rate? [no]
+no
+;Heat Generation Rate (w/m3) [0]
+0
+;material-name [aluminum]: Change current value? [no]
+no
+;Thermal BC Type [heat-flux]: Change current value? [no]
+yes
+;Thermal BC Type [heat-flux]
+;; convection
+;; coupled
+;; heat-flux
+;; mixed
+;; network
+;; radiation
+;; temperature
+temperature
+;Use Profile for Temperature? [no]
+no
+;Temperature (k) [300]
+inner_temp
+;Enable shell conduction? [no]
+no
+; Inlet
+define/boundary-conditions/velocity-inlet
+;
+inlet_channel_b
+;Velocity Specification Method: Magnitude and Direction [no]
+no
+;Velocity Specification Method: Components [no]
+no
+;Velocity Specification Method: Magnitude, Normal to Boundary [yes]
+yes
+;Reference Frame: Absolute [yes]
+yes
+;Use Profile for Velocity Magnitude? [no]
+no
+;Velocity Magnitude (m/s) [0]
+inlet_vel
+;Coordinate System: Cartesian (X, Y, Z) [yes]
+yes
+;Use Profile for Temperature? [no]
+no
+;Temperature (k) [300]
+inlet_temp
+;Turbulent Specification Method: K and Epsilon [yes]
+no
+;Turbulent Specification Method: Intensity and Length Scale [no]
+no
+;Turbulent Specification Method: Intensity and Viscosity Ratio [no]
+yes
+;Turbulent Intensity (%) [10]
+1
+;Turbulent Viscosity Ratio [10]
+1
+; channel
+define/boundary-conditions/fluid
+;(channel)
+;zone id/name [channel]
+channel_v
+;material-name [air]: Change current value? [no]
+yes
+;material-name [air]>
+water_var
+;Specify source terms? [no]
+no
+;Specify fixed values? [no]
+no
+;Motion Type: Stationary [yes]
+yes
+;X-Origin of Rotation-Axis (m) [0]
+0
+;Y-Origin of Rotation-Axis (m) [0]
+0
+;Z-Origin of Rotation-Axis (m) [0]
+0
+;X-Component of Rotation-Axis [0]
+0
+;Y-Component of Rotation-Axis [0]
+0
+;Z-Component of Rotation-Axis [1]
+1
+;Deactivated Thread [no]
+no
+;Laminar zone? [no]
+no
+;Porous zone? [no]
+no
+; soild(wall)
+define/boundary-conditions/solid
+;(wall)
+;zone id/name [wall]
+wall_v
+;material-name [aluminum]: Change current value? [no]
+yes
+;material-name [aluminum]>
+stainless_cnt
+;Specify source terms? [no]
+no
+;Specify fixed values? [no]
+no
+;Motion Type: Stationary [yes]
+yes
+;X-Origin of Rotation-Axis (m) [0]
+0
+;Y-Origin of Rotation-Axis (m) [0]
+0
+;Z-Origin of Rotation-Axis (m) [0]
+0
+;X-Component of Rotation-Axis [0]
+0
+;Y-Component of Rotation-Axis [0]
+0
+;Z-Component of Rotation-Axis [1]
+1
+;Deactivated Thread [no]
+no
+
+;Set Pressure Velocity Coupling Scheme to SIMPLEC
+solve/set/p-v-coupling
+;Pressure Velocity Coupling Scheme [20] ?
+;;	20 for SIMPLE
+;;	21 for SIMPLEC
+;;	22 for PISO
+;;	24 for Coupled
+21
+
+;Set the discretization schemes.\
+solve/set/discretization-scheme pressure
+;Convective discretization scheme for Pressure [10]
+;;	10 for Standard
+;;	14 for PRESTO!
+;;	11 for Linear
+;;	12 for Second Order
+;;	13 for Body Force Weighted
+10
+solve/set/discretization-scheme mom
+;Convective discretization scheme for Momentum [0]
+;;	0 for First Order Upwind
+;;	1 for Second Order Upwind
+;;	2 for Power Law
+;;	4 for QUICK
+;;	6 for Third-Order MUSCL
+1
+solve/set/discretization-scheme temperature
+;Convective discretization scheme for Energy [0]
+;;	0 for First Order Upwind
+;;	1 for Second Order Upwind
+;;	2 for Power Law
+;;	4 for QUICK
+;;	6 for Third-Order MUSCL
+1
+solve/set/discretization-scheme k
+;Convective discretization scheme for Turbulence Kinetic Energy [0]
+;;	0 for First Order Upwind
+;;	1 for Second Order Upwind
+;;	2 for Power Law
+;;	4 for QUICK
+;;	6 for Third-Order MUSCL
+1
+solve/set/discretization-scheme epsilon
+;Convective discretization scheme for Turbulence Dissipation Rate [0]
+;;	0 for First Order Upwind
+;;	1 for Second Order Upwind
+;;	2 for Power Law
+;;	4 for QUICK
+;;	6 for Third-Order MUSCL
+1
+
+;Set underrelaxation factors.
+solve/set/under-relaxation pressure
+;Underrelaxation factor for Pressure [0.3]
+0.9
+solve/set/under-relaxation mom
+;Underrelaxation factor for Momentum [0.7]
+0.9
+solve/set/under-relaxation temperature
+;Underrelaxation factor for Energy [1]
+0.9
+solve/set/under-relaxation k
+;Underrelaxation factor for Turbulence Kinetic Energy [0.8]
+0.9
+solve/set/under-relaxation epsilon
+;Underrelaxation factor for Turbulence Dissipation Rate [0.8]
+0.9
+solve/set/under-relaxation turb-viscosity
+;Underrelaxation factor for Viscosity [1]
+0.9
+solve/set/under-relaxation density
+;Underrelaxation factor for Density [1]
+0.9
+solve/set/under-relaxation body-force
+;Underrelaxation factor for Body Forces [1]
+0.9
+
+;Set multigrid.
+solve/set/multi-grid-controls pressure
+;Multigrid cycle type for Pressure [1]
+1
+;Termination criterion [0.1]
+1e-30
+;Multigrid method for Pressure [0]
+0
+;Multigrid stabilization for Pressure [0]
+0
+solve/set/multi-grid-controls x-mom
+;Multigrid cycle type for X-Momentum [0]
+0
+;Termination criterion [0.1]
+1e-30
+;Residual reduction tolerance for [0.7]
+0.999
+;Multigrid method for X-Momentum [0]
+0
+solve/set/multi-grid-controls y-mom
+;Multigrid cycle type for X-Momentum [0]
+0
+;Termination criterion [0.1]
+1e-30
+;Residual reduction tolerance for [0.7]
+0.999
+;Multigrid method for X-Momentum [0]
+0
+solve/set/multi-grid-controls z-mom
+;Multigrid cycle type for X-Momentum [0]
+0
+;Termination criterion [0.1]
+1e-30
+;Residual reduction tolerance for [0.7]
+0.999
+;Multigrid method for X-Momentum [0]
+0
+solve/set/multi-grid-controls k
+;Multigrid cycle type for Turbulent Kinetic Energy [0]
+0
+;Termination criterion [0.1]
+1e-30
+;Residual reduction tolerance for [0.7]
+0.999
+;Multigrid method for Turbulent Kinetic Energy [0]
+0
+solve/set/multi-grid-controls epsilon
+;Multigrid cycle type for Turbulent Dissipation Rate [0]
+0
+;Termination criterion [0.1]
+1e-30
+;Residual reduction tolerance for [0.7]
+0.999
+;Multigrid method for Turbulent Dissipation Rate [0]
+0
+solve/set/multi-grid-controls temperature
+;Multigrid cycle type for Energy [0]
+0
+;Termination criterion [0.1]
+1e-30
+;Residual reduction tolerance for [0.7]
+0.999
+;Multigrid method for Energy [0]
+0
+
+;Set the convergence criteria.
+solve/monitors/residual convergence-criteria
+;continuity residual convergence criterion [0.001]
+1e-16
+;x-velocity residual convergence criterion [0.001]
+1e-16
+;y-velocity residual convergence criterion [0.001]
+1e-16
+;z-velocity residual convergence criterion [0.001]
+1e-16
+;energy residual convergence criterion [1e-06]
+1e-16
+;k residual convergence criterion [0.001]
+1e-16
+;epsilon residual convergence criterion [0.001]
+1e-16
+
+;Write settings to a case file.
+;file/write-case
+;case file name [""]
+;case_out.cas
+(ti-menu-load-string (format #f "file/write-case ~a" case_out))
+
+;exit
+exit
+
