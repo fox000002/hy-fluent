@@ -28,7 +28,10 @@ DEFINE_ON_DEMAND(runSchemeProc)
 /************************************************************************/
 DEFINE_EXECUTE_FROM_GUI(sayHello, libhylab, mode)
 {
-    if(0 == mode)showMyMessage("Hello!");
+    if(0 == mode)
+    {
+        showMyMessage("Hello!");
+    }
     Message("Hello From the C Function\n");
 }
 
@@ -103,7 +106,7 @@ and read it back in
 ************************************************************************/
 int kount = 0;  /* define global variable kount */
 
-DEFINE_ADJUST(demo_calc,d)
+DEFINE_ADJUST(demo_calc, d)
 {
     kount++;
     printf("kount = %d\n",kount);
@@ -112,13 +115,13 @@ DEFINE_ADJUST(demo_calc,d)
 DEFINE_RW_FILE(writer,fp)
 {
     printf("Writing UDF data to data file...\n");
-    fprintf(fp,"%d",kount); /* write out kount to data file */
+    fprintf(fp, "%d", kount); /* write out kount to data file */
 }
 
 DEFINE_RW_FILE(reader,fp)
 {
     printf("Reading UDF data from data file...\n");
-    fscanf(fp,"%d",&kount); /* read kount from data file */
+    fscanf(fp, "%d", &kount); /* read kount from data file */
 }
 
 
@@ -139,7 +142,7 @@ DEFINE_ON_DEMAND(INIT)
     counter=0;
     i=0;
 
-    t = Lookup_Thread(1,thread_ID);//1代表domain id，一般情况都为1。此句得到璧面A的thread.
+    t = Lookup_Thread(1, thread_ID);//1代表domain id，一般情况都为1。此句得到璧面A的thread.
 
     // 计算壁面face数量。
     begin_f_loop(f,t)
@@ -161,14 +164,15 @@ DEFINE_ON_DEMAND(INIT)
     end_f_loop(f,t)
 }
 
-// 源项
+// Source Term
 DEFINE_SOURCE(yourSourceName, c, t, dS, eqn)
 {
     real source;
     if(cellTest(c))
     {
         //source = your source; //在这里面会用到变量
-        return source;
+        source = 1.0;
+		return source;
     }
     return 0;
 }
@@ -195,13 +199,13 @@ int cellTest(int dd)
 
 DEFINE_SOURCE(xmom_source, c, t, dS, eqn)
 {
-  real x[ND_ND];
-  real con, source;
-  C_CENTROID(x, c, t);
-  con = C2*0.5*C_R(c, t)*x[1];
-  source = -con*fabs(C_U(c, t))*C_U(c, t);
-  dS[eqn] = -2.*con*fabs(C_U(c, t));
-  return source;
+    real x[ND_ND];
+    real con, source;
+    C_CENTROID(x, c, t);
+    con = C2*0.5*C_R(c, t)*x[1];
+    source = -con*fabs(C_U(c, t))*C_U(c, t);
+    dS[eqn] = -2.*con*fabs(C_U(c, t));
+    return source;
 }
 
 /*******************************************************************/
@@ -211,8 +215,14 @@ DEFINE_SOURCE(xmom_source, c, t, dS, eqn)
 #define       REACTING_SURFACE_ID 2
 #define       MW_H2 2
 #define       STOIC_H2 1
+
+#ifndef P_CELL
 #define       P_CELL(P) RP_CELL(&((P)->cCell))           /* Non-standard macros */
+#endif // P_CELL
+
+#ifndef P_CELL_THREAD
 #define       P_CELL_THREAD(P) RP_THREAD(&((P)->cCell))
+#endif // P_CELL_THREAD
 
 real contact_area(cell_t c, Thread *t, int s_id, int *n);
 
@@ -220,14 +230,13 @@ DEFINE_DPM_INJECTION_INIT(init_bubbles, I)
 {
     int count,i;
     real area, mw[MAX_SPE_EQNS], yi[MAX_SPE_EQNS];
-    /* MAX_SPE_EQNS is a Fluent constant in materials.h               */
+    /* MAX_SPE_EQNS is a Fluent constant in materials.h */
     Particle *p;
     cell_t cell;
     Thread *cthread;
     Material *mix, *sp;
     Message("Initializing Injection: %s\n",I->name);
-    loop(p,I->p)              /* Standard Fluent Looping Macro to get particle
-                                   streams in an Injection */
+    loop(p,I->p) /* Standard Fluent Looping Macro to get particlestreams in an Injection */
     {
         cell = P_CELL(p);               /* Get the cell and thread that the particle
                                       is currently in   */
@@ -239,7 +248,6 @@ DEFINE_DPM_INJECTION_INIT(init_bubbles, I)
             mw[i] = MATERIAL_PROP(sp,PROP_mwi);
             yi[i] = C_YI(cell,cthread,i);
         }
-                                                                                 4-137
         area = contact_area(cell, cthread, REACTING_SURFACE_ID,&count);
         /* Function that gets total area of REACTING_SURFACE faces in
          contact with cell */
@@ -247,8 +255,8 @@ DEFINE_DPM_INJECTION_INIT(init_bubbles, I)
          to share the total bubble emission between the faces      */
         if (count > 0) /* if cell is in contact with REACTING_SURFACE */
         {
-            P_FLOW_RATE(p) = (area *MW_H2* STOIC_H2 
-                * reaction_rate(cell, cthread, mw, yi))/(real)count;    /* to get correct total flow
+            //P_FLOW_RATE(p) = (area *MW_H2* STOIC_H2 * reaction_rate(cell, cthread, mw, yi))/(real)count;    
+			/* to get correct total flow
                          rate when multiple faces contact the same cell */
             P_DIAM(p) = 1e-3;
             P_RHO(p) = 1.0;
@@ -275,6 +283,7 @@ real contact_area(cell_t c, Thread *t, int s_id, int *n)
             area += NV_MAG(A);
         }
     }
+	return area;
 }
 
 /*****************************************************
@@ -283,17 +292,17 @@ real contact_area(cell_t c, Thread *t, int s_id, int *n)
 DEFINE_ADJUST(where_am_i, domain)
 {
 #if RP_HOST
-  Message("I am in the host process\n");
+    Message("I am in the host process\n");
 #endif /* RP_HOST */
 
 #if RP_NODE
-  Message("I am in the node process with ID %d\n",myid);
+    Message("I am in the node process with ID %d\n",myid);
   /* myid is a global variable which is set to the multiport ID for
      each node */
 #endif /* RP_NODE */
 
 #if !PARALLEL
-  Message("I am in the serial process\n");
+    Message("I am in the serial process\n");
 #endif /* !PARALLEL */
 }
 

@@ -1,6 +1,6 @@
 @echo off
 
-rm -vf *.obj *.dll *.c *.opt *.exp *.lib *.plg *.ncb
+rm -vf *.obj *.dll *.c *.opt *.exp *.lib *.plg *.ncb *.user *.suo
 
 rm -rvf Debug
 

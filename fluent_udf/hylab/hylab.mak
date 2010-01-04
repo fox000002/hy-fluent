@@ -143,10 +143,10 @@ $(SRC_OBJECT): $(SOURCES)
 	$(CC) $(CFLAGS) $(INCLUDES)  $**
     
 $(MISC_OBJS) : $(MISC_SRCS)
-	$(CC) /c $(INCLUDES) $**
+	$(CC) /c $**
 
 $(CPP_OBJS) : $(CPP_SRCS)
-	$(CC) /c $(INCLUDES) $**
+	$(CC) /c  $**
     
 $(RES_FILE) : $(RC_FILE)
 	$(RCC) $**
