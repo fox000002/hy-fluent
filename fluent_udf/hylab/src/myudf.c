@@ -172,7 +172,7 @@ DEFINE_SOURCE(yourSourceName, c, t, dS, eqn)
     {
         //source = your source; //在这里面会用到变量
         source = 1.0;
-		return source;
+        return source;
     }
     return 0;
 }
@@ -255,8 +255,8 @@ DEFINE_DPM_INJECTION_INIT(init_bubbles, I)
          to share the total bubble emission between the faces      */
         if (count > 0) /* if cell is in contact with REACTING_SURFACE */
         {
-            //P_FLOW_RATE(p) = (area *MW_H2* STOIC_H2 * reaction_rate(cell, cthread, mw, yi))/(real)count;    
-			/* to get correct total flow
+            //P_FLOW_RATE(p) = (area *MW_H2* STOIC_H2 * reaction_rate(cell, cthread, mw, yi))/(real)count;
+            /* to get correct total flow
                          rate when multiple faces contact the same cell */
             P_DIAM(p) = 1e-3;
             P_RHO(p) = 1.0;
@@ -283,7 +283,7 @@ real contact_area(cell_t c, Thread *t, int s_id, int *n)
             area += NV_MAG(A);
         }
     }
-	return area;
+    return area;
 }
 
 /*****************************************************
