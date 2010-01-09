@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="hylab_v8"
 	ProjectGUID="{07563DC5-B67A-4684-B083-AA20FCAECA9C}"
+	RootNamespace="hylab_v8"
 	Keyword="MakeFileProj"
 	>
 	<Platforms>
@@ -24,7 +25,7 @@
 				Name="VCNMakeTool"
 				BuildCommandLine="nmake /f &quot;hylab.mak&quot;"
 				ReBuildCommandLine=""
-				CleanCommandLine="/a"
+				CleanCommandLine="clean.bat"
 				Output="hylab_v8.exe"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				IncludeSearchPath=""

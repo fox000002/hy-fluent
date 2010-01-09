@@ -54,6 +54,14 @@
   )
 )
 
+(define (hy-exec-command-ex comm)
+  (with-output-to-string
+    (lambda ()
+      (ti-menu-load-string comm)
+    )
+  )
+)
+
 (define hy-add-ti-menu
   (lambda (name menu test value help)
     (ti-menu-insert-item!
@@ -300,7 +308,7 @@
 ;takes any string as argument 'str', breaks it on the basis of blank-space or
 ;newline character into multiple strings. These multiple strings are returned
 ;as a list.
-(define (tokenizer str)
+(define (hy-tokenizer str)
   (let ( (l (string->list str))
          (result '())
          (delimitters (list #\space #\newline #\) #\())
@@ -336,7 +344,7 @@
 )
 
 ;formats the output to show the place of a string in the list.
-(define (show-output tok)
+(define (hy-show-output tok)
   (let ((f "~10a ~10a~%") (i -1))
     (format f "S.No." "String")
     (format f (make-string 10 #\-) (make-string 10 #\-))
@@ -442,6 +450,11 @@
   )
 )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Iteration
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
