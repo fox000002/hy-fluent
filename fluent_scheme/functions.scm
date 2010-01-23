@@ -38,6 +38,15 @@
   )
 )
 
+(define abs-all
+  (lambda (l)
+    (if (null? l)
+      '()
+      (cons (abs (car ls)) (abs-all (cdr ls)))
+    )
+  )
+)
+
 ;;;
 (define display-file-content
   (lambda (fname)
