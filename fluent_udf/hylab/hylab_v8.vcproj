@@ -69,6 +69,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\mydmesh.c"
+				>
+			</File>
+			<File
 				RelativePath=".\src\myext.cpp"
 				>
 			</File>

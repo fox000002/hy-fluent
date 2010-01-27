@@ -90,6 +90,10 @@ SOURCE=.\src\mydialog.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\mydmesh.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\myext.cpp
 # End Source File
 # Begin Source File

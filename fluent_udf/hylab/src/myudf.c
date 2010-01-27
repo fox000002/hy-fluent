@@ -329,9 +329,7 @@ real contact_area(cell_t c, Thread *t, int s_id, int *n)
 UDF that specifies discrete phase materials                       
 **********************************************************************/
 
-#include "udf.h"
-
-DEFINE_DPM_PROPERTY(coal_emissivity,c,t p)
+DEFINE_DPM_PROPERTY(coal_emissivity, c, t, p)
 {
 	real mp0= P_INIT_MASS(p);  
 	real mp = P_MASS(p);      
