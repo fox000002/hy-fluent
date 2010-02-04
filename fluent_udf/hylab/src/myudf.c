@@ -184,13 +184,83 @@ int cellTest(int d)
 	return iResult;
 }
 
+real g_hy_face_t_avg = 0.0;
+
+// Fetch the average temperature of a specific face
+DEFINE_ON_DEMAND(hy_face_temp_avg)
+{
+	real temperature = 0.0f;
+	real area  = 0.0f;
+	int num = 0;
+	int thread_ID = 8;
+	//
+	face_t f;
+	Thread *t;
+	int n;
+	Node *node;
+	Domain *domain;
+	//
+	real NV_VEC(A);
+
+	domain = Get_Domain(1);  /* returns fluid domain pointer */
+	t = Lookup_Thread(domain, thread_ID);
+
+	//CX_Message("There are %d nodes in Face.\n", F_NNODES(f,t));
+
+	
+	//area = A[0];
+
+	begin_f_loop(f, t)    /* loops over faces in a face thread  */
+	{
+		CX_Message("area : %f\n", F_AREA(A, f, t));
+		CX_Message("temperature : %f\n", F_T(f, t));
+		temperature += F_T(f,t) * A[0];
+		area += A[0];
+	}                         
+	end_f_loop(f, t)
+	
+	g_hy_face_t_avg  = temperature / area;
+	//
+	CX_Message("Total area of the Face : %f\n", area);
+	CX_Message("The average temperature of the Face : %f\n", g_hy_face_t_avg);
+}
+
+
+FILE *fout;
+
+void Print_Thread_Face_Centroids(Domain *domain, int id)
+{
+	real FC[2];
+	face_t f;
+	Thread *t = Lookup_Thread(domain, id);
+
+	fprintf(fout,"thread id %d\n", id);
+	begin_f_loop(f,t)
+	{
+		F_CENTROID(FC,f,t);
+		fprintf(fout, "f%d %g %g %g\n", f, FC[0], FC[1], FC[2]);
+	}
+	end_f_loop(f,t)
+		fprintf(fout, "\n");  
+}
+
+DEFINE_ON_DEMAND(get_coords)
+{
+	Domain *domain; 
+	domain = Get_Domain(1);
+	fout = fopen("faces.out", "w");
+	Print_Thread_Face_Centroids(domain, 2);
+	Print_Thread_Face_Centroids(domain, 4);
+	fclose(fout); 
+}
+
+
 // Source Term
 DEFINE_SOURCE(MySourceTerm, c, t, dS, eqn)
 {
     real source;
     if(cellTest(c))
     {
-        //source = your source; //在这里面会用到变量
         source = 1.0;
 		dS[eqn] = 0.0;
         return source;
