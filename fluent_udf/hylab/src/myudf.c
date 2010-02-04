@@ -201,6 +201,7 @@ DEFINE_ON_DEMAND(hy_face_temp_avg)
 	Domain *domain;
 	//
 	real NV_VEC(A);
+	real x[ND_ND];
 
 	domain = Get_Domain(1);  /* returns fluid domain pointer */
 	t = Lookup_Thread(domain, thread_ID);
@@ -212,16 +213,18 @@ DEFINE_ON_DEMAND(hy_face_temp_avg)
 
 	begin_f_loop(f, t)    /* loops over faces in a face thread  */
 	{
-		CX_Message("area : %f\n", F_AREA(A, f, t));
-		CX_Message("temperature : %f\n", F_T(f, t));
-		temperature += F_T(f,t) * A[0];
-		area += A[0];
+		F_CENTROID(x,f,t);
+		F_AREA(A, f, t);
+		CX_Message("area : %f\n", -A[1]);
+		CX_Message("temperature : %f  %f\n", x[0], F_T(f, t));
+		temperature -= F_T(f,t) * A[1];
+		area -= A[1];
 	}                         
 	end_f_loop(f, t)
 	
 	g_hy_face_t_avg  = temperature / area;
 	//
-	CX_Message("Total area of the Face : %f\n", area);
+	CX_Message("Total area of Face %d : %f\n", THREAD_ID(t), area);
 	CX_Message("The average temperature of the Face : %f\n", g_hy_face_t_avg);
 }
 
