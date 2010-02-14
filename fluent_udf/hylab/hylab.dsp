@@ -100,6 +100,10 @@ SOURCE=.\src\myext.cpp
 
 SOURCE=.\src\myudf.c
 # End Source File
+# Begin Source File
+
+SOURCE=.\src\myuns.c
+# End Source File
 # End Group
 # Begin Group "Header Files"
 

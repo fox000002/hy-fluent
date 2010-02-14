@@ -215,8 +215,10 @@ DEFINE_ON_DEMAND(hy_face_temp_avg)
 	{
 		F_CENTROID(x,f,t);
 		F_AREA(A, f, t);
+#ifdef DEBUG
 		CX_Message("area : %f\n", -A[1]);
 		CX_Message("temperature : %f  %f\n", x[0], F_T(f, t));
+#endif // DEBUG
 		temperature -= F_T(f,t) * A[1];
 		area -= A[1];
 	}                         
@@ -498,3 +500,17 @@ DEFINE_ADJUST(where_am_i, domain)
 #endif /* !PARALLEL */
 }
 
+/***********************************************************************/
+/* UDF for specifying user-defined scalar time derivatives             */
+/***********************************************************************/
+DEFINE_UDS_UNSTEADY(uns_time, c, t, i, apu, su)
+{
+  real physical_dt, vol, rho, phi_old;
+  physical_dt = RP_Get_Real("physical-time-step");
+  vol = C_VOLUME(c,t);
+  
+  rho = C_R_M1(c,t);
+  *apu = -rho*vol / physical_dt;/*implicit part*/
+  phi_old = C_STORAGE_R(c,t,SV_UDSI_M1(i));
+  *su  = rho*vol*phi_old/physical_dt;/*explicit part*/
+}
