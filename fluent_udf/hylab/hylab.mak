@@ -146,7 +146,7 @@ $(MISC_OBJS) : $(MISC_SRCS)
 	$(CC) /c $**
 
 $(CPP_OBJS) : $(CPP_SRCS)
-	$(CC) /c  $**
+	$(CC) /c  $(INCLUDES) $**
     
 $(RES_FILE) : $(RC_FILE)
 	$(RCC) $**

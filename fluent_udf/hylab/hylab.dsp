@@ -90,19 +90,7 @@ SOURCE=.\src\mydialog.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\mydmesh.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\myext.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\myudf.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\myuns.c
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -112,10 +100,38 @@ SOURCE=.\src\myuns.c
 
 SOURCE=.\src\mydialog.h
 # End Source File
+# Begin Source File
+
+SOURCE=.\src\myext.h
+# End Source File
 # End Group
 # Begin Group "Resource Files"
 
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# End Group
+# Begin Group "UDF Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\src\mybc.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\mydmesh.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\myprop.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\myudf.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\myuns.c
+# End Source File
 # End Group
 # End Target
 # End Project

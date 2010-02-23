@@ -138,11 +138,15 @@ DEFINE_ON_DEMAND(INIT)
     int i;
     face_t f;       // index of face of wall
     cell_t c0;      // index of cell which is adjacent to wall.
-    thread_ID = 8;  //
+	Domain *domain;  
+	
+	thread_ID = 8;  //
     count=0;
     i=0;
 
-    t = Lookup_Thread(1, thread_ID);
+
+	domain = Get_Domain(1);  /* returns fluid domain pointer */
+    t = Lookup_Thread(domain, thread_ID);
 
     //
     begin_f_loop(f,t)
@@ -235,7 +239,7 @@ FILE *fout;
 
 void Print_Thread_Face_Centroids(Domain *domain, int id)
 {
-	real FC[2];
+	real FC[3] = {0., 0.};
 	face_t f;
 	Thread *t = Lookup_Thread(domain, id);
 

@@ -15,9 +15,12 @@
  *
  * =====================================================================================
  */
- 
+
 #include "udf.h"
 
+/*********************************************************************
+ UDF that specifies a custom mass-fraction weighted conductivity   
+**********************************************************************/
 DEFINE_PROPERTY(mass_wtd_k, c, t)
 {
     real sum = 0.;
@@ -25,13 +28,13 @@ DEFINE_PROPERTY(mass_wtd_k, c, t)
     Material *sp;
     real ktc;
     Property *prop;
-    
+
     mixture_species_loop(THREAD_MATERIAL(t), sp, i)
       {
         prop = (MATERIAL_PROPERTY(sp));
         ktc = generic_property(c, t, prop, PROP_ktc, C_T(c, t));
         sum += C_YI(c, t, i) * ktc;
       }
-    
+
     return sum;
 }

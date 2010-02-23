@@ -69,15 +69,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\mydmesh.c"
-				>
-			</File>
-			<File
 				RelativePath=".\src\myext.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\myudf.c"
 				>
 			</File>
 		</Filter>
@@ -90,6 +82,10 @@
 				RelativePath=".\src\mydialog.h"
 				>
 			</File>
+			<File
+				RelativePath=".\src\myext.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
@@ -98,6 +94,30 @@
 			>
 			<File
 				RelativePath=".\res\mydialog.rc"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="UDF Files"
+			>
+			<File
+				RelativePath=".\src\mybc.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\mydmesh.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\myprop.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\myudf.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\myuns.c"
 				>
 			</File>
 		</Filter>
