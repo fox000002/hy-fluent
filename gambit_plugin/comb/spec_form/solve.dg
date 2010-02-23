@@ -1,0 +1,44 @@
+/
+/      Copyright Fluent Inc.
+/      All Rights Reserved
+/
+/      This is unpublished proprietary source code of Fluent Inc.
+/      It is protected by U.S. copyright law as an unpublished work
+/      and is furnished pursuant to a written license agreement.  It
+/      is considered by Fluent to be confidential and may not be
+/      used, copied, or disclosed to others except in accordance with
+/      the terms and conditions of the license agreement.
+/
+/
+/ PUMP SOLVING FORM
+/
+dgui createitem "GTP_pump" form \
+     name "GTP_solve_form"
+
+dgui createitem "GTP_solve_form" intentry \
+  name "GTP_iterations" \
+  labelname "Number of Iterations" \
+  entrysize 5 \
+  parameter "GTP_iterations" \
+  imin 0 \
+  idefault 200
+
+dgui createitem "GTP_solve_form" togglebutton \
+  name "GTP_interpolate" \
+  labelname "Start from previous solution" \
+  parameter "GTP_interpolate" \
+  bdefault #f \
+  top "GTP_iterations" \
+  activatecb "dgui updateitem \"GTP_solve_form\" "
+
+dgui createitem "GTP_solve_form" fileselect \
+  name "GTP_interpolate_file" \
+  labelname "Solution File:" \
+  enable "($GTP_interpolate)" \
+  entrysize 5 \
+  parameter "GTP_interpolate_file" \
+  pattern "*.ip" \
+  tdefault (GETCWD() + "\default.ip") \
+  top "GTP_interpolate"
+
+dgui hide "GTP_solve_form"

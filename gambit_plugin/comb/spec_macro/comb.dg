@@ -1,0 +1,20 @@
+/
+/      Copyright huys (huys03@gmail.com)
+/      All Rights Reserved
+/
+/
+/ COMB MAIN MACRO
+/
+
+/readfile file ($COMB_plugin_path +"/spec_macro/geometry.dg")
+/readfile file ($COMB_plugin_path +"/spec_macro/bounds.dg")
+/readfile file ($COMB_plugin_path +"/spec_macro/mesh.dg")
+/readfile file ($COMB_plugin_path +"/spec_macro/solve.dg")
+
+/
+/ Say Hello
+/
+macro start "COMB_hello"
+    dgui message "Combustion Chamber Simulation!" information
+macro end
+

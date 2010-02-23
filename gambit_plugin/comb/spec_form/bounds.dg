@@ -1,0 +1,263 @@
+/
+/      Copyright Fluent Inc.
+/      All Rights Reserved
+/
+/      This is unpublished proprietary source code of Fluent Inc.
+/      It is protected by U.S. copyright law as an unpublished work
+/      and is furnished pursuant to a written license agreement.  It
+/      is considered by Fluent to be confidential and may not be
+/      used, copied, or disclosed to others except in accordance with
+/      the terms and conditions of the license agreement.
+/
+/
+/ PUMP BOUNDARY CONDITIONS FORM
+/
+dgui createitem "GTP_pump" form \
+     name "GTP_bounds_form"
+
+dgui createitem "GTP_bounds_form" optionmenu \
+     name "GTP_fluid" \
+     labelname "Fluid" \
+     parameter "GTP_fluid" \
+     items "Water" "water-liquid" "" \
+           "Oil" "engine-oil" "" \
+	   "Kerosene" "kerosene-liquid" "" \
+     tdefault "water-liquid"
+
+dgui createitem "GTP_bounds_form" label \
+     name "GTP_spacer1" \
+     labelname "   " \
+     top "GTP_fluid"
+     
+dgui createitem "GTP_bounds_form" form \ 
+     name "GTP_io_form" \
+     noborder \
+     top "GTP_spacer1"
+
+dgui createitem "GTP_io_form" form \
+     noborder \
+     name "GTP_inlet_form" 
+
+dgui createitem "GTP_inlet_form" picker \
+     face name "GTP_inletf_picker" \
+     labelname "Inlet       " \
+     entrysize 5 \
+     parameter "GTP_inletf" 
+
+dgui createitem "GTP_inlet_form" pushbutton \
+     name "GTP_inlet_bc" \
+     buttonlabel "  Set Inlet Conditions  " \
+     activatecb "dgui show \"GTP_inlet_set\"" \
+     top "GTP_inletf_picker"
+
+dgui createitem "GTP_io_form" form \ 
+     name "GTP_outlet_form" \
+     noborder \
+     left "GTP_inlet_form"
+
+dgui createitem "GTP_outlet_form" picker \
+     face name "GTP_outletf_picker" \
+     labelname "Outlet    " \
+     entrysize 5 \
+     parameter "GTP_outletf" 
+
+dgui createitem "GTP_outlet_form" pushbutton \
+     name "GTP_outlet_bc" \
+     buttonlabel "  Set Outlet Conditions  " \
+     activatecb "dgui show \"GTP_outlet_set\"" \
+     top "GTP_outletf_picker"
+
+dgui createitem "GTP_bounds_form" label \
+     name "GTP_spacer2" \
+     labelname "   " \
+     top "GTP_io_form"
+     
+dgui createitem "GTP_bounds_form" form \ 
+     name "GTP_hc_form" \
+     noborder \
+     top "GTP_spacer2"
+
+dgui createitem "GTP_hc_form" picker \
+     face name "GTP_hubf_picker" \
+     labelname "Hub        " \
+     entrysize 5 \
+     parameter "GTP_hubf" 
+
+dgui createitem "GTP_hc_form" picker \
+     face name "GTP_casingf_picker" \
+     labelname "Casing   " \
+     entrysize 5 \
+     parameter "GTP_casingf" \
+     left "GTP_hubf_picker"
+
+dgui createitem "GTP_bounds_form" label \
+     name "GTP_spacer3" \
+     labelname "   " \
+     top "GTP_hc_form"
+     
+dgui createitem "GTP_bounds_form" form \ 
+     name "GTP_vanes_form" \
+     noborder \
+     top "GTP_spacer3"
+
+dgui createitem "GTP_vanes_form" form \
+    name "GTP_blade_form" \
+    noborder \
+    labelname "Blade:" 
+
+dgui createitem "GTP_blade_form" picker \
+    face name "GTP_pressuref_picker" \
+    labelname "Pressure" \
+    entrysize 5 \
+    parameter "GTP_pressuref" 
+
+dgui createitem "GTP_blade_form" picker \
+    face name "GTP_suctionf_picker" \
+    labelname "Suction  " \
+    entrysize 5 \
+    parameter "GTP_suctionf" \
+    top "GTP_pressuref_picker"
+
+dgui createitem "GTP_vanes_form" form \
+    name "GTP_splitter_form" \
+    noborder \
+    labelname "Splitter:" \
+    left "GTP_blade_form"
+
+dgui createitem "GTP_splitter_form" picker \
+    face name "GTP_pressure1f_picker" \
+    labelname "Pressure" \
+    entrysize 5 \
+    parameter "GTP_pressure1f" \
+    enable "$GTP_n_splitters"
+
+dgui createitem "GTP_splitter_form" picker \
+    face name "GTP_suction1f_picker" \
+    labelname "Suction  " \
+    entrysize 5 \
+    parameter "GTP_suction1f" \
+    enable "$GTP_n_splitters" \
+    top "GTP_pressure1f_picker"
+
+dgui createitem "GTP_bounds_form" label \
+     name "GTP_spacer4" \
+     labelname "   " \
+     top "GTP_vanes_form"
+     
+dgui createitem "GTP_bounds_form" pushbutton \
+     name "GTP_rotation_bc" \
+     buttonlabel "  Set Rotation Conditions  " \
+     activatecb "dgui show \"GTP_rotation_set\"" \
+     top "GTP_spacer4"
+
+dgui createitem "GTP_bounds_form" label \
+     name "GTP_spacer5" \
+     labelname "   " \
+     top "GTP_rotation_bc"
+     
+dgui hide "GTP_bounds_form"
+
+/
+/ SUBFORM DEFINITIONS
+/
+
+/ INLET SET
+
+dgui createform "GTP_inlet_set" \
+     formtitle "Inlet Conditions" \
+     position 0 \
+     actionbuttons \
+     "OK" "dgui hideitem \"GTP_inlet_set\"" ""
+
+dgui createitem "GTP_inlet_set" realentry \
+     name "GTP_inlet_flow" \
+     labelname "Gauge Pressure (Atm)" \
+     entrysize 5 \
+     parameter "GTP_inlet_pressure" \
+     rdefault 0 
+
+dgui createitem "GTP_inlet_set" \ 
+     rowcolumn horizontal \
+     nrank 3 \
+     name "GTP_inlet_dirn" \
+     labelname "Direction"
+
+dgui createitem "GTP_inlet_dirn" realentry \
+     name "GTP_inlet_radial" \
+     labelname "Radial      " \
+     entrysize 5 \
+     parameter "GTP_inlet_radial" \
+     rdefault 0
+     
+dgui createitem "GTP_inlet_dirn" realentry \
+     name "GTP_inlet_tang" \
+     labelname "Tangential" \
+     entrysize 5 \
+     parameter "GTP_inlet_tang" \
+     rdefault 0
+     
+dgui createitem "GTP_inlet_dirn" realentry \
+     name "GTP_inlet_axial" \
+     labelname "Axial        " \
+     entrysize 5 \
+     parameter "GTP_inlet_axial" \
+     rdefault 1
+     
+dgui hide "GTP_inlet_set"
+
+/ OUTLET SET
+
+dgui createform "GTP_outlet_set" \
+     formtitle "Outlet Conditions" \
+     position 0 \
+     actionbuttons \
+     "OK" "dgui hideitem \"GTP_outlet_set\"" ""
+
+dgui createitem "GTP_outlet_set" realentry \
+     name "GTP_outlet_pressure" \
+     labelname "Gauge Pressure (Atm)" \
+     entrysize 5 \
+     parameter "GTP_outlet_pressure" \
+     rdefault 0 
+
+dgui hide "GTP_outlet_set"
+
+/ ROTATION SET
+
+dgui createform "GTP_rotation_set" \
+     formtitle "Rotation Conditions" \
+     position 0 \
+     actionbuttons \
+     "OK" "dgui hideitem \"GTP_rotation_set\"" ""
+
+dgui createitem "GTP_rotation_set" togglebutton \
+     name "GTP_rotation" \
+     labelname "Rotating" \
+     parameter "GTP_rotation" \
+     bdefault #t \
+     activatecb "dgui updateitem \"GTP_rotation_set\" "
+
+dgui createitem "GTP_rotation_set" form \
+     name "GTP_rotation_form" \
+     enable "($GTP_rotation)" \
+     top "GTP_rotation"
+
+dgui createitem "GTP_rotation_form" realentry \
+     name "GTP_rpm" \
+     labelname "Rotational Speed (rpm)" \
+     entrysize 5 \
+     parameter "GTP_rpm" \
+     rdefault 0 
+
+dgui createitem "GTP_rotation_form" radiobuttonbox \
+     name "GTP_orient" \
+     labelname "Orientation" \
+     noborder \
+     parameter "GTP_orient" \
+     items "Left Handed" "-1" "" \
+ 	   "Right Handed" "1" "" \
+     tdefault "-1" \
+     top "GTP_rpm"
+
+dgui hide "GTP_rotation_set"
+

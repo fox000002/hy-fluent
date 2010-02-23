@@ -1,0 +1,815 @@
+/
+/      Copyright Fluent Inc.
+/      All Rights Reserved
+/
+/      This is unpublished proprietary source code of Fluent Inc.
+/      It is protected by U.S. copyright law as an unpublished work
+/      and is furnished pursuant to a written license agreement.  It
+/      is considered by Fluent to be confidential and may not be
+/      used, copied, or disclosed to others except in accordance with
+/      the terms and conditions of the license agreement.
+/
+/
+/ PUMP GEOMETRY MACRO
+/
+
+macro start "GTP_geometry_cb"
+$GTP_error = 0
+
+import turbo $GTP_turbofile
+$GTP_error = $GTP_error + opererr()
+
+$GTP_arch = GETENV("FLUENT_ARCH")
+$GTP_scratch = GETSCR()
+system command($GTP_plugin_path + \
+		"/bin/" + $GTP_arch + \
+		"/get_tur " + $GTP_turbofile + " " + \
+		$GTP_scratch + "/params.jou")
+$GTP_error = $GTP_error + opererr()
+
+readfile file ($GTP_scratch + "/params.jou")
+$GTP_error = $GTP_error + opererr()
+/
+/ MERGE MULTIPLE HUB AND CASING EDGES IF PRESENT
+/
+
+if cond(PARAMSIZE("GTP_hubv").gt.2)
+ $GTP_merge_vertex = $GTP_hubv
+ macrorun name "GTP_edge_merge"
+endif
+
+if cond(PARAMSIZE("GTP_casingv").gt.2)
+ $GTP_merge_vertex = $GTP_casingv
+ macrorun name "GTP_edge_merge"
+endif
+
+/
+/ CREATE TURBO PROFILE
+/
+
+if cond($GTP_n_splitters.eq.0)
+ turbo create \
+      hub $GTP_hub_inlet \
+      casing $GTP_casing_inlet \
+      blade $GTP_leading \
+      vector $GTP_axis \
+      origin 0 0 0
+ $GTP_error = $GTP_error + opererr()
+endif
+
+if cond($GTP_n_splitters.eq.1)
+ turbo create \
+      hub $GTP_hub_inlet \
+      casing $GTP_casing_inlet \
+      blade $GTP_leading \
+      splitters $GTP_splitter \
+      vector $GTP_axis \
+      origin 0 0 0
+ $GTP_error = $GTP_error + opererr()
+endif
+
+/ **********************************************
+/ *** AUTOMATIC ADJUSTMENT OF INLET VERTICES ***
+/ **********************************************
+graphics off
+
+/
+/ FILL COORDINATE ARRAYS FOR LEADING EDGE VERTICES
+/
+$GTP_n_profiles = PARAMSIZE("GTP_leading")
+declare $GTP_leading_cart[$GTP_n_profiles,3]
+declare $GTP_leading_cyl[$GTP_n_profiles,3]
+declare $GTP_cyl[3]
+$GTP_n = 1
+do param "$GTP_n" init 1 cond ($GTP_n.le.$GTP_n_profiles) incr 1
+ $GTP_cart = ENT2LOC($GTP_leading[$GTP_n])
+ $GTP_leading_cart[$GTP_n,1] = $GTP_cart[1]
+ $GTP_leading_cart[$GTP_n,2] = $GTP_cart[2]
+ $GTP_leading_cart[$GTP_n,3] = $GTP_cart[3]
+ macrorun name "GTP_cart2cyl"
+ $GTP_leading_cyl[$GTP_n,1] = $GTP_cyl[1]
+ $GTP_leading_cyl[$GTP_n,2] = $GTP_cyl[2]
+ $GTP_leading_cyl[$GTP_n,3] = $GTP_cyl[3]
+enddo
+
+/
+/ CALCULATE ARRAY FOR LEADING EDGE VERTEX SEGMENT SPACING (USED IN RAIL CREATION)
+/
+if cond ($GTP_n_profiles.gt.2)
+ declare $GTP_segment[$GTP_n_profiles-1]
+ $GTP_n = 1
+ do param "$GTP_n" init 1 cond ($GTP_n.lt.$GTP_n_profiles) incr 1
+  $GTP_vertex1 = $GTP_leading[$GTP_n]
+  $GTP_vertex2 = $GTP_leading[$GTP_n+1]
+  macrorun name "GTP_distance"
+  $GTP_segment[$GTP_n] = $GTP_distance 
+ enddo
+
+ $GTP_n = 1
+ $GTP_segment_sum = 0
+ do param "$GTP_n" init 1 cond ($GTP_n.lt.$GTP_n_profiles) incr 1
+  $GTP_segment_sum = $GTP_segment_sum + $GTP_segment[$GTP_n]
+ enddo
+
+ declare $GTP_leading_fraction[$GTP_n_profiles]
+ $GTP_leading_fraction[1] = 0
+ $GTP_n = 1
+ do param "$GTP_n" init 1 cond ($GTP_n.lt.$GTP_n_profiles) incr 1
+  $GTP_leading_fraction[$GTP_n+1] = $GTP_leading_fraction[$GTP_n] + $GTP_segment[$GTP_n]/$GTP_segment_sum 
+ enddo
+endif
+
+/
+/ FILL COORDINATE ARRAYS FOR INLET VERTICES 
+/
+declare $GTP_inlet_cart[$GTP_n_profiles,3]
+declare $GTP_inlet_cyl[$GTP_n_profiles,3]
+
+$GTP_cart = ENT2LOC($GTP_hub_inlet)
+macrorun name "GTP_cart2cyl"
+$GTP_cyl[2] = $GTP_leading_cyl[1,2]
+macrorun name "GTP_cyl2cart"
+$GTP_inlet_cart[1,1] = $GTP_cart[1]
+$GTP_inlet_cart[1,2] = $GTP_cart[2]
+$GTP_inlet_cart[1,3] = $GTP_cart[3]
+macrorun name "GTP_cart2cyl"
+$GTP_inlet_cyl[1,1] = $GTP_cyl[1]
+$GTP_inlet_cyl[1,2] = $GTP_cyl[2]
+$GTP_inlet_cyl[1,3] = $GTP_cyl[3]
+
+$GTP_cart = ENT2LOC($GTP_casing_inlet)
+macrorun name "GTP_cart2cyl"
+$GTP_cyl[2] = $GTP_leading_cyl[$GTP_n_profiles,2]
+macrorun name "GTP_cyl2cart"
+$GTP_inlet_cart[$GTP_n_profiles,1] = $GTP_cart[1]
+$GTP_inlet_cart[$GTP_n_profiles,2] = $GTP_cart[2]
+$GTP_inlet_cart[$GTP_n_profiles,3] = $GTP_cart[3]
+macrorun name "GTP_cart2cyl"
+$GTP_inlet_cyl[$GTP_n_profiles,1] = $GTP_cyl[1]
+$GTP_inlet_cyl[$GTP_n_profiles,2] = $GTP_cyl[2]
+$GTP_inlet_cyl[$GTP_n_profiles,3] = $GTP_cyl[3]
+
+if cond ($GTP_n_profiles.gt.2)
+$GTP_n = 2
+ do param "$GTP_n" init 2 cond ($GTP_n.lt.$GTP_n_profiles) incr 1
+  $GTP_inlet_cyl[$GTP_n,1] = $GTP_inlet_cyl[1,1] + \
+                             $GTP_leading_fraction[$GTP_n] * \
+			     ($GTP_inlet_cyl[$GTP_n_profiles,1]-$GTP_inlet_cyl[1,1])
+  $GTP_inlet_cyl[$GTP_n,2] = $GTP_leading_cyl[$GTP_n,2]
+  $GTP_inlet_cyl[$GTP_n,3] = $GTP_inlet_cyl[1,3] + \
+                             $GTP_leading_fraction[$GTP_n] * \
+			     ($GTP_inlet_cyl[$GTP_n_profiles,3]-$GTP_inlet_cyl[1,3])
+  $GTP_cyl[1] = $GTP_inlet_cyl[$GTP_n,1]
+  $GTP_cyl[2] = $GTP_inlet_cyl[$GTP_n,2]
+  $GTP_cyl[3] = $GTP_inlet_cyl[$GTP_n,3]
+  macrorun name "GTP_cyl2cart"
+  $GTP_inlet_cart[$GTP_n,1] = $GTP_cart[1]
+  $GTP_inlet_cart[$GTP_n,2] = $GTP_cart[2]
+  $GTP_inlet_cart[$GTP_n,3] = $GTP_cart[3]
+ enddo
+endif
+
+/
+/ ADJUST HUB INLET VERTEX
+/
+
+$GTP_leading_vertex = $GTP_leading[1]
+declare $GTP_end_location[3]
+$GTP_end_location[1]= $GTP_inlet_cart[1,1]
+$GTP_end_location[2]= $GTP_inlet_cart[1,2]
+$GTP_end_location[3]= $GTP_inlet_cart[1,3]
+macrorun name "GTP_get_edge"
+macrorun name "GTP_adjust"
+$GTP_inlet_cart[1,1] = $GTP_cart[1]
+$GTP_inlet_cart[1,2] = $GTP_cart[2]
+$GTP_inlet_cart[1,3] = $GTP_cart[3]
+
+/
+/ ADJUST CASING INLET VERTEX
+/
+
+$GTP_leading_vertex = $GTP_leading[$GTP_n_profiles]
+$GTP_end_location[1] = $GTP_inlet_cart[$GTP_n_profiles,1]
+$GTP_end_location[2] = $GTP_inlet_cart[$GTP_n_profiles,2]
+$GTP_end_location[3] = $GTP_inlet_cart[$GTP_n_profiles,3]
+macrorun name "GTP_get_edge"
+macrorun name "GTP_adjust"
+$GTP_inlet_cart[$GTP_n_profiles,1] = $GTP_cart[1]
+$GTP_inlet_cart[$GTP_n_profiles,2] = $GTP_cart[2]
+$GTP_inlet_cart[$GTP_n_profiles,3] = $GTP_cart[3]
+
+/
+/ ADJUST OTHER INLET VERTICES
+/
+if cond ($GTP_n_profiles.gt.2)
+ declare $GTP_htc_vector[3]
+ $GTP_htc_vector[1] = $GTP_inlet_cart[$GTP_n_profiles,1] - $GTP_inlet_cart[1,1]
+ $GTP_htc_vector[2] = $GTP_inlet_cart[$GTP_n_profiles,2] - $GTP_inlet_cart[1,2]
+ $GTP_htc_vector[3] = $GTP_inlet_cart[$GTP_n_profiles,3] - $GTP_inlet_cart[1,3]
+ $GTP_n=2
+ do param "$GTP_n" init 2 cond ($GTP_n.lt.$GTP_n_profiles) incr 1
+  $GTP_end_location[1] = $GTP_inlet_cart[$GTP_n,1]
+  $GTP_end_location[2] = $GTP_inlet_cart[$GTP_n,2]
+  $GTP_end_location[3] = $GTP_inlet_cart[$GTP_n,3]
+  macrorun name "GTP_get_edge"
+  $GTP_inlet_cart[$GTP_n,1] = $GTP_inlet_cart[1,1] + \
+  			      $GTP_leading_fraction[$GTP_n] * $GTP_htc_vector[1]
+  $GTP_inlet_cart[$GTP_n,2] = $GTP_inlet_cart[1,2] + \
+  			      $GTP_leading_fraction[$GTP_n] * $GTP_htc_vector[2]
+  $GTP_inlet_cart[$GTP_n,3] = $GTP_inlet_cart[1,3] + \
+  			      $GTP_leading_fraction[$GTP_n] * $GTP_htc_vector[3]
+  vertex move $GTP_inlet_vertex coordinates $GTP_inlet_cart[$GTP_n,1] \
+  					    $GTP_inlet_cart[$GTP_n,2] \
+					    $GTP_inlet_cart[$GTP_n,3] \
+					    virtual
+ enddo
+endif
+
+
+/ *********************************************
+/ *** AUTOMATIC ADJUSTMENT OF EXIT VERTICES ***
+/ *********************************************
+
+/
+/ FILL COORDINATE ARRAYS FOR TRAILING EDGE VERTICES
+/
+declare $GTP_trailing_cart[$GTP_n_profiles,3]
+declare $GTP_trailing_cyl[$GTP_n_profiles,3]
+$GTP_n = 1
+do param "$GTP_n" init 1 cond ($GTP_n.le.$GTP_n_profiles) incr 1
+ $GTP_cart = ENT2LOC($GTP_trailing[$GTP_n])
+ $GTP_trailing_cart[$GTP_n,1] = $GTP_cart[1]
+ $GTP_trailing_cart[$GTP_n,2] = $GTP_cart[2]
+ $GTP_trailing_cart[$GTP_n,3] = $GTP_cart[3]
+ macrorun name "GTP_cart2cyl"
+ $GTP_trailing_cyl[$GTP_n,1] = $GTP_cyl[1]
+ $GTP_trailing_cyl[$GTP_n,2] = $GTP_cyl[2]
+ $GTP_trailing_cyl[$GTP_n,3] = $GTP_cyl[3]
+enddo
+
+/
+/ FILL COORDINATE ARRAYS FOR EXIT VERTICES 
+/
+declare $GTP_exit_cart[$GTP_n_profiles,3]
+declare $GTP_exit_cyl[$GTP_n_profiles,3]
+
+$GTP_cart = ENT2LOC($GTP_hub_exit)
+macrorun name "GTP_cart2cyl"
+$GTP_cyl[2] = $GTP_trailing_cyl[1,2]
+macrorun name "GTP_cyl2cart"
+$GTP_exit_cart[1,1] = $GTP_cart[1]
+$GTP_exit_cart[1,2] = $GTP_cart[2]
+$GTP_exit_cart[1,3] = $GTP_cart[3]
+macrorun name "GTP_cart2cyl"
+$GTP_exit_cyl[1,1] = $GTP_cyl[1]
+$GTP_exit_cyl[1,2] = $GTP_cyl[2]
+$GTP_exit_cyl[1,3] = $GTP_cyl[3]
+
+$GTP_cart = ENT2LOC($GTP_casing_exit)
+macrorun name "GTP_cart2cyl"
+$GTP_cyl[2] = $GTP_trailing_cyl[$GTP_n_profiles,2]
+macrorun name "GTP_cyl2cart"
+$GTP_exit_cart[$GTP_n_profiles,1] = $GTP_cart[1]
+$GTP_exit_cart[$GTP_n_profiles,2] = $GTP_cart[2]
+$GTP_exit_cart[$GTP_n_profiles,3] = $GTP_cart[3]
+macrorun name "GTP_cart2cyl"
+$GTP_exit_cyl[$GTP_n_profiles,1] = $GTP_cyl[1]
+$GTP_exit_cyl[$GTP_n_profiles,2] = $GTP_cyl[2]
+$GTP_exit_cyl[$GTP_n_profiles,3] = $GTP_cyl[3]
+
+if cond ($GTP_n_profiles.gt.2)
+$GTP_n = 2
+ do param "$GTP_n" init 2 cond ($GTP_n.lt.$GTP_n_profiles) incr 1
+  $GTP_exit_cyl[$GTP_n,1] = $GTP_exit_cyl[1,1] + \
+                            $GTP_leading_fraction[$GTP_n] * \
+			    ($GTP_exit_cyl[$GTP_n_profiles,1]-$GTP_exit_cyl[1,1])
+  $GTP_exit_cyl[$GTP_n,2] = $GTP_trailing_cyl[$GTP_n,2]
+  $GTP_exit_cyl[$GTP_n,3] = $GTP_exit_cyl[1,3] + \
+                            $GTP_leading_fraction[$GTP_n] * \
+			    ($GTP_exit_cyl[$GTP_n_profiles,3]-$GTP_exit_cyl[1,3])
+  $GTP_cyl[1] = $GTP_exit_cyl[$GTP_n,1]
+  $GTP_cyl[2] = $GTP_exit_cyl[$GTP_n,2]
+  $GTP_cyl[3] = $GTP_exit_cyl[$GTP_n,3]
+  macrorun name "GTP_cyl2cart"
+  $GTP_exit_cart[$GTP_n,1] = $GTP_cart[1]
+  $GTP_exit_cart[$GTP_n,2] = $GTP_cart[2]
+  $GTP_exit_cart[$GTP_n,3] = $GTP_cart[3]
+ enddo
+endif
+
+/
+/ ADJUST HUB EXIT VERTEX
+/
+
+$GTP_leading_vertex = $GTP_trailing[1]
+$GTP_end_location[1] = $GTP_exit_cart[1,1]
+$GTP_end_location[2] = $GTP_exit_cart[1,2]
+$GTP_end_location[3] = $GTP_exit_cart[1,3]
+macrorun name "GTP_get_edge"
+macrorun name "GTP_adjust"
+$GTP_exit_cart[1,1] = $GTP_cart[1]
+$GTP_exit_cart[1,2] = $GTP_cart[2]
+$GTP_exit_cart[1,3] = $GTP_cart[3]
+
+/
+/ ADJUST CASING EXIT VERTEX
+/
+
+$GTP_leading_vertex = $GTP_trailing[$GTP_n_profiles]
+$GTP_end_location[1] = $GTP_exit_cart[$GTP_n_profiles,1]
+$GTP_end_location[2] = $GTP_exit_cart[$GTP_n_profiles,2]
+$GTP_end_location[3] = $GTP_exit_cart[$GTP_n_profiles,3]
+macrorun name "GTP_get_edge"
+macrorun name "GTP_adjust"
+$GTP_exit_cart[$GTP_n_profiles,1] = $GTP_cart[1]
+$GTP_exit_cart[$GTP_n_profiles,2] = $GTP_cart[2]
+$GTP_exit_cart[$GTP_n_profiles,3] = $GTP_cart[3]
+
+/
+/ ADJUST OTHER EXIT VERTICES
+/
+if cond ($GTP_n_profiles.gt.2)
+ $GTP_htc_vector[1] = $GTP_exit_cart[$GTP_n_profiles,1] - $GTP_exit_cart[1,1]
+ $GTP_htc_vector[2] = $GTP_exit_cart[$GTP_n_profiles,2] - $GTP_exit_cart[1,2]
+ $GTP_htc_vector[3] = $GTP_exit_cart[$GTP_n_profiles,3] - $GTP_exit_cart[1,3]
+ $GTP_n=2
+ do param "$GTP_n" init 2 cond ($GTP_n.lt.$GTP_n_profiles) incr 1
+  $GTP_end_location[1] = $GTP_exit_cart[$GTP_n,1]
+  $GTP_end_location[2] = $GTP_exit_cart[$GTP_n,2]
+  $GTP_end_location[3] = $GTP_exit_cart[$GTP_n,3]
+  macrorun name "GTP_get_edge"
+  $GTP_exit_cart[$GTP_n,1] = $GTP_exit_cart[1,1] + \
+  			     $GTP_leading_fraction[$GTP_n] * $GTP_htc_vector[1]
+  $GTP_exit_cart[$GTP_n,2] = $GTP_exit_cart[1,2] + \
+  			     $GTP_leading_fraction[$GTP_n] * $GTP_htc_vector[2]
+  $GTP_exit_cart[$GTP_n,3] = $GTP_exit_cart[1,3] + \
+  			     $GTP_leading_fraction[$GTP_n] * $GTP_htc_vector[3]
+  vertex move $GTP_inlet_vertex coordinates $GTP_exit_cart[$GTP_n,1] \
+  					    $GTP_exit_cart[$GTP_n,2] \
+					    $GTP_exit_cart[$GTP_n,3] \
+					    virtual
+ enddo
+endif
+
+/ ********************************************
+/ **** END OF AUTOMATIC ADJUSTMENT ROUTINE ***
+/ ********************************************
+
+graphics on
+
+default set "TURBO.GENERAL.PROJECT_TO_HUB_CASING" numeric 1
+/
+/ SET BLADE EXTENSION FACTOR AS PROPORTION OF BLADE SPAN (MAX = 2)
+/
+if cond ($GTP_n_profiles.gt.2)
+ $GTP_blade_ext = NDEFAULT("TURBO.GENERAL.BLADE_EXTENSION_FACTOR")
+ $GTP_hub_ext = 1 + (($GTP_blade_ext-1) * $GTP_segment_sum / $GTP_segment[1])
+ $GTP_casing_ext = 1 + (($GTP_blade_ext-1) * $GTP_segment_sum / $GTP_segment[$GTP_n_profiles-1])
+ $GTP_blade_ext_new = $GTP_hub_ext
+ if cond ($GTP_casing_ext.gt.$GTP_blade_ext_new)
+  $GTP_blade_ext_new = $GTP_casing_ext
+ endif
+ if cond ($GTP_blade_ext_new.gt.2)
+  $GTP_blade_ext_new = 2
+ endif
+ default set "TURBO.GENERAL.BLADE_EXTENSION_FACTOR" numeric $GTP_blade_ext_new
+endif
+
+/
+/ SET PERIODIC EXTENSION FACTOR AS PROPORTION OF BLADE SPAN (MAX = 2)
+/
+if cond ($GTP_n_profiles.gt.2)
+ $GTP_per_ext = NDEFAULT("TURBO.GENERAL.PERIODIC_EXTENSION_FACTOR")
+ $GTP_hub_ext = 1 + (($GTP_per_ext-1) * $GTP_segment_sum / $GTP_segment[1])
+ $GTP_casing_ext = 1 + (($GTP_per_ext-1) * $GTP_segment_sum / $GTP_segment[$GTP_n_profiles-1])
+ $GTP_per_ext_new = $GTP_hub_ext
+ if cond ($GTP_casing_ext.gt.$GTP_per_ext_new)
+  $GTP_per_ext_new = $GTP_casing_ext
+ endif
+ if cond ($GTP_per_ext_new.gt.2)
+  $GTP_per_ext_new = 2
+ endif
+ default set "TURBO.GENERAL.PERIODIC_EXTENSION_FACTOR" numeric $GTP_per_ext_new
+endif
+
+turbo passagetopassage \
+      bladecount $GTP_blade_number \
+      spanwise 1 \
+      volume
+$GTP_error = $GTP_error + opererr()
+
+$GTP_temp_vol = LISTENTITY(t_vo)
+volume modify $GTP_temp_vol[1] label "GTP_volume"
+
+if cond ($GTP_n_profiles.gt.2)
+ default set "TURBO.GENERAL.BLADE_EXTENSION_FACTOR" numeric $GTP_blade_ext
+ default set "TURBO.GENERAL.PERIODIC_EXTENSION_FACTOR" numeric $GTP_per_ext
+endif
+
+/
+/ SET GEOMETRY SCALE FACTOR
+/
+if cond ($GTP_units.eq."m")
+ $GTP_scale = 1
+endif
+if cond ($GTP_units.eq."cm")
+ $GTP_scale = 0.01
+endif
+if cond ($GTP_units.eq."mm")
+ $GTP_scale = 0.001
+endif
+if cond ($GTP_units.eq."in")
+ $GTP_scale = 0.0254
+endif
+if cond ($GTP_units.eq."ft")
+ $GTP_scale = 0.3048
+endif
+
+/
+/ CLEANUP PARAMETERS
+/
+
+parameter delete "GTP_arch"
+parameter delete "GTP_scratch"
+parameter delete "GTP_hubv"
+parameter delete "GTP_casingv"
+parameter delete "GTP_hub_inlet"
+parameter delete "GTP_casing_inlet"
+parameter delete "GTP_hub_exit"
+parameter delete "GTP_casing_exit"
+parameter delete "GTP_leading"
+parameter delete "GTP_trailing"
+parameter delete "GTP_splitter"
+parameter delete "GTP_temp_num"
+parameter delete "GTP_temp_array"
+parameter delete "GTP_temp_vol"
+parameter delete "GTP_cart"
+parameter delete "GTP_cyl"
+parameter delete "GTP_vertex1"
+parameter delete "GTP_vertex2"
+parameter delete "GTP_fraction"
+parameter delete "GTP_htc_vector"
+parameter delete "GTP_n_profiles"
+parameter delete "GTP_inlet_coord"
+parameter delete "GTP_exit_coord"
+parameter delete "GTP_inlet_vertex"
+parameter delete "GTP_leading_vertex"
+parameter delete "GTP_edge"
+parameter delete "GTP_distance"
+parameter delete "GTP_n"
+parameter delete "GTP_merge_vertex"
+parameter delete "GTP_leading_cart"
+parameter delete "GTP_leading_cyl"
+parameter delete "GTP_leading_fraction"
+parameter delete "GTP_segment"
+parameter delete "GTP_segment_sum"
+parameter delete "GTP_inlet_cart"
+parameter delete "GTP_inlet_cyl"
+parameter delete "GTP_trailing_cart"
+parameter delete "GTP_trailing_cyl"
+parameter delete "GTP_exit_cart"
+parameter delete "GTP_exit_cyl"
+parameter delete "GTP_blade_ext"
+parameter delete "GTP_blade_ext_new"
+parameter delete "GTP_per_ext"
+parameter delete "GTP_per_ext_new"
+parameter delete "GTP_hub_ext"
+parameter delete "GTP_casing_ext"
+parameter delete "GTP_end_location"
+
+macro end
+
+macro start "GTP_geometry_form_cb"
+$GTP_geom=1
+$GTP_stage="Boundary Conditions"
+dgui updateitem "GTP_pump"
+$GTP_stage="Boundary Conditions"
+macrorun name "GTP_showstage_cb"
+macro end
+
+/
+/ ADJUST INLET VERTEX MACRO
+/
+
+macro start "GTP_adjust"
+
+$GTP_theta_max=40
+$GTP_cart = ENT2LOC($GTP_inlet_vertex)
+macrorun name "GTP_cart2cyl"
+
+$GTP_vertex1 = $GTP_inlet_vertex
+$GTP_vertex2 = $GTP_leading_vertex
+macrorun name "GTP_distance"
+$GTP_theta = RAD2DEG*$GTP_distance/$GTP_cyl[1]
+if cond($GTP_theta.GT.$GTP_theta_max)
+ $GTP_theta = $GTP_theta_max
+endif
+
+macrorun name "GTP_parameter"
+macrorun name "GTP_scalar_prod"
+$GTP_scalar_max = $GTP_scalar
+$GTP_theta_best = $GTP_cyl[2]
+
+$GTP_count=1
+do param "$GTP_count" init 1 cond ($GTP_count.LT.6) incr 1
+ $GTP_cyl[2] = $GTP_cyl[2] - $GTP_theta/2
+ macrorun name "GTP_cyl2cart"
+ vertex move $GTP_inlet_vertex coordinates $GTP_cart virtual
+ macrorun name "GTP_parameter"
+ macrorun name "GTP_scalar_prod"
+ if cond($GTP_scalar.GT.$GTP_scalar_max)
+  $GTP_scalar_max = $GTP_scalar
+  $GTP_theta_best = $GTP_cyl[2]
+ endif
+
+ $GTP_cyl[2] = $GTP_cyl[2] + $GTP_theta
+ macrorun name "GTP_cyl2cart"
+ vertex move $GTP_inlet_vertex coordinates $GTP_cart virtual
+ macrorun name "GTP_parameter"
+ macrorun name "GTP_scalar_prod"
+ if cond($GTP_scalar.GT.$GTP_scalar_max)
+  $GTP_scalar_max = $GTP_scalar
+  $GTP_theta_best = $GTP_cyl[2]
+ endif
+
+ $GTP_cyl[2] = $GTP_theta_best
+ macrorun name "GTP_cyl2cart"
+ vertex move $GTP_inlet_vertex coordinates $GTP_cart virtual
+
+ $GTP_theta = $GTP_theta/2
+enddo
+
+/CLEANUP LOCAL PARAMETERS
+parameter delete "GTP_theta"
+parameter delete "GTP_theta_max"
+parameter delete "GTP_theta_best"
+parameter delete "GTP_scalar"
+parameter delete "GTP_scalar_max"
+parameter delete "GTP_count"
+parameter delete "GTP_distance"
+parameter delete "GTP_param"
+
+macro end
+
+
+/
+/ CALCULATE SCALAR PRODUCT MACRO
+/
+
+macro start "GTP_scalar_prod"
+$GTP_delta=0.05
+
+$GTP_p1 = $GTP_param - $GTP_delta
+if cond($GTP_p1.LT.0)
+ $GTP_p1=0
+endif
+
+$GTP_p2 = $GTP_param + $GTP_delta
+if cond($GTP_p2.GT.1)
+ $GTP_p2=1
+endif
+
+$GTP_tan_p1=GETTANGENT($GTP_edge,$GTP_p1)
+$GTP_tan_p2=GETTANGENT($GTP_edge,$GTP_p2)
+
+$GTP_scalar = $GTP_tan_p1[1] * $GTP_tan_p2[1] + \
+	  $GTP_tan_p1[2] * $GTP_tan_p2[2] + \
+	  $GTP_tan_p1[3] * $GTP_tan_p2[3]
+
+/ CLEANUP LOCAL PARAMETERS
+parameter delete "GTP_delta"
+parameter delete "GTP_p1"
+parameter delete "GTP_p2"
+parameter delete "GTP_tan_p1"
+parameter delete "GTP_tan_p2"
+
+macro end
+
+
+/
+/ FIND PARAMETER AT A VERTEX ON A CURVE MACRO
+/
+
+macro start "GTP_parameter"
+$GTP_tol=0.00001
+$GTP_dist=1.0
+$GTP_kount=1
+$GTP_param1=0.0
+$GTP_param2=1.0
+$GTP_length=ARCLEN($GTP_edge)
+
+do para "$GTP_kount" init 1 cond ( ($GTP_dist.GT.$GTP_tol).AND.($GTP_kount.LE.20) ) incr 1
+ vertex create "GTP_point1" onedge $GTP_edge uparameter $GTP_param1
+ vertex create "GTP_point2" onedge $GTP_edge uparameter $GTP_param2
+ $GTP_vertex1="GTP_point1"
+ $GTP_vertex2=$GTP_leading_vertex
+ macrorun name "GTP_distance"
+ $GTP_d1 = $GTP_distance
+ $GTP_vertex1="GTP_point2"
+ $GTP_vertex2=$GTP_leading_vertex
+ macrorun name "GTP_distance"
+ $GTP_d2 = $GTP_distance
+ vertex delete "GTP_point1"
+ vertex delete "GTP_point2"
+
+ if cond($GTP_d1.GT.$GTP_d2)
+  $GTP_param1=$GTP_param1+($GTP_d1/$GTP_length)
+  $GTP_param=$GTP_param2
+  $GTP_dist=$GTP_d2
+ else
+  $GTP_param2=$GTP_param2-($GTP_d2/$GTP_length)
+  $GTP_param=$GTP_param1
+  $GTP_dist=$GTP_d1
+ endif
+enddo
+
+/ CLEANUP LOCAL PARAMETERS
+parameter delete "GTP_tol"
+parameter delete "GTP_kount"
+parameter delete "GTP_param1"
+parameter delete "GTP_param2"
+parameter delete "GTP_d1"
+parameter delete "GTP_d2"
+parameter delete "GTP_dist"
+parameter delete "GTP_length"
+parameter delete "GTP_distance"
+
+macro end
+
+/
+/ DISTANCE BETWEEN 2 VERTICES MACRO
+/
+
+macro start "GTP_distance"
+$GTP_first = ENT2LOC($GTP_vertex1)
+$GTP_second = ENT2LOC($GTP_vertex2)
+
+declare $GTP_vector[3]
+$GTP_vector[1] = $GTP_first[1]-$GTP_second[1]
+$GTP_vector[2] = $GTP_first[2]-$GTP_second[2]
+$GTP_vector[3] = $GTP_first[3]-$GTP_second[3]
+
+$GTP_distance = SQRT($GTP_vector[1]*$GTP_vector[1] + \
+	         $GTP_vector[2]*$GTP_vector[2] + \
+	         $GTP_vector[3]*$GTP_vector[3])
+
+/ CLEANUP LOCAL PARAMETERS
+parameter delete "GTP_first"
+parameter delete "GTP_second"
+parameter delete "GTP_vector"
+
+macro end
+
+/
+/ CARTESIAN TO CYLINDRICAL COORDS MACRO
+/ 
+
+macro start "GTP_cart2cyl"
+
+if cond($GTP_axis[1].GT.0)
+ $GTP_cyl[1] = SQRT($GTP_cart[2]*$GTP_cart[2] + $GTP_cart[3]*$GTP_cart[3])
+ if cond($GTP_cart[2].EQ.0)
+  if cond($GTP_cart[3].GT.0)
+   $GTP_cyl[2]=90
+  else
+   $GTP_cyl[2]=270
+  endif
+ else
+  $GTP_cyl[2] = ATAN( ABS($GTP_cart[3]) / ABS($GTP_cart[2]) ) 
+  if cond(($GTP_cart[2].LT.0).AND.($GTP_cart[3].GE.0))
+   $GTP_cyl[2] = 180 - $GTP_cyl[2]
+  endif
+  if cond(($GTP_cart[2].LT.0).AND.($GTP_cart[3].LT.0))
+   $GTP_cyl[2] = 180 + $GTP_cyl[2]
+  endif
+  if cond(($GTP_cart[2].GT.0).AND.($GTP_cart[3].LT.0))
+   $GTP_cyl[2] = 360 - $GTP_cyl[2]
+  endif
+ endif
+ $GTP_cyl[3] = $GTP_cart[1]
+endif
+
+if cond($GTP_axis[2].GT.0)
+ $GTP_cyl[1] = SQRT($GTP_cart[3]*$GTP_cart[3] + $GTP_cart[1]*$GTP_cart[1])
+ if cond($GTP_cart[3].EQ.0)
+  if cond($GTP_cart[1].GT.0)
+   $GTP_cyl[2]=90
+  else
+   $GTP_cyl[2]=270
+  endif
+ else
+  $GTP_cyl[2] = ATAN( ABS($GTP_cart[1]) / ABS($GTP_cart[3]) )
+  if cond(($GTP_cart[3].LT.0).AND.($GTP_cart[1].GE.0))
+   $GTP_cyl[2] = 180 - $GTP_cyl[2]
+  endif
+  if cond(($GTP_cart[3].LT.0).AND.($GTP_cart[1].LT.0))
+   $GTP_cyl[2] = 180 + $GTP_cyl[2]
+  endif
+  if cond(($GTP_cart[3].GT.0).AND.($GTP_cart[1].LT.0))
+   $GTP_cyl[2] = 360 - $GTP_cyl[2]
+  endif
+ endif
+ $GTP_cyl[3] = $GTP_cart[2]
+endif
+
+if cond($GTP_axis[3].GT.0)
+ $GTP_cyl[1] = SQRT($GTP_cart[1]*$GTP_cart[1] + $GTP_cart[2]*$GTP_cart[2])
+ if cond($GTP_cart[1].EQ.0)
+  if cond($GTP_cart[2].GT.0)
+   $GTP_cyl[2]=90
+  else
+   $GTP_cyl[2]=270
+  endif
+ else
+  $GTP_cyl[2] = ATAN( ABS($GTP_cart[2]) / ABS($GTP_cart[1]) )
+  if cond(($GTP_cart[1].LT.0).AND.($GTP_cart[2].GE.0))
+   $GTP_cyl[2] = 180 - $GTP_cyl[2]
+  endif
+  if cond(($GTP_cart[1].LT.0).AND.($GTP_cart[2].LT.0))
+   $GTP_cyl[2] = 180 + $GTP_cyl[2]
+  endif
+  if cond(($GTP_cart[1].GT.0).AND.($GTP_cart[2].LT.0))
+   $GTP_cyl[2] = 360 - $GTP_cyl[2]
+  endif
+ endif
+ $GTP_cyl[3] = $GTP_cart[3]
+endif
+
+macro end
+
+/
+/ CYLINDRICAL TO CARTESIAN COORDS MACRO
+/
+macro start "GTP_cyl2cart"
+
+$GTP_cart[1] = $GTP_axis[1]*$GTP_cyl[3] + \
+	   $GTP_axis[2]*$GTP_cyl[1]*SIN($GTP_cyl[2]) + \
+	   $GTP_axis[3]*$GTP_cyl[1]*COS($GTP_cyl[2])
+
+$GTP_cart[2] = $GTP_axis[1]*$GTP_cyl[1]*COS($GTP_cyl[2]) + \
+	   $GTP_axis[2]*$GTP_cyl[3] + \
+	   $GTP_axis[3]*$GTP_cyl[1]*SIN($GTP_cyl[2])
+
+$GTP_cart[3] = $GTP_axis[1]*$GTP_cyl[1]*SIN($GTP_cyl[2]) + \
+	   $GTP_axis[2]*$GTP_cyl[1]*COS($GTP_cyl[2]) + \
+	   $GTP_axis[3]*$GTP_cyl[3]
+macro end
+
+/
+/ MERGE EDGES AT VERTICES MACRO
+/
+macro start "GTP_edge_merge"
+$GTP_edge_temp = "dummy"
+$GTP_size = PARAMSIZE("GTP_merge_vertex")
+$GTP_count=2
+do para "$GTP_count" init 2 cond ($GTP_count.le.$GTP_size)
+ $GTP_edge_temp2 = LISTENTITY(t_ed,t_ve,$GTP_merge_vertex[$GTP_count])
+ $GTP_edge_temp = $GTP_edge_temp, $GTP_edge_temp2[1]
+enddo
+
+declare $GTP_tomerge[$GTP_size-1]
+do para "$GTP_count" init 1 cond ($GTP_count.lt.$GTP_size)
+ $GTP_tomerge[$GTP_count] = $GTP_edge_temp[$GTP_count+1]
+enddo
+
+edge merge $GTP_tomerge forced
+edge convert ("v_edge." + NTOS(LASTID(t_ed)))
+
+/ CLEANUP LOCAL PARAMETERS
+parameter delete "GTP_edge_temp"
+parameter delete "GTP_edge_temp2"
+parameter delete "GTP_tomerge"
+parameter delete "GTP_count"
+parameter delete "GTP_size"
+
+macro end
+
+/
+/ FIND VIRTUAL VERTEX AND EDGE FROM ITS ENDPOINT COORDINATES MACRO
+/ RETURNS $GTP_inlet_vertex and $GTP_edge
+/
+macro start "GTP_get_edge"
+$GTP_tol=0.00001
+$GTP_temp_array = ENTS_AT(t_ve, $GTP_end_location[1], \
+			        $GTP_end_location[2], \
+			        $GTP_end_location[3],
+				$GTP_tol)
+$GTP_size = PARAMSIZE("GTP_temp_array")
+$GTP_count = 1
+do para "$GTP_count" init 1 cond ($GTP_count.le.$GTP_size)
+ $GTP_check_virtual = ENTITYATTR(a_real,$GTP_temp_array[$GTP_count],t_ve)
+ if cond($GTP_check_virtual.eq.0)
+  $GTP_inlet_vertex = $GTP_temp_array[$GTP_count]
+ endif
+enddo
+$GTP_temp_array = LISTENTITY(t_ed, t_ve, $GTP_inlet_vertex)
+$GTP_edge=$GTP_temp_array[1]
+/ CLEANUP LOCAL PARAMETERS
+parameter delete "GTP_tol"
+parameter delete "GTP_count"
+parameter delete "GTP_size"
+parameter delete "GTP_check_virtual"
+parameter delete "GTP_temp_array"
+
+macro end
+

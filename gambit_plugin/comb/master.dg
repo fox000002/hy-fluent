@@ -1,0 +1,33 @@
+default set "GUI.GENERAL.TRANSCRIPT" numeric -1
+/ GEOMETRY DEFAULTS
+default set "TURBO.GENERAL.EDGE_PERCENT_EXTENSION" numeric 5
+default set "TURBO.GENERAL.BLADE_EXTENSION_FACTOR" numeric 1.25
+default set "TURBO.GENERAL.PERIODIC_EXTENSION_FACTOR" numeric 1.01
+default set "GEOMETRY.EDGE.NUM_SAMPLING_POINTS" numeric 100
+default set "GEOMETRY.EDGE.VIRTUAL_NUM_FACETS" numeric 30
+default set "GEOMETRY.EDGE.MAX_NUM_FACETS" numeric 500
+default set "GEOMETRY.TOLERANCE.EDGE_FACET" numeric 0.0001
+default set "GEOMETRY.TOLERANCE.FACE_FACET_MESH_SIZE_GRADING" string "fine"
+/ MESH DEFAULTS
+default set "MESH.TRIMESH.LSCALE_METHOD" numeric 3
+default set "MESH.TRIMESH.SMU_ITERATIONS" numeric 20
+default set "MESH.TRIMESH.SMU_RELAXATION" numeric 0.4
+/ BOUNDARY LAYER DEFAULTS
+default set "MESH.TETMESH.USE_3D_BOUNDARY_LAYERS" numeric 0
+default set "MESH.BLAYER.ANGLE_SMOOTH_FACTOR" numeric 0
+default set "MESH.BLAYER.HEIGHT_TRANSIT_RATIO" numeric 10
+default set "GRAPHICS.GENERAL.BOUNDARY_LAYER_VISIBLE_AT_CONSTRUCTION" numeric 0
+default set "MESH.BLAYER.QUICK_N_DIRTY" numeric 0
+default set "MESH.BLAYER.USE_FACET_EVALS" numeric 1
+default set "MESH.BLAYER.NORMAL_SMOOTH_ITER" numeric 10
+default set "MESH.BLAYER.OFFSET_SMOOTH_ITER" numeric 10
+/ SIZE FUNCTION DEFAULTS
+default set "TOOLS.SFUNCTION.BGRID_MAX_TREE_DEPTH" numeric 20
+default set "TOOLS.SFUNCTION.BGRID_NONLINEAR_ERR_PERCENT" numeric 50
+$COMB_loaded=0
+$COMB_plugin_path = $___plugin_path
+$COMB_plugin_button = $___plugin_button
+readfile file ($COMB_plugin_path + "/spec_form/comb.dg")
+readfile file ($COMB_plugin_path + "/spec_macro/comb.dg")
+$COMB_loaded=1
+default set "GUI.GENERAL.TRANSCRIPT" numeric 1

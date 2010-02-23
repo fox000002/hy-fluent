@@ -1,0 +1,356 @@
+/
+/      Copyright Fluent Inc.
+/      All Rights Reserved
+/
+/      This is unpublished proprietary source code of Fluent Inc.
+/      It is protected by U.S. copyright law as an unpublished work
+/      and is furnished pursuant to a written license agreement.  It
+/      is considered by Fluent to be confidential and may not be
+/      used, copied, or disclosed to others except in accordance with
+/      the terms and conditions of the license agreement.
+/
+/
+/ PUMP SOLVE MACRO
+/
+
+macro start "GTP_solve_cb"
+
+tempfile open (GETIDENT() + ".cmd")
+
+tempfile write "/\n"
+tempfile write "/ GTPUMP COMMAND FILE\n"
+tempfile write "/\n"
+
+tempfile write "$GTP_turbofile = \""
+ if cond (CSTRCMP((GETENV("FLUENT_ARCH")),"ntx86").eq.0)
+  tempfile write (STRTOUC($GTP_turbofile))
+ else
+  tempfile write ($GTP_turbofile)
+ endif 
+tempfile write "\"\n"
+
+tempfile write "$GTP_blade_number = "
+tempfile write NTOS($GTP_blade_number)
+tempfile write "\n"
+
+$GTP_size = PARAMSIZE("GTP_hubf_cmd")
+$GTP_i = 1
+tempfile write "$GTP_hubf = "
+do para "$GTP_i" init 1 cond($GTP_i.lt.$GTP_size)
+ tempfile write "\""
+ tempfile write $GTP_hubf_cmd[$GTP_i]
+ tempfile write "\", "
+enddo
+tempfile write "\""
+tempfile write $GTP_hubf_cmd[$GTP_size]
+tempfile write "\"\n"
+
+$GTP_size = PARAMSIZE("GTP_casingf_cmd")
+$GTP_i = 1
+tempfile write "$GTP_casingf = "
+do para "$GTP_i" init 1 cond($GTP_i.lt.$GTP_size)
+ tempfile write "\""
+ tempfile write $GTP_casingf_cmd[$GTP_i]
+ tempfile write "\", "
+enddo
+tempfile write "\""
+tempfile write $GTP_casingf_cmd[$GTP_size]
+tempfile write "\"\n"
+
+$GTP_size = PARAMSIZE("GTP_inletf_cmd")
+$GTP_i = 1
+tempfile write "$GTP_inletf = "
+do para "$GTP_i" init 1 cond($GTP_i.lt.$GTP_size)
+ tempfile write "\""
+ tempfile write $GTP_inletf_cmd[$GTP_i]
+ tempfile write "\", "
+enddo
+tempfile write "\""
+tempfile write $GTP_inletf_cmd[$GTP_size]
+tempfile write "\"\n"
+
+$GTP_size = PARAMSIZE("GTP_outletf_cmd")
+$GTP_i = 1
+tempfile write "$GTP_outletf = "
+do para "$GTP_i" init 1 cond($GTP_i.lt.$GTP_size)
+ tempfile write "\""
+ tempfile write $GTP_outletf_cmd[$GTP_i]
+ tempfile write "\", "
+enddo
+tempfile write "\""
+tempfile write $GTP_outletf_cmd[$GTP_size]
+tempfile write "\"\n"
+
+$GTP_size = PARAMSIZE("GTP_pressuref_cmd")
+$GTP_i = 1
+tempfile write "$GTP_pressuref = "
+do para "$GTP_i" init 1 cond($GTP_i.lt.$GTP_size)
+ tempfile write "\""
+ tempfile write $GTP_pressuref_cmd[$GTP_i]
+ tempfile write "\", "
+enddo
+tempfile write "\""
+tempfile write $GTP_pressuref_cmd[$GTP_size]
+tempfile write "\"\n"
+
+$GTP_size = PARAMSIZE("GTP_suctionf_cmd")
+$GTP_i = 1
+tempfile write "$GTP_suctionf = "
+do para "$GTP_i" init 1 cond($GTP_i.lt.$GTP_size)
+ tempfile write "\""
+ tempfile write $GTP_suctionf_cmd[$GTP_i]
+ tempfile write "\", "
+enddo
+tempfile write "\""
+tempfile write $GTP_suctionf_cmd[$GTP_size]
+tempfile write "\"\n"
+
+if cond($GTP_n_splitters.eq.1)
+ $GTP_size = PARAMSIZE("GTP_pressure1f_cmd")
+ $GTP_i = 1
+ tempfile write "$GTP_pressure1f = "
+ do para "$GTP_i" init 1 cond($GTP_i.lt.$GTP_size)
+  tempfile write "\""
+  tempfile write $GTP_pressure1f_cmd[$GTP_i]
+  tempfile write "\", "
+ enddo
+ tempfile write "\""
+ tempfile write $GTP_pressure1f_cmd[$GTP_size]
+ tempfile write "\"\n"
+
+ $GTP_size = PARAMSIZE("GTP_suction1f_cmd")
+ $GTP_i = 1
+ tempfile write "$GTP_suction1f = "
+ do para "$GTP_i" init 1 cond($GTP_i.lt.$GTP_size)
+  tempfile write "\""
+  tempfile write $GTP_suction1f_cmd[$GTP_i]
+  tempfile write "\", "
+ enddo
+ tempfile write "\""
+ tempfile write $GTP_suction1f_cmd[$GTP_size]
+ tempfile write "\"\n"
+endif
+
+tempfile write "$GTP_rotation = \""
+tempfile write NTOS($GTP_rotation)
+tempfile write "\"\n"
+
+if cond($GTP_rotation.eq.1)
+tempfile write "$GTP_rpm = "
+tempfile write NTOS($GTP_rpm)
+tempfile write "\n"
+tempfile write "$GTP_orient = "
+tempfile write $GTP_orient
+tempfile write "\n"
+endif
+
+tempfile write "$GTP_inlet_pressure = "
+tempfile write NTOS($GTP_inlet_pressure)
+tempfile write "\n"
+
+tempfile write "$GTP_outlet_pressure = "
+tempfile write NTOS($GTP_outlet_pressure)
+tempfile write "\n"
+
+tempfile write "$GTP_refinement = \""
+tempfile write $GTP_refinement
+tempfile write "\"\n"
+
+tempfile write "$GTP_iterations = "
+tempfile write NTOS($GTP_iterations)
+tempfile write "\n"
+
+tempfile write "macrorun name \"GTP_geometry_cb\"\n"
+tempfile write "macrorun name \"GTP_bounds_cb\"\n"
+tempfile write "macrorun name \"GTP_mesh_cb\"\n"
+tempfile write "macrorun name \"GTP_solve_cb\"\n"
+tempfile close
+
+tempfile open (GETIDENT() + ".fljou")
+
+tempfile write "file read-case "
+tempfile write (GETIDENT() + ".msh")
+tempfile write "\n"
+
+tempfile write "grid scale "
+tempfile write NTOS($GTP_scale) 
+tempfile write " "
+tempfile write NTOS($GTP_scale) 
+tempfile write " "
+tempfile write NTOS($GTP_scale) 
+tempfile write " \n"
+
+tempfile write "define units angular-velocity rpm\n"
+tempfile write "define units pressure atm\n"
+
+tempfile write "define models solver segregated yes\n"
+tempfile write "define models energy no\n"
+tempfile write "define models viscous mixing-length? yes\n"
+
+tempfile write "define materials copy fluid "
+tempfile write ($GTP_fluid)
+tempfile write "\n"
+tempfile write "define boundary-conditions fluid fluid yes "
+tempfile write ($GTP_fluid)
+tempfile write " no no "
+if cond ($GTP_rotation.eq.0)
+ tempfile write "yes 0 0 0 "
+else 
+ tempfile write "no yes 0 0 0 "
+ tempfile write (NTOS(STON($GTP_orient)*$GTP_rpm))
+ tempfile write " 0 0 0 "
+endif
+tempfile write (NTOS($GTP_axis[1]))
+tempfile write " "
+tempfile write (NTOS($GTP_axis[2]))
+tempfile write " "
+tempfile write (NTOS($GTP_axis[3]))
+tempfile write " no no no\n"
+
+tempfile write "define boundary-conditions wall hub yes motion-bc-stationary yes shear-bc-spec-shear no 0 no 0 no 0\n"
+
+tempfile write "define boundary-conditions wall casing yes motion-bc-stationary yes shear-bc-spec-shear no 0 no 0 no 0\n"
+
+if cond($GTP_n_splitters.eq.0)
+ tempfile write "define boundary-conditions wall pressure yes motion-bc-moving yes yes no 0 0 0 0 "
+ tempfile write (NTOS($GTP_axis[1]))
+ tempfile write " "
+ tempfile write (NTOS($GTP_axis[2]))
+ tempfile write " "
+ tempfile write (NTOS($GTP_axis[3]))
+ tempfile write "\n"
+
+ tempfile write "define boundary-conditions wall suction yes motion-bc-moving yes yes no 0 0 0 0 "
+ tempfile write (NTOS($GTP_axis[1]))
+ tempfile write " "
+ tempfile write (NTOS($GTP_axis[2]))
+ tempfile write " "
+ tempfile write (NTOS($GTP_axis[3]))
+ tempfile write "\n"
+endif
+
+if cond($GTP_n_splitters.eq.1)
+ tempfile write "define boundary-conditions wall pressure1 yes motion-bc-moving yes yes no 0 0 0 0 "
+ tempfile write (NTOS($GTP_axis[1]))
+ tempfile write " "
+ tempfile write (NTOS($GTP_axis[2]))
+ tempfile write " "
+ tempfile write (NTOS($GTP_axis[3]))
+ tempfile write "\n"
+
+ tempfile write "define boundary-conditions wall pressure2 yes motion-bc-moving yes yes no 0 0 0 0 "
+ tempfile write (NTOS($GTP_axis[1]))
+ tempfile write " "
+ tempfile write (NTOS($GTP_axis[2]))
+ tempfile write " "
+ tempfile write (NTOS($GTP_axis[3]))
+ tempfile write "\n"
+
+ tempfile write "define boundary-conditions wall suction1 yes motion-bc-moving yes yes no 0 0 0 0 "
+ tempfile write (NTOS($GTP_axis[1]))
+ tempfile write " "
+ tempfile write (NTOS($GTP_axis[2]))
+ tempfile write " "
+ tempfile write (NTOS($GTP_axis[3]))
+ tempfile write "\n"
+
+ tempfile write "define boundary-conditions wall suction2 yes motion-bc-moving yes yes no 0 0 0 0 "
+ tempfile write (NTOS($GTP_axis[1]))
+ tempfile write " "
+ tempfile write (NTOS($GTP_axis[2]))
+ tempfile write " "
+ tempfile write (NTOS($GTP_axis[3]))
+ tempfile write "\n"
+endif
+
+if cond($GTP_righthanded.eq.1)
+ tempfile write "define boundary-conditions modify-zone make-periodic periodic-1 periodic-2 yes yes\n"
+else
+ tempfile write "define boundary-conditions modify-zone make-periodic periodic-2 periodic-1 yes yes\n"
+endif
+
+tempfile write "define boundary-conditions pressure-inlet inlet no "
+tempfile write (NTOS($GTP_inlet_pressure))
+tempfile write " no "
+tempfile write (NTOS($GTP_inlet_pressure))
+tempfile write " yes no yes no "
+tempfile write (NTOS($GTP_inlet_radial))
+tempfile write " no "
+tempfile write (NTOS($GTP_inlet_tang))
+tempfile write " no "
+tempfile write (NTOS($GTP_inlet_axial))
+tempfile write "\n"
+
+tempfile write "define boundary-conditions zone-type outlet pressure-outlet\n"
+tempfile write "define boundary-conditions pressure-outlet outlet no "
+tempfile write (NTOS($GTP_outlet_pressure))
+tempfile write " no no no yes\n"
+
+tempfile write "solve set discretization-scheme pressure 14\n"
+tempfile write "solve set discretization-scheme flow 22\n"
+tempfile write "(rpsetvar 'piso/coupling? #f)\n"
+tempfile write "(rpsetvar 'piso/skew-iter 1)\n"
+tempfile write "(rpsetvar 'piso/neighbor-iter 0)\n"
+tempfile write "solve set discretization-scheme mom 1\n"
+tempfile write "solve set under-relaxation pressure 0.1\n"
+tempfile write "solve set under-relaxation mom 0.9\n"
+tempfile write "solve monitors residual plot? yes\n"
+tempfile write "solve monitors surface set-monitor mass-flow pressure outlet () yes 1 yes no \"Mass Flow Rate\"\n"
+tempfile write "(rpsetvar 'init-relative? #f)\n"
+tempfile write "solve initialize initialize-flow\n"
+if cond($GTP_interpolate.eq.1)
+ tempfile write "file interpolate read-data yes "
+  if cond (CSTRCMP((GETENV("FLUENT_ARCH")),"ntx86").eq.0)
+   tempfile write (STRTOUC($GTP_interpolate_file))
+  else
+   tempfile write ($GTP_interpolate_file)
+  endif 
+ tempfile write "\n"
+endif
+tempfile write "grid reorder reorder-domain\n"
+tempfile write "solve iterate "
+tempfile write (NTOS($GTP_iterations))
+tempfile write "\n"
+tempfile write "file write-case-data "
+tempfile write (GETIDENT() + ".cas.gz")
+$GTP_file_exists = FILEEXISTS(GETIDENT() + ".cas.gz")
+if cond($GTP_file_exists.eq.1)
+ tempfile write " yes"
+endif
+tempfile write "\n"
+tempfile write "file interpolate write-data "
+tempfile write (GETIDENT() + ".ip")
+$GTP_file_exists = FILEEXISTS(GETIDENT() + ".ip")
+if cond($GTP_file_exists.eq.1)
+ tempfile write " yes "
+endif
+tempfile write " yes\n"
+/
+/ Maximum Y+ Reporting on Blades
+/ Experimental Code - commented out
+/
+/tempfile write "(load '"
+/tempfile write $GTP_plugin_path
+/tempfile write "\scheme\flowlab.scm)"
+/tempfile write "\n"
+/tempfile write "flowlab open-file \""
+/tempfile write $GTP_plugin_path
+/tempfile write "\temp\y-plus.jou\""
+/tempfile write "\n"
+/
+/if cond($GTP_n_splitters.eq.0)
+/ tempfile write "flowlab write-report \"report surface-facet-max pressure suction () y-plus\" \"y-plus\" -1"
+/endif
+
+/if cond($GTP_n_splitters.eq.1)
+/ tempfile write "flowlab write-report \"report surface-facet-max pressure1 pressure2 suction1 suction2 () y-plus\" \"y-plus\" -1"
+/endif
+
+/tempfile write "\n"
+/tempfile write "flowlab close-file\n"
+tempfile close
+
+system command("fluent 3d -r6.1.22 -i " + (GETIDENT() + ".fljou")) background
+abort force
+macro end
+

@@ -1,0 +1,11 @@
+/
+/ comb.plugin
+/
+/ This plugin will hook Plugin Button 452
+/
+
+if cond (CSTRCMP((GETENV("FLUENT_ARCH")),"ntx86").eq.0)
+ dgui plugin (GETENV("GAMBIT_ROOT")+"\plugins\comb") "452"
+else
+ dgui plugin (GETENV("GAMBIT_ROOT")+"/plugins/comb") "452"
+endif 

@@ -1,0 +1,128 @@
+/
+/      Copyright Fluent Inc.
+/      All Rights Reserved
+/
+/      This is unpublished proprietary source code of Fluent Inc.
+/      It is protected by U.S. copyright law as an unpublished work
+/      and is furnished pursuant to a written license agreement.  It
+/      is considered by Fluent to be confidential and may not be
+/      used, copied, or disclosed to others except in accordance with
+/      the terms and conditions of the license agreement.
+/
+/
+/ PUMP BOUNDARY CONDITIONS MACRO
+/
+
+macro start "GTP_bounds_cb"
+$GTP_error = 0
+/
+/ CREATING GROUPS TO HOLD ENTITIES
+/
+group create "GTP-inlet" face $GTP_inletf
+$GTP_error = $GTP_error + opererr()
+group create "GTP-outlet" face $GTP_outletf
+$GTP_error = $GTP_error + opererr()
+group create "GTP-hub" face $GTP_hubf
+$GTP_error = $GTP_error + opererr()
+group create "GTP-casing" face $GTP_casingf
+$GTP_error = $GTP_error + opererr()
+group create "GTP-volume" volume "GTP_volume"
+$GTP_error = $GTP_error + opererr()
+if cond ($GTP_n_splitters.eq.1)
+ group create "GTP-pressure" face $GTP_pressuref $GTP_pressure1f
+ $GTP_error = $GTP_error + opererr()
+ group create "GTP-suction" face $GTP_suctionf $GTP_suction1f
+ $GTP_error = $GTP_error + opererr()
+else
+ group create "GTP-pressure" face $GTP_pressuref
+ $GTP_error = $GTP_error + opererr()
+ group create "GTP-suction" face $GTP_suctionf
+ $GTP_error = $GTP_error + opererr()
+endif
+
+/
+/ COPY THE FACE VARIABLES TO USE IN COMMAND FILE LATER
+/
+$GTP_inletf_cmd = $GTP_inletf
+$GTP_outletf_cmd = $GTP_outletf
+$GTP_hubf_cmd = $GTP_hubf
+$GTP_casingf_cmd = $GTP_casingf
+$GTP_pressuref_cmd = $GTP_pressuref
+$GTP_suctionf_cmd = $GTP_suctionf
+if cond ($GTP_n_splitters.eq.1)
+ $GTP_pressure1f_cmd = $GTP_pressure1f
+ $GTP_suction1f_cmd = $GTP_suction1f
+endif
+/
+/ MERGE HUB, CASING, INLET & OUTLET FACES
+/
+$GTP_size = PARAMSIZE("GTP_inletf")
+if cond($GTP_size.gt.1)
+ face merge LISTENTITY(t_fa,t_gr,"GTP-inlet") mergelower
+endif
+
+$GTP_size = PARAMSIZE("GTP_outletf")
+if cond($GTP_size.gt.1)
+ face merge LISTENTITY(t_fa,t_gr,"GTP-outlet") mergelower
+endif
+
+$GTP_size = PARAMSIZE("GTP_hubf")
+if cond($GTP_size.gt.1)
+ face merge LISTENTITY(t_fa,t_gr,"GTP-hub") mergelower
+endif
+
+$GTP_size = PARAMSIZE("GTP_casingf")
+if cond($GTP_size.gt.1)
+ face merge LISTENTITY(t_fa,t_gr,"GTP-casing") mergelower
+endif
+
+/
+/ DEFINE TURBO ZONES
+/
+turbo inlet LISTENTITY(t_fa,t_gr,"GTP-inlet") \
+      outlet LISTENTITY(t_fa,t_gr,"GTP-outlet") \
+      hub LISTENTITY(t_fa,t_gr,"GTP-hub") \
+      casing LISTENTITY(t_fa,t_gr,"GTP-casing") \
+      pressure LISTENTITY(t_fa,t_gr,"GTP-pressure") \
+      suction LISTENTITY(t_fa,t_gr,"GTP-suction") \
+      zones
+/
+/ CALCULATE INLET AREA AND HYDRAULIC DIAMETER FOR USE IN SOLVER
+/
+$GTP_tempf = LISTENTITY(t_fa,t_gr,"GTP-inlet")
+$GTP_inlet_area = AREA($GTP_tempf[1])*$GTP_scale*$GTP_scale
+$GTP_inlet_hdia = SQRT($GTP_inlet_area * 4.0 / PI)
+
+/
+/ CALCULATE OUTLET AREA AND HYDRAULIC DIAMETER FOR USE IN SOLVER
+/
+$GTP_tempf = LISTENTITY(t_fa,t_gr,"GTP-outlet")
+$GTP_outlet_area = AREA($GTP_tempf[1])*$GTP_scale*$GTP_scale
+$GTP_outlet_hdia = SQRT($GTP_outlet_area * 4.0 / PI)
+
+/
+/ DELETE PERIODIC BOUNDARY ZONE
+/ (WILL BE RE-CREATED IN THE SOLVER)
+/
+$GTP_periodic_faces = LISTENTITY(t_fa,t_zn,"periodic")
+physics delete "periodic" btype
+physics create "periodic-1" btype "SYMMETRY" face $GTP_periodic_faces[1]
+physics create "periodic-2" btype "SYMMETRY" face $GTP_periodic_faces[2]
+
+/
+/ CLEANUP PARAMETERS
+/
+parameter delete "GTP_size"
+parameter delete "GTP_tempf"
+parameter delete "GTP_periodic_faces"
+
+macro end
+
+macro start "GTP_bounds_form_cb"
+$GTP_bounds=1
+$GTP_stage="Mesh"
+dgui updateitem "GTP_pump"
+$GTP_stage="Mesh"
+macrorun name "GTP_showstage_cb"
+macro end
+

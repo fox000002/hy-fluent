@@ -1,0 +1,89 @@
+/
+/      Copyright Fluent Inc.
+/      All Rights Reserved
+/
+/      This is unpublished proprietary source code of Fluent Inc.
+/      It is protected by U.S. copyright law as an unpublished work
+/      and is furnished pursuant to a written license agreement.  It
+/      is considered by Fluent to be confidential and may not be
+/      used, copied, or disclosed to others except in accordance with
+/      the terms and conditions of the license agreement.
+/
+/
+/ PUMP MAIN FORM
+/
+
+dgui createform "COMB_FORM" \
+     formtitle "COMB-FORM" \
+     position 3 \
+     actionbuttons \
+     "Apply" "macrorun name \"COMB_hello\"" "" \
+     "Close" "dgui hideitem \"COMB_FORM\"" ""
+
+$COMB_geom=0
+$COMB_bounds=0
+$COMB_mesh=0
+$COMB_n_splitters=0
+
+dgui createitem "COMB_FORM" radiobuttonbox \
+     name "COMBO_tasks" \
+     items "Geometry" "" "1" \
+           "Boundary Conditions" "" "$COMB_geom" \
+           "Mesh" "" "$COMB_bounds" \
+           "Solve" "" "$COMB_mesh" \
+     parameter "COMB_stage" \
+     activatecb "" \
+     tdefault "Geometry"
+
+dgui createitem "COMB_FORM" form \
+     name "COMB_geometry_form"
+
+dgui createitem "COMB_geometry_form" fileselect \
+     name "COMB_file_form" \
+     labelname "Design File: " \
+     entrysize 5 \
+     parameter "COMB_file" \
+     pattern "*.comb" \
+     tdefault (GETCWD() + "\default.comb")
+
+
+dgui createitem "COMB_geometry_form" optionmenu \
+     name "COMB_units" \
+     labelname "Units" \
+     parameter "COMB_units" \
+     items "m" "m" "" \
+           "cm" "cm" "" \
+           "mm" "mm" "" \
+     tdefault "m" \
+     top "COMB_file_form"
+
+dgui createitem "COMB_geometry_form" intentry \
+     name "COMB_inlet_number" \
+     labelname "Number of inlet" \
+     entrysize 5 \
+     parameter "COMB_inlet_number" \
+     imin 2 \
+     top "COMB_units"
+
+dgui createitem "COMB_geometry_form" label \
+     name "COMB_hello_label" \
+     labelname "hello label" \
+     top "COMB_inlet_number"
+
+dgui createitem "COMB_FORM" separator
+
+dgui createitem "COMB_FORM" label \
+     name "COMB_hello2_label" \
+     labelname "hello2 label" \
+
+dgui hide "COMB_geometry_form"
+
+dgui show "COMB_geometry_form"
+
+/ readfile file ($GTP_plugin_path + "/spec_form/geometry.dg")
+/ readfile file ($GTP_plugin_path + "/spec_form/bounds.dg")
+/ readfile file ($GTP_plugin_path + "/spec_form/mesh.dg")
+/ readfile file ($GTP_plugin_path + "/spec_form/solve.dg")
+
+dgui hookup ($COMB_plugin_button) formname "COMB_FORM" pixmap ($COMB_plugin_path + "/icons/comb.xpm")
+

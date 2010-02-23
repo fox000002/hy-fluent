@@ -1,0 +1,38 @@
+/
+/      Copyright Fluent Inc.
+/      All Rights Reserved
+/
+/      This is unpublished proprietary source code of Fluent Inc.
+/      It is protected by U.S. copyright law as an unpublished work
+/      and is furnished pursuant to a written license agreement.  It
+/      is considered by Fluent to be confidential and may not be
+/      used, copied, or disclosed to others except in accordance with
+/      the terms and conditions of the license agreement.
+/
+/
+/ PUMP MESH FORM
+/
+
+dgui createitem "GTP_pump" form \
+     name "GTP_mesh_form"
+
+dgui createitem "GTP_mesh_form" radiobuttonbox \
+     name "GTP_mesh_control" \
+     parameter "GTP_refinement" \
+     tdefault "coarse" \
+     items "Coarse  (Mesh Factor = 1.5)" "coarse" "#t" \
+     	   "Medium (Mesh Factor = 1.0)" "medium" "#t" \
+     	   "Fine      (Mesh Factor = 0.5)" "fine" "#t" \
+     	   "Custom" "custom" "#t" \
+     noborder 
+
+dgui createitem "GTP_mesh_form" realentry \
+     name "GTP_mesh_factor" \
+     labelname "Custom Mesh Factor" \
+     entrysize 5 \
+     parameter "GTP_mesh_factor" \
+     top "GTP_mesh_control" \
+     rdefault 1.0
+     
+dgui hide "GTP_mesh_form"
+

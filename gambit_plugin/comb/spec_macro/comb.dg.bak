@@ -1,0 +1,110 @@
+/
+/      Copyright huys (huys03@gmail.com)
+/      All Rights Reserved
+/
+/
+/ COMB MAIN MACRO
+/
+
+/readfile file ($COMB_plugin_path +"/spec_macro/geometry.dg")
+/readfile file ($COMB_plugin_path +"/spec_macro/bounds.dg")
+/readfile file ($COMB_plugin_path +"/spec_macro/mesh.dg")
+/readfile file ($COMB_plugin_path +"/spec_macro/solve.dg")
+
+/
+/ Say Hello
+/
+macro start "COMB_hello"
+    dgui message "Combustion Chamber Simulation!" infomation
+macro end
+
+/
+/ next step
+/
+macro start
+
+/ transcript nothing
+  if cond($COMB_loaded.eq.1)
+    default set "GUI.GENERAL.TRANSCRIPT" numeric -1
+  endif
+
+  if cond ($COMB_stage .eq. "Geometry")
+    macrorun name "COMB_geometry_cb"
+    if cond ($COMB_error.gt.0)
+      dgui message "Error creating geometry." error
+    else
+      macro name "COM_geometry_form_cb"
+    endif
+  else
+    if cond ($COMB_stage .eq. "Boundary Conditions")
+      macrorun name "COMB_bounds_cb"
+      if cond ($COMB_error.gt.0)
+        dgui message "Error applying boundaries." error
+      else
+        macrorun name "COMB_bounds_cb"
+      endif
+    else
+      if cond ($COMB_stage .eq. "Mesh")
+        macrorun name "COMB_mesh_cb"
+        if cond ($COMB_error.gt.0)
+          dgui message "Error creating mesh." error
+        else
+          macrorun name "COMB_mesh_form_cb"
+        endif
+      else
+        macrorun name "COMB_solve_cb"
+      endif
+    endif
+  endif
+
+
+/ transcript command
+  if cond($COMB_loaded.eq.1)
+    default set "GUI.GENERAL.TRANSCRIPT" numeric 1
+  endif
+
+macro end
+
+/
+/ show stage
+/
+macro start "COMB_showstage_cb"
+
+/ transcript nothing
+  if cond($COMB_loaded.eq.1)
+   default set "GUI.GENERAL.TRANSCRIPT" numeric -1
+  endif
+
+   if cond ($COMB_stage .eq. "Geometry")
+    dgui show "COMB_geometry_form"
+    dgui hide "COMB_bounds_form"
+    dgui hide "COMB_mesh_form"
+    dgui hide "COMB_solve_form"
+   else
+    if cond ($COMB_stage .eq. "Boundary Conditions")
+     dgui hide "COMB_geometry_form"
+     dgui show "COMB_bounds_form"
+     dgui hide "COMB_mesh_form"
+     dgui hide "COMB_solve_form"
+    else
+     if cond ($COMB_stage .eq. "Mesh")
+      dgui hide "COMB_geometry_form"
+      dgui hide "COMB_bounds_form"
+      dgui show "COMB_mesh_form"
+      dgui hide "COMB_solve_form"
+     else
+      dgui hide "COMB_geometry_form"
+      dgui hide "COMB_bounds_form"
+      dgui hide "COMB_mesh_form"
+      dgui show "COMB_solve_form"
+     endif
+    endif
+   endif
+
+/ transcript commands
+  if cond($COMB_loaded.eq.1)
+   default set "GUI.GENERAL.TRANSCRIPT" numeric 1
+  endif
+
+macro end
+

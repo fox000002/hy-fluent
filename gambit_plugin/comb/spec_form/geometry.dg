@@ -1,0 +1,51 @@
+/
+/      Copyright Fluent Inc.
+/      All Rights Reserved
+/
+/      This is unpublished proprietary source code of Fluent Inc.
+/      It is protected by U.S. copyright law as an unpublished work
+/      and is furnished pursuant to a written license agreement.  It
+/      is considered by Fluent to be confidential and may not be
+/      used, copied, or disclosed to others except in accordance with
+/      the terms and conditions of the license agreement.
+/
+/
+/ PUMP GEOMETRY FORM
+/
+
+dgui createitem "GTP_pump" form \
+     name "GTP_geometry_form"
+
+dgui createitem "GTP_geometry_form" fileselect \
+     name "GTP_turbofile_form" \
+     labelname "Design File:" \
+     entrysize 5 \
+     parameter "GTP_turbofile" \
+     pattern "*.tur" \
+     tdefault (GETCWD() + "\default.tur")
+
+dgui createitem "GTP_geometry_form" optionmenu \
+  name "GTP_units" \
+  labelname "Units" \
+  parameter "GTP_units" \
+  items "m" "m" "" \
+        "cm" "cm" "" \
+	"mm" "mm" "" \
+	"in" "in" "" \
+	"ft" "ft" "" \
+  tdefault "m" \
+  top "GTP_turbofile_form"
+
+dgui createitem "GTP_geometry_form" intentry \
+  name "GTP_blade_number" \
+  labelname "Number of Blades" \
+  entrysize 5 \
+  parameter "GTP_blade_number" \
+  imin 2 \
+  top "GTP_units"
+
+dgui hide "GTP_geometry_form"
+/
+/ UNHIDE THIS FORM AS IT IS THE DEFAULT
+/
+dgui show "GTP_geometry_form"
