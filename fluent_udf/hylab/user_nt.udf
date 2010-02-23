@@ -1,4 +1,4 @@
-SOURCES =  $(SRC)myudf.c $(SRC)mydmesh.c $(SRC)myuns.c 
+SOURCES =  $(SRC)myudf.c $(SRC)mydmesh.c $(SRC)myuns.c $(SRC)mybc.c $(SRC)myprop.c
 VERSION = 2d
 PARALLEL_NODE = none
 FLUENT_INC = D:\GS\Fluent.Inc
