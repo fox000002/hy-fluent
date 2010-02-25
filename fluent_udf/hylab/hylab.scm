@@ -18,6 +18,17 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
+;; rp-var
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define (set-new-var s v t)
+  (if (not (rp-var-object s))
+    (rp-var-define s v t #f)
+  )
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; GUI Menu
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -474,11 +485,59 @@
 (hy-open-udf-library "libhylab")
 
 ;;;
+(for-each
+  (lambda (var) (apply set-new-var var))
+  '(
+    (my/int   1   integer)  ; user integer
+    (my/real  0.5  real)    ; user real
+    (my/text  "abc" string) ; user text
+  )
+)
+
+(define gui-my-input-panel
+  (let 
+    ((panel #f) (mybox) (my-int-entry) (my-real-entry) (my-text-entry))
+    ;;;
+    (define (update-cb . args)
+      (cx-set-integer-entry my-int-entry (rpgetvar 'my/int))
+      (cx-set-real-entry my-real-entry (rpgetvar 'my/real))
+      (cx-set-text-entry my-text-entry (rpgetvar 'my/text))
+    )
+    ;;;
+    (define (apply-cb . args)
+      (rpsetvar 'my/int (cx-show-integer-entry my-int-entry))
+      (rpsetvar 'my/real (cx-show-real-entry my-real-entry))
+      (rpsetvar 'my/text (cx-show-text-entry my-text-entry))
+    )
+    ;;;
+    (lambda args
+      (if (not panel)
+        ;; create panel
+        (let ((table))
+            (set! panel (cx-create-panel "My Input Panel" apply-cb update-cb))
+            ;;
+            (set! table (cx-create-table panel "" 'border #f 'below 0 'right-of 0))
+            ;;
+            (set! mybox (cx-create-table table "My Inputs" 'border #t 'row 0))
+            (set! my-int-entry (cx-create-integer-entry mybox "my integer" 'row 0 'col 0))
+            (set! my-real-entry (cx-create-real-entry mybox "my real" 'row 1 'col 0))
+            (set! my-text-entry (cx-create-text-entry mybox "my text" 'row 2 'col 0))
+        )
+      )
+      ;;
+      (cx-show-panel panel)
+    )
+  )
+)
+
+;;;
 (hy-restore-mainmenu)
 
 (hy-add-mainmenu hy-menu-name)
 
 (hy-add-menuitem hy-menu-name "SayHello" hy-hello)
+
+(hy-add-menuitem hy-menu-name "ShowInput" gui-my-input-panel)
 
 (hy-add-menuitem hy-menu-name "CheckSurface" (lambda () (hy-check-surf-name "inlet") (hy-delete-inj "injection-0")))
 

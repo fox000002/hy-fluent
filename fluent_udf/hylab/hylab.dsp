@@ -122,6 +122,14 @@ SOURCE=.\src\mydmesh.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\mymisc.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\mymphase.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\myprop.c
 # End Source File
 # Begin Source File

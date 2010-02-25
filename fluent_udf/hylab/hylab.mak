@@ -115,7 +115,7 @@ CPP_SRCS = $(SRC)myext.cpp
 CPP_SRCS2 = $(CPP_SRCS:.\src\=)
 CPP_OBJS = $(CPP_SRCS2:.cpp=.obj)
 
-RCC = rc /V /X /I"D:\GS\VC6\VC98\Include"
+RCC = rc /nologo /V /X /I"D:\GS\VC6\VC98\Include"
 
 RC_FILE = .\res\mydialog.rc
 #RC_FILE2 = $(RC_FILE:.\src\=)
@@ -153,7 +153,7 @@ $(RES_FILE) : $(RC_FILE)
 	
 $(TARGET): hylab.mak user_nt.udf $(UDF_OBJECT) $(SRC_OBJECT) $(MISC_OBJS) $(CPP_OBJS) $(RES_FILE)
 	@echo # Linking $@ because of $?
-	link  $(LIBS) /dll   /out:$(TARGET) \
+	link  /nologo $(LIBS) /dll   /out:$(TARGET) \
 	      $(OBJECTS)  $(FLUENT_LIB) $(RES_FILE)
 	
 $(UDFDATA): hylab.mak $(SRC_OBJECT)

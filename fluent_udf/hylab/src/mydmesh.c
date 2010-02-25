@@ -33,6 +33,99 @@ DEFINE_CG_MOTION(piston, dt, vel, omega, time, dtime)
     vel[0] = v_prev;
 }
 
+/************************************************************
+ * defining parabola through points (0, 1), (1/2, 5/4), (1, 1)
+ ************************************************************/
+DEFINE_GEOM(parabola, domain, dt, position)
+{
+  /* set y = -x^2 + x + 1 */
+  position[1] = - position[0]*position[0] + position[0] + 1;
+}
+
+/**********************************************************
+ node motion based on simple beam deflection equation
+ compiled UDF
+ **********************************************************/
+DEFINE_GRID_MOTION(beam,domain,dt,time,dtime)
+{
+  Thread *tf = DT_THREAD(dt);
+  face_t f;
+  Node *v;
+  real NV_VEC(omega), NV_VEC(axis), NV_VEC(dx);
+  real NV_VEC(origin), NV_VEC(rvec);
+  real sign;
+  int n;
+
+  /* set deforming flag on adjacent cell zone */
+  SET_DEFORMING_THREAD_FLAG(THREAD_T0(tf));
+
+  sign = -5.0 * sin (26.178 * time);
+
+  Message ("time = %f, omega = %f\n", time, sign);
+
+  NV_S(omega, =, 0.0);
+  NV_D(axis, =, 0.0, 1.0, 0.0);
+  NV_D(origin, =, 0.0, 0.0, 0.152);
+
+  begin_f_loop(f,tf)
+    {
+      f_node_loop(f,tf,n)
+        {
+          v = F_NODE(f,tf,n);
+
+          /* update node if x position is greater than 0.02
+             and that the current node has not been previously
+             visited when looping through previous faces */
+          if (NODE_X(v) > 0.020 && NODE_POS_NEED_UPDATE (v))
+            {
+              /* indicate that node position has been update
+                 so that it's not updated more than once */
+              NODE_POS_UPDATED(v);
+
+              omega[1] = sign * pow (NODE_X(v)/0.230, 0.5);
+              NV_VV(rvec, =, NODE_COORD(v), -, origin);
+              NV_CROSS(dx, omega, rvec);
+              NV_S(dx, *=, dtime);
+              NV_V(NODE_COORD(v), +=, dx);
+            }
+        }
+    }
+
+  end_f_loop(f,tf);
+}
+
+/*******************************************************
+SDOF property compiled UDF with external forces/moments
+*******************************************************/
+DEFINE_SDOF_PROPERTIES(delta_missile, prop, dt, time, dtime)
+{
+   prop[SDOF_MASS]       = 907.185;
+   prop[SDOF_IXX]        = 27.116;
+   prop[SDOF_IYY]        = 488.094;
+   prop[SDOF_IZZ]        = 488.094;
+
+   /* add injector forces, moments */
+   {
+     register real dfront = fabs (DT_CG (dt)[2] -
+                            (0.179832*DT_THETA (dt)[1]));
+     register real dback  = fabs (DT_CG (dt)[2] +
+                            (0.329184*DT_THETA (dt)[1]));
+
+     if (dfront <= 0.100584)
+       {
+         prop[SDOF_LOAD_F_Z] = 10676.0;
+         prop[SDOF_LOAD_M_Y] = -1920.0;
+       }
+
+     if (dback <= 0.100584)
+       {
+         prop[SDOF_LOAD_F_Z] += 42703.0;
+         prop[SDOF_LOAD_M_Y] += 14057.0;
+       }
+   }
+
+   printf ("\ndelta_missile: updated 6DOF properties");
+}
 
 /*                                        */
 static real G = 9.80; /* ÖØÁ¦*/
