@@ -115,7 +115,7 @@ CPP_SRCS = $(SRC)myext.cpp
 CPP_SRCS2 = $(CPP_SRCS:.\src\=)
 CPP_OBJS = $(CPP_SRCS2:.cpp=.obj)
 
-RCC = rc /nologo /V /X /I"D:\GS\VC6\VC98\Include"
+RCC = rc /V /X /I"D:\GS\VC6\VC98\Include"
 
 RC_FILE = .\res\mydialog.rc
 #RC_FILE2 = $(RC_FILE:.\src\=)

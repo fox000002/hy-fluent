@@ -50,10 +50,10 @@ DEFINE_ADJUST(my_adjust, d)
     thread_loop_c(t,d)
     {
         begin_c_loop(c,t)
-		{
+        {
             sum_diss += C_D(c,t) * C_VOLUME(c,t);
         }
-		end_c_loop(c,t)
+        end_c_loop(c,t)
     }
 
     printf("Volume integral of turbulent dissipation: %g\n", sum_diss);
@@ -128,14 +128,14 @@ DEFINE_ON_DEMAND(INIT)
     int i;
     face_t f;       // index of face of wall
     cell_t c0;      // index of cell which is adjacent to wall.
-	Domain *domain;  
-	
-	thread_ID = 8;  //
+    Domain *domain;  
+    
+    thread_ID = 8;  //
     count=0;
     i=0;
 
 
-	domain = Get_Domain(1);  /* returns fluid domain pointer */
+    domain = Get_Domain(1);  /* returns fluid domain pointer */
     t = Lookup_Thread(domain, thread_ID);
 
     //
@@ -147,7 +147,7 @@ DEFINE_ON_DEMAND(INIT)
     end_f_loop(f,t)
 
     g_sgrid = (int *) malloc(count * sizeof(int));
-	g_ssize = count;
+    g_ssize = count;
     //
     begin_f_loop(f,t)
     {
@@ -161,21 +161,21 @@ DEFINE_ON_DEMAND(INIT)
 //
 int cellTest(int d)
 {
-	int iResult;
-	int i;
-	// if d is within array g_sgrid return 1, otherwise return 0.
-	iResult = 0;
+    int iResult;
+    int i;
+    // if d is within array g_sgrid return 1, otherwise return 0.
+    iResult = 0;
 
-	for (i=0; i<g_ssize; ++i)
-	{
-		if (d == g_sgrid[i])
-		{
-			iResult = 1;
-			break;
-		}
-	}
+    for (i=0; i<g_ssize; ++i)
+    {
+        if (d == g_sgrid[i])
+        {
+            iResult = 1;
+            break;
+        }
+    }
 
-	return iResult;
+    return iResult;
 }
 
 real g_hy_face_t_avg = 0.0;
@@ -183,45 +183,45 @@ real g_hy_face_t_avg = 0.0;
 // Fetch the average temperature of a specific face
 DEFINE_ON_DEMAND(hy_face_temp_avg)
 {
-	real temperature = 0.0f;
-	real area  = 0.0f;
-	int num = 0;
-	int thread_ID = 8;
-	//
-	face_t f;
-	Thread *t;
-	int n;
-	Node *node;
-	Domain *domain;
-	//
-	real NV_VEC(A);
-	real x[ND_ND];
+    real temperature = 0.0f;
+    real area  = 0.0f;
+    int num = 0;
+    int thread_ID = 8;
+    //
+    face_t f;
+    Thread *t;
+    int n;
+    Node *node;
+    Domain *domain;
+    //
+    real NV_VEC(A);
+    real x[ND_ND];
 
-	domain = Get_Domain(1);  /* returns fluid domain pointer */
-	t = Lookup_Thread(domain, thread_ID);
+    domain = Get_Domain(1);  /* returns fluid domain pointer */
+    t = Lookup_Thread(domain, thread_ID);
 
-	//CX_Message("There are %d nodes in Face.\n", F_NNODES(f,t));
+    //CX_Message("There are %d nodes in Face.\n", F_NNODES(f,t));
 
-	
-	//area = A[0];
 
-	begin_f_loop(f, t)    /* loops over faces in a face thread  */
-	{
-		F_CENTROID(x,f,t);
-		F_AREA(A, f, t);
+    //area = A[0];
+
+    begin_f_loop(f, t)    /* loops over faces in a face thread  */
+    {
+        F_CENTROID(x,f,t);
+        F_AREA(A, f, t);
 #ifdef DEBUG
-		CX_Message("area : %f\n", -A[1]);
-		CX_Message("temperature : %f  %f\n", x[0], F_T(f, t));
+        CX_Message("area : %f\n", -A[1]);
+        CX_Message("temperature : %f  %f\n", x[0], F_T(f, t));
 #endif // DEBUG
-		temperature -= F_T(f,t) * A[1];
-		area -= A[1];
-	}                         
-	end_f_loop(f, t)
-	
-	g_hy_face_t_avg  = temperature / area;
-	//
-	CX_Message("Total area of Face %d : %f\n", THREAD_ID(t), area);
-	CX_Message("The average temperature of the Face : %f\n", g_hy_face_t_avg);
+        temperature -= F_T(f,t) * A[1];
+        area -= A[1];
+    }                         
+    end_f_loop(f, t)
+
+    g_hy_face_t_avg  = temperature / area;
+    //
+    CX_Message("Total area of Face %d : %f\n", THREAD_ID(t), area);
+    CX_Message("The average temperature of the Face : %f\n", g_hy_face_t_avg);
 }
 
 
@@ -229,28 +229,28 @@ FILE *fout;
 
 void Print_Thread_Face_Centroids(Domain *domain, int id)
 {
-	real FC[3] = {0., 0.};
-	face_t f;
-	Thread *t = Lookup_Thread(domain, id);
+    real FC[3] = {0., 0.};
+    face_t f;
+    Thread *t = Lookup_Thread(domain, id);
 
-	fprintf(fout,"thread id %d\n", id);
-	begin_f_loop(f,t)
-	{
-		F_CENTROID(FC,f,t);
-		fprintf(fout, "f%d %g %g %g\n", f, FC[0], FC[1], FC[2]);
-	}
-	end_f_loop(f,t)
-		fprintf(fout, "\n");  
+    fprintf(fout,"thread id %d\n", id);
+    begin_f_loop(f,t)
+    {
+        F_CENTROID(FC,f,t);
+        fprintf(fout, "f%d %g %g %g\n", f, FC[0], FC[1], FC[2]);
+    }
+    end_f_loop(f,t)
+        fprintf(fout, "\n");  
 }
 
 DEFINE_ON_DEMAND(get_coords)
 {
-	Domain *domain; 
-	domain = Get_Domain(1);
-	fout = fopen("faces.out", "w");
-	Print_Thread_Face_Centroids(domain, 2);
-	Print_Thread_Face_Centroids(domain, 4);
-	fclose(fout); 
+    Domain *domain; 
+    domain = Get_Domain(1);
+    fout = fopen("faces.out", "w");
+    Print_Thread_Face_Centroids(domain, 2);
+    Print_Thread_Face_Centroids(domain, 4);
+    fclose(fout); 
 }
 
 
@@ -261,7 +261,7 @@ DEFINE_SOURCE(MySourceTerm, c, t, dS, eqn)
     if(cellTest(c))
     {
         source = 1.0;
-		dS[eqn] = 0.0;
+        dS[eqn] = 0.0;
         return source;
     }
     return 0;
@@ -313,7 +313,7 @@ real contact_area(cell_t c, Thread *t, int s_id, int *n);
 #define BETA 0.0
 real arrhenius_rate(real temp)
 {
-	return PRE_EXP*pow(temp,BETA)*exp(-ACTIVE/(UNIVERSAL_GAS_CONSTANT*temp));
+    return PRE_EXP*pow(temp,BETA)*exp(-ACTIVE/(UNIVERSAL_GAS_CONSTANT*temp));
 }
 
 /* Species numbers. Must match order in Fluent panel */
@@ -328,9 +328,9 @@ real reaction_rate(cell_t c, Thread *cthread, real mw[], real yi[])
 call in your .c source file MUST be on the same line or a
 compilation error will occur */
 {
-	real concenHF = C_R(c,cthread)*yi[HF]/mw[HF];
+    real concenHF = C_R(c,cthread)*yi[HF]/mw[HF];
 
-	return arrhenius_rate(C_T(c,cthread)) * pow(concenHF, HF_EXP);
+    return arrhenius_rate(C_T(c,cthread)) * pow(concenHF, HF_EXP);
 }
 
 DEFINE_DPM_INJECTION_INIT(init_bubbles, I)
@@ -380,7 +380,7 @@ real contact_area(cell_t c, Thread *t, int s_id, int *n)
 {
     int i = 0;
     real area = 0.0;
-	real A[ND_ND];
+    real A[ND_ND];
     *n = 0;
     c_face_loop(c, t, i)
     {
@@ -400,78 +400,78 @@ UDF that specifies discrete phase materials
 
 DEFINE_DPM_PROPERTY(coal_emissivity, c, t, p)
 {
-	real mp0= P_INIT_MASS(p);  
-	real mp = P_MASS(p);      
-	real vf, cf;
+    real mp0= P_INIT_MASS(p);  
+    real mp = P_MASS(p);      
+    real vf, cf;
 
-	/* get the material char and volatile fractions and store them */
-	/* in vf and cf                                               */
-	vf=DPM_VOLATILE_FRACTION(p);
-	cf=DPM_CHAR_FRACTION(p);
+    /* get the material char and volatile fractions and store them */
+    /* in vf and cf                                               */
+    vf=DPM_VOLATILE_FRACTION(p);
+    cf=DPM_CHAR_FRACTION(p);
 
-	if (!(((mp/mp0) >= 1) || ((mp/mp0) <= 0)))
-	{
-		if ((mp/mp0) < (1-(vf)-(cf)))
-		{
-			/* only ash left */
-			/* vf = cf = 0; */
-			return .001;
-		}
-		else if ((mp/mp0) < (1-(vf)))
-		{
-			/* only ash and char left */
-			/* cf = 1 - (1-(vf)-(cf))/(mp/mp0); */
-			/* vf = 0; */
-			return 1.0;
-		}
+    if (!(((mp/mp0) >= 1) || ((mp/mp0) <= 0)))
+    {
+        if ((mp/mp0) < (1-(vf)-(cf)))
+        {
+            /* only ash left */
+            /* vf = cf = 0; */
+            return .001;
+        }
+        else if ((mp/mp0) < (1-(vf)))
+        {
+            /* only ash and char left */
+            /* cf = 1 - (1-(vf)-(cf))/(mp/mp0); */
+            /* vf = 0; */
+            return 1.0;
+        }
 
-		else
-		{
-			/* volatiles, char, and ash left */
-			/* cf =  (cf)/(mp/mp0); */
-			/* vf = 1. - (1.-(vf))/(mp/mp0); */
-			return 1.0;
-		}
-	}
-	return 1.0;
+        else
+        {
+            /* volatiles, char, and ash left */
+            /* cf =  (cf)/(mp/mp0); */
+            /* vf = 1. - (1.-(vf))/(mp/mp0); */
+            return 1.0;
+        }
+    }
+    return 1.0;
 } 
 
 DEFINE_DPM_PROPERTY(coal_scattering,c,t,p)
 {
-	real mp0 = P_INIT_MASS(p);  
-	real mp = P_MASS(p);      
-	real cf, vf;
+    real mp0 = P_INIT_MASS(p);  
+    real mp = P_MASS(p);      
+    real cf, vf;
 
-	/* get the original char and volatile fractions and store them */
-	/* in vf and cf                                               */
-	vf = DPM_VOLATILE_FRACTION(p);
-	cf = DPM_CHAR_FRACTION(p);
+    /* get the original char and volatile fractions and store them */
+    /* in vf and cf                                               */
+    vf = DPM_VOLATILE_FRACTION(p);
+    cf = DPM_CHAR_FRACTION(p);
 
-	if (!(((mp/mp0) >= 1) || ((mp/mp0) <= 0)))
-	{
-		if ((mp/mp0) < (1-(vf)-(cf)))
-		{
-			/* only ash left */
-			/* vf = cf = 0; */
-			return 1.1;
-		}
-		else if ((mp/mp0) < (1-(vf)))
-		{
-			/* only ash and char left */
-			/* cf = 1 - (1-(vf)-(cf))/(mp/mp0); */
-			/* vf = 0; */
-			return 0.9;
-		}
+    if (!(((mp/mp0) >= 1) || ((mp/mp0) <= 0)))
+    {
+        if ((mp/mp0) < (1-(vf)-(cf)))
+        {
+            /* only ash left */
+            /* vf = cf = 0; */
+            return 1.1;
+        }
+        else if ((mp/mp0) < (1-(vf)))
+        {
+            /* only ash and char left */
+            /* cf = 1 - (1-(vf)-(cf))/(mp/mp0); */
+            /* vf = 0; */
+            return 0.9;
+        }
 
-		else
-		{
-			/* volatiles, char, and ash left */
-			/* cf =  (cf)/(mp/mp0); */
-			/* vf = 1. - (1.-(vf))/(mp/mp0); */
-			return 1.0;
-		}
-	}
-	return 1.0;
+        else
+        {
+            /* volatiles, char, and ash left */
+            /* cf =  (cf)/(mp/mp0); */
+            /* vf = 1. - (1.-(vf))/(mp/mp0); */
+            return 1.0;
+        }
+    }
+    return 1.0;
 }
 
 /****************************************************/
@@ -502,7 +502,7 @@ DEFINE_UDS_UNSTEADY(uns_time, c, t, i, apu, su)
   real physical_dt, vol, rho, phi_old;
   physical_dt = RP_Get_Real("physical-time-step");
   vol = C_VOLUME(c,t);
-  
+
   rho = C_R_M1(c,t);
   *apu = -rho*vol / physical_dt;/*implicit part*/
   phi_old = C_STORAGE_R(c,t,SV_UDSI_M1(i));

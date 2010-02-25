@@ -72,6 +72,43 @@ real get_face_avg_temp(int did, int tid)
     return face_t_avg;
 }
 
+/*   */
+real get_avg_density(int zone_id)
+{
+    real rho_avg = 0.0;
+    real mass = 0.0;
+    real vol = 0.0;
+    Domain *domain;
+    Thread *t;
+    cell_t c;
+
+    domain = Get_Domain(1);
+    //t = Lookup_Thread(domain, zone_id);
+
+    thread_loop_c(t,domain)
+    {
+        if (!FLUID_THREAD_P(t))
+        {
+            begin_c_loop(c,t)
+            {
+                vol += C_VOLUME(c,t);
+                mass += C_R(c, t) * C_VOLUME(c,t);
+            }
+            end_c_loop(c,t)
+        }
+    }
+
+    rho_avg = mass / vol;
+
+    return rho_avg;
+}
+
+DEFINE_ON_DEMAND(test_avg_func)
+{
+    real avg = get_avg_density(10);
+
+    CX_Message("Average Density : %g", avg);
+}
 
 static int last_ts = -1;   /*  Global variable.  Time step is never <0 */
 
