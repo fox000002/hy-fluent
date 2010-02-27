@@ -92,6 +92,10 @@ SOURCE=.\src\mydialog.c
 
 SOURCE=.\src\myext.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\src\myscheme.c
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -103,6 +107,10 @@ SOURCE=.\src\mydialog.h
 # Begin Source File
 
 SOURCE=.\src\myext.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\myscheme.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
