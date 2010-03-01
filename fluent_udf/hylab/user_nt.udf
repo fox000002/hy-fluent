@@ -5,6 +5,7 @@ SOURCES =  $(SRC)myudf.c   \
            $(SRC)myprop.c  \
            $(SRC)mymphase.c\
            $(SRC)mymisc.c  \
+           $(SRC)myhack.c  \
 
 VERSION = 2d
 PARALLEL_NODE = none
