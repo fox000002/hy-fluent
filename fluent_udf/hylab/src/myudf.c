@@ -19,7 +19,7 @@ DEFINE_ON_DEMAND(myAdd)
 
 DEFINE_ON_DEMAND(runSchemeProc)
 {
-    CX_Interpret_String("(%udf-on-demand \"showMsg::libhylab\")");  
+    CX_Interpret_String("(%udf-on-demand \"showMsg::libhylab\")");
 }
 
 
@@ -129,8 +129,8 @@ DEFINE_ON_DEMAND(INIT)
     int i;
     face_t f;       // index of face of wall
     cell_t c0;      // index of cell which is adjacent to wall.
-    Domain *domain;  
-    
+    Domain *domain;
+
     thread_ID = 8;  //
     count=0;
     i=0;
@@ -216,7 +216,7 @@ DEFINE_ON_DEMAND(hy_face_temp_avg)
 #endif // DEBUG
         temperature -= F_T(f,t) * A[1];
         area -= A[1];
-    }                         
+    }
     end_f_loop(f, t)
 
     g_hy_face_t_avg  = temperature / area;
@@ -241,17 +241,17 @@ void Print_Thread_Face_Centroids(Domain *domain, int id)
         fprintf(fout, "f%d %g %g %g\n", f, FC[0], FC[1], FC[2]);
     }
     end_f_loop(f,t)
-        fprintf(fout, "\n");  
+        fprintf(fout, "\n");
 }
 
 DEFINE_ON_DEMAND(get_coords)
 {
-    Domain *domain; 
+    Domain *domain;
     domain = Get_Domain(1);
     fout = fopen("faces.out", "w");
     Print_Thread_Face_Centroids(domain, 2);
     Print_Thread_Face_Centroids(domain, 4);
-    fclose(fout); 
+    fclose(fout);
 }
 
 
@@ -396,13 +396,13 @@ real contact_area(cell_t c, Thread *t, int s_id, int *n)
 }
 
 /*********************************************************************
-UDF that specifies discrete phase materials                       
+UDF that specifies discrete phase materials
 **********************************************************************/
 
 DEFINE_DPM_PROPERTY(coal_emissivity, c, t, p)
 {
-    real mp0= P_INIT_MASS(p);  
-    real mp = P_MASS(p);      
+    real mp0= P_INIT_MASS(p);
+    real mp = P_MASS(p);
     real vf, cf;
 
     /* get the material char and volatile fractions and store them */
@@ -435,12 +435,12 @@ DEFINE_DPM_PROPERTY(coal_emissivity, c, t, p)
         }
     }
     return 1.0;
-} 
+}
 
 DEFINE_DPM_PROPERTY(coal_scattering,c,t,p)
 {
-    real mp0 = P_INIT_MASS(p);  
-    real mp = P_MASS(p);      
+    real mp0 = P_INIT_MASS(p);
+    real mp = P_MASS(p);
     real cf, vf;
 
     /* get the original char and volatile fractions and store them */
@@ -495,17 +495,12 @@ DEFINE_ADJUST(where_am_i, domain)
 #endif /* !PARALLEL */
 }
 
-/***********************************************************************/
-/* UDF for specifying user-defined scalar time derivatives             */
-/***********************************************************************/
-DEFINE_UDS_UNSTEADY(uns_time, c, t, i, apu, su)
-{
-  real physical_dt, vol, rho, phi_old;
-  physical_dt = RP_Get_Real("physical-time-step");
-  vol = C_VOLUME(c,t);
 
-  rho = C_R_M1(c,t);
-  *apu = -rho*vol / physical_dt;/*implicit part*/
-  phi_old = C_STORAGE_R(c,t,SV_UDSI_M1(i));
-  *su  = rho*vol*phi_old/physical_dt;/*explicit part*/
+/**********************************************************************
+UDF that computes diffusivity for mean age using a user-defined    
+scalar.                                                            
+***********************************************************************/
+DEFINE_DIFFUSIVITY(mean_age_diff,c,t,i)
+{
+    return C_R(c,t) * 2.88e-05 + C_MU_EFF(c,t) / 0.7;
 }

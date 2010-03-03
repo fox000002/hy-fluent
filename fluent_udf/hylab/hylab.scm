@@ -13,7 +13,11 @@
 ;; Global variables
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(define hy-menu-load? #f)
+(if 
+  (symbol-bound? 'hy-menu-load? (the-environment)) 
+  (display (format #f "hy-menu-load? : ~a" hy-menu-load?))
+  (define hy-menu-load? #f)
+)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -38,7 +42,8 @@
   (lambda ()
     ;;(rampant-menubar)
     ;(display "Not implemented yet!")
-    (set! hy-menu-load? #t)
+    (cx-clear-menubar)
+    (set! hy-menu-load? #f)
   )
 )
 
@@ -51,6 +56,12 @@
 (define hy-add-menuitem
   (lambda (menuname itemname myproc)
     (cx-add-item menuname itemname #\H #f cx-client? myproc)
+  )
+)
+
+(define hy-delete-menuitem
+  (lambda (itemname)
+    (cx-delete-item itemname)
   )
 )
 
@@ -69,6 +80,14 @@
   (with-output-to-string
     (lambda ()
       (ti-menu-load-string comm)
+    )
+  )
+)
+
+(define (hy-exec-proc-ex proc)
+  (with-output-to-string
+    (lambda ()
+      (proc)
     )
   )
 )
@@ -303,6 +322,8 @@
             (set! table4 (cx-create-table ttab2 "风速风温" 'border #t))
             (cx-create-real-entry table4 "一次风速度" 'width 20 'value 22.2 'minimum 0 'maximum 100 'col 1 'row 1)
             (cx-create-real-entry table4 "一次风温度" 'width 20 'value 22.2 'minimum 0 'maximum 100 'col 1 'row 2)
+            (cx-create-real-entry table4 "二次风速度" 'width 20 'value 22.2 'minimum 0 'maximum 100 'col 2 'row 1)
+            (cx-create-real-entry table4 "二次风温度" 'width 20 'value 22.2 'minimum 0 'maximum 100 'col 2 'row 2)
           )
         )
         (cx-show-panel panel)
@@ -473,12 +494,14 @@
 ;; Test
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;(hy-restore-mainmenu)
 
 (define hy-menu-name "HyLab")
 
 (define hy-hello
     (lambda ()
-      (display "Hello HyLab!\n")
+      (display "Hello HyLab!")
+      (newline)
     )
 )
 
@@ -530,17 +553,43 @@
   )
 )
 
+(define hy-test-udf
+  (lambda ()
+    (hy-run-udf-proc "hy_test_fluent_pointer" "libhylab")
+    (newline)
+  )
+)
+
+
+(define hy-test-export-bc
+  (lambda ()
+    (display (hy-exec-proc-ex hy-export-bc-names))
+  )
+)
+
 ;;;
-(hy-restore-mainmenu)
 
-(hy-add-mainmenu hy-menu-name)
+(if (not hy-menu-load?)
+  (begin
+    ;;;
+    (hy-add-mainmenu hy-menu-name)
+    
+    (hy-add-menuitem hy-menu-name "SayHello" hy-hello)
 
-(hy-add-menuitem hy-menu-name "SayHello" hy-hello)
+    (hy-add-menuitem hy-menu-name "TestUDF" hy-test-udf)
 
-(hy-add-menuitem hy-menu-name "ShowInput" gui-my-input-panel)
+    (hy-add-menuitem hy-menu-name "ExportBC" hy-test-export-bc)
 
-(hy-add-menuitem hy-menu-name "CheckSurface" (lambda () (hy-check-surf-name "inlet") (hy-delete-inj "injection-0")))
+    (hy-add-menuitem hy-menu-name "ShowInput" gui-my-input-panel)
 
-(hy-add-menuitem hy-menu-name "ShowDialog" (lambda () (hy-panel hy-hello (lambda () (hy-run-udf-proc "showMsg" "libhylab")))))
+    (hy-add-menuitem hy-menu-name "CheckSurface" (lambda () (hy-check-surf-name "inlet") (hy-delete-inj "injection-0")))
 
-(hy-add-menuitem hy-menu-name "About" (lambda () (hy-run-udf-proc "showMsg" "libhylab")))
+    (hy-add-menuitem hy-menu-name "ShowDialog" (lambda () (hy-panel hy-hello (lambda () (hy-run-udf-proc "showMsg" "libhylab")))))
+
+    (hy-add-menuitem hy-menu-name "About" (lambda () (hy-run-udf-proc "showMsg" "libhylab")))
+    
+    (set! hy-menu-load? #t)
+  )
+)
+
+

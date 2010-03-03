@@ -94,6 +94,10 @@ SOURCE=.\src\myext.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\mymodels.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\myscheme.c
 # End Source File
 # End Group
@@ -111,6 +115,10 @@ SOURCE=.\src\myext.h
 # Begin Source File
 
 SOURCE=.\src\myscheme.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\myudf.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
@@ -143,6 +151,10 @@ SOURCE=.\src\mymphase.c
 # Begin Source File
 
 SOURCE=.\src\myprop.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\myturb.c
 # End Source File
 # Begin Source File
 

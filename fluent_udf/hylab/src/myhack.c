@@ -1,6 +1,6 @@
 #include "udf.h"
 
-FLUENT_EXPORT char* CX_Interpret_String_To_String(char *);
+//FLUENT_EXPORT char* CX_Interpret_String_To_String(char *);
 
 DEFINE_ON_DEMAND(hy_test_fluent_pointer)
 {
@@ -24,13 +24,16 @@ DEFINE_ON_DEMAND(hy_test_fluent_pointer)
     switch (p->type)
     {
     case 0:
-        CX_Message("Type symbol: %d \n", p->type);
+        CX_Message("Type NIL: %d \n", p->type);
         break;
     case 1:
-        CX_Message("Type cons: %d \n", p->type);
+        CX_Message("Type TRUE: %d \n", p->type);
         break;
     case 2:
-        CX_Message("Type closure: %d \n", p->type);
+        CX_Message("Type cons: %d \n", p->type);
+        break;
+    case 3:
+        CX_Message("Type symbol: %d  %d\n", p->type, p->as.symbol.ncell);
         break;
     case 5:
         CX_Message("Type fixnum : %d -- %ld \n", p->type, FIXNM(p));

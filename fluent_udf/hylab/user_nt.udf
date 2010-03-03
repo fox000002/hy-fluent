@@ -6,6 +6,8 @@ SOURCES =  $(SRC)myudf.c   \
            $(SRC)mymphase.c\
            $(SRC)mymisc.c  \
            $(SRC)myhack.c  \
+           $(SRC)mymodels.c\
+           $(SRC)myturb.c  \
 
 VERSION = 2d
 PARALLEL_NODE = none
