@@ -30,27 +30,25 @@ real get_face_avg_temp(int did, int tid)
     real face_t_avg = 0.0f;
     real temperature = 0.0f;
     real area  = 0.0f;
-    int num = 0;
-    //int thread_ID = tid;
-    //
+    /*  int num = 0; */
+    /*  */
     face_t f;
     Thread *t;
-    int n;
-    Node *node;
+    /*  Node *node; */
     Domain *domain;
-    //
+    /*  */
     real NV_VEC(A);
     real x[ND_ND];
 
-    //
+    /*  */
     real area_cell = 0.0f;
 
     domain = Get_Domain(did);  /* returns fluid domain pointer */
     t = Lookup_Thread(domain, tid);
-    //CX_Message("There are %d nodes in Face.\n", F_NNODES(f,t));
+    /* CX_Message("There are %d nodes in Face.\n", F_NNODES(f,t)); */
 
 
-    //area = A[0];
+    /* area = A[0]; */
 
     begin_f_loop(f, t)    /* loops over faces in a face thread  */
     {
@@ -61,7 +59,7 @@ real get_face_avg_temp(int did, int tid)
 #ifdef DEBUG
         CX_Message("area : %f\n", area_cell);
         CX_Message("temperature : %f  %f\n", x[0], F_T(f, t));
-#endif // DEBUG
+#endif /* DEBUG */
         temperature += F_T(f,t) * area_cell;
         area += area_cell;
     }
@@ -69,9 +67,10 @@ real get_face_avg_temp(int did, int tid)
 
     face_t_avg  = temperature / area;
 
-    //
-    //CX_Message("Total area of Face %d : %.2f\n", THREAD_ID(t), area);
-    //CX_Message("The average temperature of the Face : %.2f\n", face_t_avg);
+#ifdef DEBUG
+    CX_Message("Total area of Face %d : %.2f\n", THREAD_ID(t), area);
+    CX_Message("The average temperature of the Face : %.2f\n", face_t_avg);
+#endif /* DEBUG */
 
     return face_t_avg;
 }
@@ -87,7 +86,7 @@ real get_avg_density(int zone_id)
     cell_t c;
 
     domain = Get_Domain(1);
-    //t = Lookup_Thread(domain, zone_id);
+    /* t = Lookup_Thread(domain, zone_id); */
 
     thread_loop_c(t,domain)
     {
@@ -159,16 +158,13 @@ DEFINE_ADJUST(do_every_timestep, domain)
 }
 
 static real latent_heat_mat = 263.56e3;
-static real latent_heat_water = 2331.0e3; /* 0.1 MPa */
+/* static real latent_heat_water = 2331.0e3; //0.1 MPa */
 static real rho_0_mat = 1490.0;
 
 /*
-  @Param:
     real t : temperature in Celsius degree
-  @Fixed:
-    Remove 3600
  */
-static real cal_beta_t(real t, real dt)
+static real cal_beta_t(real t)
 {
     real b = 0.;
 
@@ -178,23 +174,23 @@ static real cal_beta_t(real t, real dt)
     }
     else if ( t > 60.0 && t < 200.0 )
     {
-        b = 0.03 / 140.0 * dt;
+        b = 0.03 / 140.0 * (t-60.0);
     }
     else if ( t > 200.0 && t < 310.0 )
     {
-        b = 0.03 + 0.02 / 110.0 * dt;
+        b = 0.03 + 0.02 / 110.0 * (t-200.0);
     }
     else if ( t > 310.0 && t < 400.0 )
     {
-        b = 0.05 + 0.12 / 90.0 * dt;
+        b = 0.05 + 0.12 / 90.0 * (t-310.0);
     }
     else if ( t > 400.0 && t < 480.0 )
     {
-        b = 0.17 + 0.20 / 80.0 * dt;
+        b = 0.17 + 0.20 / 80.0 * (t-400.0);
     }
-    else // > 480
+    else /*  > 480 */
     {
-        b = 0.;
+        b = 0.37;
     }
 
     return b;
@@ -203,28 +199,26 @@ static real cal_beta_t(real t, real dt)
 DEFINE_PROPERTY(cell_density,c,t)
 {
     real density;
-    real dt;
-    real t1, t2;
+    /* real dt; */
+    real t1;
+    /* real t2; */
     real beta;
-    real r;
+    /* real r; */
 
     int curr_ts = RP_Get_Integer("time-step");
 
     if (0 < curr_ts)
     {
-        t1 = C_T(c,t);
+        t1 = C_T_M1(c,t);
 
-        t2 = C_T_M1(c,t);
+        beta = cal_beta_t(t1-273.15);
 
-        dt = t1 - t2;
-
-        beta = cal_beta_t(t1-273.15, dt);
-
-        //CX_Message("!!! Density !!! :  %f     %f\n", r, beta);
 
         density = rho_0_mat * (1 - beta);
 
-        //CX_Message("!!! Density !!! :  %f   %f    %f\n", C_R_M1(c,t), density, dt);
+#ifdef HU_DEBUG
+        CX_Message("!!! Density !!! :  %f   %f    %f\n", C_R_M1(c,t), density, dt);
+#endif /*  HU_DEBUG */
     }
     else
     {
@@ -237,13 +231,13 @@ DEFINE_PROPERTY(cell_density,c,t)
 /* energy loss of mass change and latent heat */
 DEFINE_SOURCE(energy_loss, c, t, dS, eqn)
 {
-    real x[ND_ND];
+    /* real x[ND_ND]; */
     real source;
-    real dt;
+    /* real dt; */
     real dm;
-    //real t1, t2;
+    /* real t1, t2; */
 
-    //int curr_ts = RP_Get_Integer("time-step");
+    /* int curr_ts = RP_Get_Integer("time-step"); */
 
     if (!is_uds_on())
     {
@@ -270,7 +264,7 @@ DEFINE_SOURCE(energy_loss, c, t, dS, eqn)
 }
 
 static real T_RAD_SOURCE = 1073.15;
-static real HFLUX_MAX_RAD = 60000;
+/* static real HFLUX_MAX_RAD = 60000; */
 static real ALPHA_RAD_HFLUX = 6.365;
 
 DEFINE_PROFILE(wall_rad_flux, t, i)
@@ -291,7 +285,7 @@ DEFINE_PROFILE(wall_rad_flux, t, i)
         {
             t_0 = T_RAD_SOURCE / 100.;
             t_w = t_w / 100.;
-            F_PROFILE(f,t,i) = 6.365 * ( t_0 * t_0 * t_0 * t_0 - t_w * t_w * t_w * t_w);
+            F_PROFILE(f,t,i) = ALPHA_RAD_HFLUX * ( t_0 * t_0 * t_0 * t_0 - t_w * t_w * t_w * t_w);
         }
     }
     end_f_loop(f,t)

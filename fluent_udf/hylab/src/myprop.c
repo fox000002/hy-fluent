@@ -19,7 +19,7 @@
 #include "udf.h"
 
 /*********************************************************************
- UDF that specifies a custom mass-fraction weighted conductivity   
+ UDF that specifies a custom mass-fraction weighted conductivity
 **********************************************************************/
 DEFINE_PROPERTY(mass_wtd_k, c, t)
 {

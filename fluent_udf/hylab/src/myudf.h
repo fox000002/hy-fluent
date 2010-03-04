@@ -16,4 +16,4 @@ int is_uds_on();
 
 int num_uds();
 
-#endif // HU_MYUDF_H
+#endif /*  HU_MYUDF_H */
