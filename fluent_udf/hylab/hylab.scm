@@ -166,7 +166,14 @@
 
 (define hy-open-udf-library
   (lambda (libname)
-    (open-udf-library libname)
+    (if (file-exists? (format #f "~a.dll" libname))
+      (open-udf-library libname)
+      (begin
+        (newline)
+        (display "Failed to open the library")
+        (newline)
+      )
+    )
   )
 )
 
@@ -481,6 +488,47 @@
     (inquire-zone-names)
   )
 )
+
+;/solve/animate/define> define-monitor
+;First display the post processing results and then define
+;the animation sequence.
+;Also, for all type of monitors(surface,residuals....etc),
+;first set the monitor parameters and then define the animation monitor
+;Animation Name ["sequence-7"] "myanime"
+;Enter Window ID [0] 
+;set animation window? [no] 
+;Every Timestep? [no] 
+;Frequency [1] 5
+;Animation Of: (grid contour pathline ptracks vector monitor xy-plot)
+;Enter Name [contour] 
+;Storage Type: (memory hmf ppm)
+;Enter Storage Type [hmf] ppm
+;Storage Path Name [""] "C:"
+(define hy-def-anime-monitor
+  (lambda (name step path)
+    (hy-exec-command
+      (format #f "/solve/animate/define define-monitor \"~a\" 0 no yes ~a contour ppm \"~a\"" name step path)
+    )
+  )
+)
+
+;;; MPEG stuff
+;; (create-mpeg)
+;; (mpeg-open)
+;; (play-mpeg)
+;; (cx-set-mpeg-compression)
+;; *mpeg-compression?*
+;; *mpeg-options*
+;; *mpeg-qscale*
+;; *mpeg-bsearch*
+;; *mpeg-psearch*
+;; *mpeg-range*
+;; *mpeg-pattern*
+;; *mpeg-command*
+;; (create-mpeg-animation)
+;; (cx-set-hardcopy-options-for-mpeg)
+ 
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
