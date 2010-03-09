@@ -527,8 +527,106 @@
 ;; *mpeg-command*
 ;; (create-mpeg-animation)
 ;; (cx-set-hardcopy-options-for-mpeg)
+
+;;; Animation stuff
+;; (ani-monitor-update)
+;; (set-animon-active?) 
+;; (animon->active?)
+;; (ani-monitor-delete)
+;; (build-ani-monitor-list-element)
+;; (show-ani-monitors)
+;; (show-one-ani-monitor <which>)
+;; (get-ani-monitors)
+;; (ani-monitor-active?)
+;; (ani-monitor-name->seq)
+;; (ani-monitor-seq->name)
+;; (ani-monitor-deactivate) 
+;; (ani-monitor-activate)
+;; (ani-monitor-change-freq)
+;; (ani-monitor-rename)
+;; (remove-ani-monitor)
+;; (add-ani-monitor-command)
+;; (run-ani-monitors)
+;; (animation-init)
+
  
 
+(define hy-create-animation
+  (lambda (datafilename imagefile-prefix first-index last-index delta disp-proc)
+    (let ((break #f))
+      ;;; options:
+      ;;;;   dump-window
+      ;;;;   jpeg
+      ;;;;   post-script
+      ;;;;   list
+      ;;;;   ppm
+      ;;;;   hpgl
+      ;;;;   options
+      ;;;;   tiff
+      ;;;;   image 
+      ;;;    vrml
+      (hy-exec-command "/display/set/hardcopy/driver/tiff")
+      ;;; options:
+      ;;;; fast-raster
+      ;;;; rle-raster
+      ;;;; raster
+      ;;;; vector
+      (hy-exec-command "/display/set/hardcopy/driver/post-format raster")
+      (hy-exec-command "/display/set/hardcopy/invert-background? no")
+      (hy-exec-command "/display/set/hardcopy/color-mode/color") ; default "gray"
+      (hy-exec-command "/display/set/hardcopy/x-resolution 0")
+      (hy-exec-command "/display/set/hardcopy/y-resolution 0")
+      (do
+        (
+          (j first-index (+ j delta))
+          (i 1 (+ i 1))
+        )
+        ((or (> j last-index) break))
+        (set! break
+          (not
+            (and
+              (read-date (format #f "~a~04d.dat" datafilename j))
+              (begin
+                (if (= i 1)
+                  (set! t0 (time))
+                )
+                (disp-proc)
+                (system "rm temp.tif")
+                (hy-exec-command "/disply/hardcopy temp.tif")
+                (system (format #f "convert temp.tif ~a~02d.bmp &" imagefile-prefix i))
+              )
+            )
+          )
+        )
+        (if break
+          (begin
+            (newline)
+            (newline)
+            (display "scheme interrupted!")
+            (newline)
+          )
+        )
+      )
+    )
+  )
+)
+
+;;
+(define hy-display-contour
+  (lambda (var min max)
+    (hy-exec-command
+      (format #f "/display/contour ~a ~a ~a" var min max)
+    )
+  )
+)
+
+(define hy-display-vector-uvw
+  (lambda (colorby min max scale skip)
+    (hy-exec-command
+      (format #f "/display/vector velocity ~a ~a ~a ~a ~a" colorby min max scale skip)
+    )
+  )
+)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
