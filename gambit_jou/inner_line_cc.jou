@@ -1,0 +1,173 @@
+/
+/ * filename: inner_line.jou
+/ * revision: 0.2
+/ * updated:  090408
+/
+/       E      F               OTI
+/        _______             __
+/               \           >
+/                \         >
+/                 \_      >
+/                   \    >
+/                    \__>
+/                     G
+/        _________________________
+/        D      C  B  O           A
+/
+/                OL       OR
+/ !
+solver select "fluent 5/6"
+/
+$p=1
+/ Point coordinate (x,y)
+declare $points2d[1:37,1:2]
+/ coordinate x
+$points2d[1,1]=16.23
+/
+DO PARA "p" INIT 2 COND ($p .le. 36) INCR 1
+   $points2d[$p,1]=19-6+$p*3
+ENDDO
+/
+$p = 37
+/
+$points2d[37,1]=124.7
+/
+/ coordinate y
+$points2d[1,2]=69.50
+$points2d[2,2]=73.11
+$points2d[3,2]=77.03
+$points2d[4,2]=80.97
+$points2d[5,2]=84.90
+$points2d[6,2]=88.82
+$points2d[7,2]=92.73
+$points2d[8,2]=96.62
+$points2d[9,2]=100.49
+$points2d[10,2]=104.34
+$points2d[11,2]=108.15
+$points2d[12,2]=111.94
+$points2d[13,2]=115.69
+$points2d[14,2]=119.40
+$points2d[15,2]=123.08
+$points2d[16,2]=126.72
+$points2d[17,2]=130.32
+$points2d[18,2]=133.88
+$points2d[19,2]=137.41
+$points2d[20,2]=140.89
+$points2d[21,2]=144.34
+$points2d[22,2]=147.75
+$points2d[23,2]=151.12
+$points2d[24,2]=154.45
+$points2d[25,2]=157.74
+$points2d[26,2]=161.00
+$points2d[27,2]=164.22
+$points2d[28,2]=167.40
+$points2d[29,2]=170.55
+$points2d[30,2]=173.66
+$points2d[31,2]=176.74
+$points2d[32,2]=179.78
+$points2d[33,2]=182.79
+$points2d[34,2]=185.77
+$points2d[35,2]=188.72
+$points2d[36,2]=191.63
+$points2d[37,2]=195.18
+/ !!! Unit = 0.1mm !!!
+/ !!!   Times 10   !!!
+/ Vertices creation
+DO PARA "p" INIT 1 COND ($p .le. 37) INCR 1
+   vertex create STRFMT("pt%d", $p)  coordinates (10*$points2d[$p,1]) (10*($points2d[$p,2]/2))
+ENDDO
+
+/ origin
+vertex create "O" coordinates 0 0 0
+vertex create "A" coordinates 1247 0 0
+vertex create "B" coordinates -242 0 0
+vertex create "C" coordinates -1371 0 0
+vertex create "D" coordinates -2361 0 0
+vertex create "E" coordinates -2361 700 0
+vertex create "F" coordinates -1371 700 0
+vertex create "G" coordinates 0 300 0
+vertex create "OL" coordinates -316 0 0
+vertex create "OR" coordinates 283 0 0
+vertex create "OT" coordinates 0 347.5 0
+vertex create "OTI" coordinates 0 923.4 0
+/ assist vertices
+vertex create "as1" coordinates 0 600 0
+vertex create "as2" coordinates 0 750 0
+vertex create "as1m" coordinates 0 -600 0
+vertex create "as2m" coordinates 0 -750 0
+vertex create "as1x" coordinates 300 600 0
+vertex create "as2x" coordinates -450 750 0
+vertex copy "as1m" to "as1m_tmp"
+vertex copy "as2m" to "as2m_tmp"
+vertex move "as1m_tmp" dangle 30 zaxis
+vertex move "as2m_tmp" dangle 30 zaxis
+vertex create "as3" coordinates -1371 -1400 0
+vertex create "as3y" coordinates -1371 700 0
+vertex create "as3x" coordinates -3471 -1400 0
+/ assist edges
+edge create "ae1" center2points "O" "as1" "as1m_tmp" circle
+edge create "ae2" center2points "O" "as2" "as2m_tmp" circle
+edge create "ae3" center2points "as1" "G" "as1x" circle
+edge create "ae4" center2points "as2" "G" "as2x" circle
+edge create "ae5" center2points "as3" "as3y" "as3x" circle
+/ inner line
+/ <1> cylinder segment
+edge create "seg_c" straight "E" "F"
+/ <2> expansion segment
+edge create nurbs "pt1" "pt2" "pt3" "pt4" "pt5" "pt6" "pt7" "pt8" "pt9" \
+  "pt10" "pt11" "pt12" "pt13" "pt14" "pt15" "pt16" "pt17" "pt18" "pt19" \
+  "pt20" "pt21" "pt22" "pt23" "pt24" "pt25" "pt26" "pt27" "pt28" "pt29" \
+  "pt30" "pt31" "pt32" "pt33" "pt34" "pt35" "pt36" "pt37" tolerance 0
+
+/ <3> convergence segment
+vertex copy "B" to "B_t"
+vertex move "B_t" offset 0 600
+edge create "B_ae" straight "B" "B_t"
+vertex create "B_y" edgeints "ae5" "B_ae"
+edge create "seg_g1" center2points "as3" "F" "B_y" arc
+edge create "seg_g2" center2points "as2" "B_y" "G" arc
+vertex copy "OT" to "OT_t"
+vertex move "OT_t" offset 400
+edge create "OT_ae" straight "OT" "OT_t"
+vertex create "OT_x" edgeints "ae3" "OT_ae"
+edge create "seg_g3" center2points "as1" "G" "OT_x" arc
+/ !! Delete assist edges
+/ edge delete "ae1" "ae2" "ae3" "ae4" "ae5"
+/ !! Hiding them is enough
+window modify edge "ae1" "ae2" "ae3" "ae4" "ae5" invisible
+/ OL point
+vertex copy "OL" to "OL_t"
+vertex move "OL_t" offset 0 700
+edge create "OL_ae" straight "OL" "OL_t"
+vertex create "OL_y" edgeints "seg_g1" "OL_ae"
+/ OR point
+vertex copy "OR" to "OR_t"
+vertex move "OR_t" offset 0 700
+edge create "OR_ae" straight "OR" "OR_t"
+vertex create "OR_y" edgeints "seg_e56" "OR_ae"
+/ *
+/ * Now create faces
+/ *
+
+
+/ *
+/ * Now create volume
+/ *
+/ resolve
+/ unit
+/ *
+/ * Now mesh
+/ *
+/ *
+/ * Now boundary conditions
+/ *
+/ *
+/ * Now contiunm
+/ *
+/ *
+/ * Now save and export
+/ *
+/
+/ * End of file
+/
+/ - export uns "pipe.msh"
