@@ -9,6 +9,6 @@ SOURCES =  $(SRC)myudf.c   \
            $(SRC)mymodels.c\
            $(SRC)myturb.c  \
 
-VERSION = 2d
+VERSION = 3ddp
 PARALLEL_NODE = none
 FLUENT_INC = D:\GS\Fluent.Inc
