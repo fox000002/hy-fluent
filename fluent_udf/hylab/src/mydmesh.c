@@ -24,10 +24,12 @@ DEFINE_CG_MOTION(piston, dt, vel, omega, time, dtime)
         force += F_P (f, t) * NV_MAG (A);
     }
     end_f_loop (f, t)
+    
     /* compute change in velocity, i.e., dv= F * dt/ mass;
        velocity update using explicit eulerformula */
     dv= dtime* force / 50.0;
     v_prev+= dv;
+    
     CX_Message ("time = %f, x_vel= %f, force = %f\n", time, v_prev, force);
     /* set x-component of velocity */
     vel[0] = v_prev;
@@ -170,9 +172,9 @@ DEFINE_CG_MOTION(valve, dt, vel, omega, time, dtime)
     if (is_valve == 0 && dv >= 0.0)
     {
         is_valve = 1;
-        Message0("\n\n============================== BEGIN VALVE MOTION INFO ==============================\n");
+        Message0("\n\n======= BEGIN VALVE MOTION INFO =========\n");
         Message0("\n VALVE BEGIN MOVE! \n");
-        Message0("\n============================== END VALVE MOTION INFO ==============================\n");
+        Message0("\n========= END VALVE MOTION INFO ==========\n");
     }
 
     if(is_valve == 0 && dv < 0.0)
@@ -192,9 +194,9 @@ DEFINE_CG_MOTION(valve, dt, vel, omega, time, dtime)
     vel[0] = valve_V;
     valve_F = force[0];
 
-    Message0("\n\n============================== BEGIN VALVE MOTION INFO ==============================\n");
+    Message0("\n\n==========BEGIN VALVE MOTION INFO ==========\n");
     Message0("\ntime=%.5e F(x)=%.4e S(x)=%.6e V(x)=%.6e move?=%d\n", time, force[0], valve_S, valve_V, is_valve);
-    Message0("\n============================== END VALVE MOTION INFO ==============================\n");
+    Message0("\n=========== END VALVE MOTION INFO ===========\n");
 #endif /* RP_HOST */
 
     node_to_host_real_1(valve_S);
@@ -235,7 +237,7 @@ static void read_data(FILE * fp)
 
 DEFINE_RW_FILE(dm_reader, fp)
 {
-    Message0("\n\n============================== BEGIN UDF INFOMATION ==============================\n");
+    Message0("\n\n========== BEGIN UDF INFOMATION ==========\n");
     Message0("\nReading UDF data from data file...\n");
 
 #if PARALLEL
@@ -263,12 +265,12 @@ DEFINE_RW_FILE(dm_reader, fp)
     Message0("\n------------------------------ BEGIN BALL MOTION INFO ------------------------------\n");
     Message0("\nS(x)=%.6e V(x)=%.6e F(x)=%.4e move?=%d\n", ball_S, ball_V, ball_F, is_ball);
     Message0("\n------------------------------- END BALL MOTION INFO -------------------------------\n");
-    Message0("\n================================ END UDF INFOMATION ================================\n\n");
+    Message0("\n===============END UDF INFOMATION ==================\n\n");
 }
 
 DEFINE_RW_FILE(dm_writer, fp)
 {
-    Message0("\n\n============================== BEGIN UDF INFOMATION ==============================\n");
+    Message0("\n\n=============BEGIN UDF INFOMATION =================\n");
     Message0("\n\nWriting UDF data to data file...\n");
 
 #if PARALLEL
@@ -278,5 +280,5 @@ DEFINE_RW_FILE(dm_writer, fp)
 #else
     write_data(fp);
 #endif
-    Message0("\n================================ END UDF INFOMATION ================================\n\n");
+    Message0("\n=============== END UDF INFOMATION =================\n\n");
 }
