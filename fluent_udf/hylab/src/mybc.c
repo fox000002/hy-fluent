@@ -23,7 +23,7 @@ UDF for specifying a steady-state velocity profile boundary condition
 **********************************************************************/
 DEFINE_PROFILE(x_velocity, thread, index)
 {
-    real x[ND_ND];        /* this will hold the position vector */
+    real x[ND_ND];
     real y;
     face_t f;
 
@@ -60,7 +60,6 @@ DEFINE_PROFILE(pressure_profile, t, i)
 /***********************************************************************
 UDF for specifying boundary for regenerative cooling
 ************************************************************************/
-#define TOTAL_SMP_POINTS 361
 
 /* Free Stream Temperature */
 DEFINE_PROFILE(FST_profile, t, i)
@@ -83,9 +82,10 @@ DEFINE_PROFILE(FST_profile, t, i)
 DEFINE_PROFILE(HTC_profile, t, i)
 {
   real x[ND_ND] = {0};
-  real position;
-  real position_y;
-  real position_z;
+  real pos_x;
+  real pos_y;
+  real pos_z;
+  face_t f;
 /*
   real Tf;
   real Tw;
@@ -94,26 +94,28 @@ DEFINE_PROFILE(HTC_profile, t, i)
   real A_t = 1.0;
   real A = 5.0;
 
+  /* throat radius */
   real y0 = 0.030;
 
-  face_t f;
   begin_f_loop(f, t)
     {
       F_CENTROID(x,f,t);
-      position = x[0];
-      position_y = x[1];
-      position_z = x[2];
+      pos_x = x[0];
+      pos_y = x[1];
+      pos_z = x[2];
 /*
       Tf = 300 + 2 * position;
       Tw = F_T(f, t);
 */
-      A = (position_y * position_y + position_z * position_z) / y0 / y0;
+      A = (pos_y * pos_y + pos_z * pos_z) / y0 / y0;
 
       F_PROFILE(f, t, i) = 8271.39 * pow(A_t/A, 0.9) * sigma;
     }
   end_f_loop(f, t)
 }
 
+
+#define TOTAL_SMP_POINTS 361
 
 #ifndef TOTAL_SMP_POINTS
   #include "config.h"
@@ -193,10 +195,10 @@ void read_all()
 
     for (i=0; i<DX_SIZE; i++)
     {
-        printf("%lf  %lf  %lf  %lf  %lf  %lf\n", g_pos_x[i], g_Ts[i], g_Ps[i], g_Ma[i], g_Gamma[i], g_Mol_Weight[i]);
+        CX_Message("%lf  %lf  %lf  %lf  %lf  %lf\n", g_pos_x[i], g_Ts[i], g_Ps[i], g_Ma[i], g_Gamma[i], g_Mol_Weight[i]);
     }
 
-    fflush(stdout);
+    /* fflush(stdout) */;
     /* return 0;*/
 }
 
@@ -414,20 +416,24 @@ DEFINE_PROFILE(FST_modify, t, i)
 
 DEFINE_PROFILE(FST_r_mod, t, i)
 {
+  /*  */
   real x[ND_ND];
-  real position;
+  real pos_x;
+  face_t f;
+  /*  */
   real tc; /* (tc)_{ns} */
 
+  /*    */
   real rc;
   real erc;
 
+  /*  */
   real Ma_x;
   real gamma;
   real tmp;
 
   real Pr;
 
-  face_t f;
 
   if (g_nReadInput==0)
   {
@@ -439,13 +445,13 @@ DEFINE_PROFILE(FST_r_mod, t, i)
   begin_f_loop(f, t)
     {
       F_CENTROID(x,f,t);
-      position = x[0];
+      pos_x = x[0];
       /* tc = 2500 - 2000 * position; */
       /* tc = 2500 - 2000 * position; */
       /* tc = 3500; */
-      tc = search_ts(position);
-      Ma_x = search_value(g_pos_x, g_Ma, DX_SIZE, position);
-      gamma = search_value(g_pos_x, g_Gamma, DX_SIZE, position);
+      tc = search_ts(pos_x);
+      Ma_x = search_value(g_pos_x, g_Ma, DX_SIZE, pos_x);
+      gamma = search_value(g_pos_x, g_Gamma, DX_SIZE, pos_x);
 
       tmp = (gamma-1)/2 * Ma_x * Ma_x;
 

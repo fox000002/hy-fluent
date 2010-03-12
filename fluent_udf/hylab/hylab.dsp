@@ -4,7 +4,7 @@
 
 # TARGTYPE "Win32 (x86) External Target" 0x0106
 
-CFG=hylab - Win32 Debug
+CFG=hylab - Win32 Debug_2DDP
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,12 +13,15 @@ CFG=hylab - Win32 Debug
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "hylab.mak" CFG="hylab - Win32 Debug"
+!MESSAGE NMAKE /f "hylab.mak" CFG="hylab - Win32 Debug_2DDP"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "hylab - Win32 Release" (based on "Win32 (x86) External Target")
 !MESSAGE "hylab - Win32 Debug" (based on "Win32 (x86) External Target")
+!MESSAGE "hylab - Win32 Debug_3D" (based on "Win32 (x86) External Target")
+!MESSAGE "hylab - Win32 Debug_2D" (based on "Win32 (x86) External Target")
+!MESSAGE "hylab - Win32 Debug_2DDP" (based on "Win32 (x86) External Target")
 !MESSAGE 
 
 # Begin Project
@@ -43,7 +46,7 @@ CFG=hylab - Win32 Debug
 # PROP Intermediate_Dir "Release"
 # PROP Cmd_Line "nmake /f "hylab.mak""
 # PROP Rebuild_Opt "/a"
-# PROP Target_File "hylab.dll"
+# PROP Target_File "libhylab.dll"
 # PROP Bsc_Name ""
 # PROP Target_Dir ""
 
@@ -62,9 +65,72 @@ CFG=hylab - Win32 Debug
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
-# PROP Cmd_Line "nmake /f "hylab.mak""
+# PROP Cmd_Line "nmake /f "hylab.mak"  VERSION=3ddp"
 # PROP Rebuild_Opt "/a"
-# PROP Target_File "hylab.dll"
+# PROP Target_File "libhylab.dll"
+# PROP Bsc_Name ""
+# PROP Target_Dir ""
+
+!ELSEIF  "$(CFG)" == "hylab - Win32 Debug_3D"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "hylab___Win32_Debug_3D"
+# PROP BASE Intermediate_Dir "hylab___Win32_Debug_3D"
+# PROP BASE Cmd_Line "nmake /f "hylab.mak""
+# PROP BASE Rebuild_Opt "/a"
+# PROP BASE Target_File "libhylab.dll"
+# PROP BASE Bsc_Name ""
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "hylab___Win32_Debug_3D"
+# PROP Intermediate_Dir "hylab___Win32_Debug_3D"
+# PROP Cmd_Line "nmake /f "hylab.mak" VERSION=3d"
+# PROP Rebuild_Opt "/a"
+# PROP Target_File "libhylab.dll"
+# PROP Bsc_Name ""
+# PROP Target_Dir ""
+
+!ELSEIF  "$(CFG)" == "hylab - Win32 Debug_2D"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "hylab___Win32_Debug_2D"
+# PROP BASE Intermediate_Dir "hylab___Win32_Debug_2D"
+# PROP BASE Cmd_Line "nmake /f "hylab.mak""
+# PROP BASE Rebuild_Opt "/a"
+# PROP BASE Target_File "libhylab.dll"
+# PROP BASE Bsc_Name ""
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "hylab___Win32_Debug_2D"
+# PROP Intermediate_Dir "hylab___Win32_Debug_2D"
+# PROP Cmd_Line "nmake /f "hylab.mak" VERSION=2d"
+# PROP Rebuild_Opt "/a"
+# PROP Target_File "libhylab.dll"
+# PROP Bsc_Name ""
+# PROP Target_Dir ""
+
+!ELSEIF  "$(CFG)" == "hylab - Win32 Debug_2DDP"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "hylab___Win32_Debug_2DDP"
+# PROP BASE Intermediate_Dir "hylab___Win32_Debug_2DDP"
+# PROP BASE Cmd_Line "nmake /f "hylab.mak""
+# PROP BASE Rebuild_Opt "/a"
+# PROP BASE Target_File "libhylab.dll"
+# PROP BASE Bsc_Name ""
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "hylab___Win32_Debug_2DDP"
+# PROP Intermediate_Dir "hylab___Win32_Debug_2DDP"
+# PROP Cmd_Line "nmake /f "hylab.mak" VERSION=2ddp"
+# PROP Rebuild_Opt "clean"
+# PROP Target_File "libhylab.dll"
 # PROP Bsc_Name ""
 # PROP Target_Dir ""
 
@@ -74,10 +140,19 @@ CFG=hylab - Win32 Debug
 
 # Name "hylab - Win32 Release"
 # Name "hylab - Win32 Debug"
+# Name "hylab - Win32 Debug_3D"
+# Name "hylab - Win32 Debug_2D"
+# Name "hylab - Win32 Debug_2DDP"
 
 !IF  "$(CFG)" == "hylab - Win32 Release"
 
 !ELSEIF  "$(CFG)" == "hylab - Win32 Debug"
+
+!ELSEIF  "$(CFG)" == "hylab - Win32 Debug_3D"
+
+!ELSEIF  "$(CFG)" == "hylab - Win32 Debug_2D"
+
+!ELSEIF  "$(CFG)" == "hylab - Win32 Debug_2DDP"
 
 !ENDIF 
 

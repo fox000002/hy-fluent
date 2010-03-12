@@ -92,7 +92,7 @@ SRC = .\src^\
 CC = cl /nologo
 
 SED_CMD = $(FLUENT_INC)\ntbin\$(FLUENT_ARCH)\sed.exe
-FLUENT_CMD = $(FLUENT_INC)\ntbin\$(FLUENT_ARCH)\fluent 2d
+FLUENT_CMD = $(FLUENT_INC)\ntbin\$(FLUENT_ARCH)\fluent $version
 
 # compile flags 
 #  /c for compile only,  /Za for ansi c and __STDC__ is set

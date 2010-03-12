@@ -2,7 +2,7 @@
 
 rm -vf *.obj *.dll *.c *.opt *.exp *.lib *.plg *.ncb *.user *.suo
 
-rm -rvf Debug Release _UpgradeReport_Files
+rm -rvf Debug Release _UpgradeReport_Files hylab_*Debug*
 
 rm -vf res/*.res
 
