@@ -2,19 +2,21 @@
 # makefile for user defined functions.
 #----------------------------------------------------------------------#
 
-
 #----------------------------------------------------------------------#
 # User modifiable section.
 #----------------------------------------------------------------------#
 SRCDIR = ./src
-SOURCES =  $(SRCDIR)/mymodels.c \
-           $(SRCDIR)/myuns.c    \
+MYSRCS =  mymodels.c \
+          myuns.c    \
+          mybc.c     \
+
+SOURCES = $(addprefix $(SRCDIR)/, $(MYSRCS))
 
 HEADERS =  $(SRCDIR)/myudf.h
 
 FLUENT_INC = /opt/progs/Fluent.Inc
 
-ARCH = liamd64
+ARCH = lnamd64
 
 MAKE = make -f makefile_linux
 
@@ -24,14 +26,14 @@ USER_OBJECTS=
 #----------------------------------------------------------------------#
 # Build targets (do not modify below this line).
 #----------------------------------------------------------------------#
-CC= cc -DRP_CONFIG_2D
+CC= cc -DRP_CONFIG_3DDP=1
 SHELL= /bin/sh
 RELEASE= 6.3.26
-VERSION= 2d
+VERSION= 3ddp
 ARCHC=$(ARCH)
 TARGET= libhylab.so
 UDFDATA= udf_names.c
-OBJECTS= $(UDFDATA:.c=.o) $($(SOURCES:.c=.o): $(SRCDIR)=)
+OBJECTS= $(UDFDATA:.c=.o) $(MYSRCS:.c=.o)
 
 INCLUDES= -I$(FLUENT_INC)/fluent$(RELEASE)/$(ARCH)/$(VERSION) \
           -I$(FLUENT_INC)/fluent$(RELEASE)/src \
@@ -88,14 +90,22 @@ LDFLAGS_GCC64=		-shared -lm
 	@rm -f $*.o
 	$(CC) $(CFLAGS) $(INCLUDES) -c $*.c
 
+%.o : $(SRCDIR)/%.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c $<
+
 default: $(UDFDATA)
 	@$(MAKE) $(ARCHC)	
 
 $(TARGET): makefile_linux $(UDFDATA) $(OBJECTS)
+	@echo ==============================================================
+	@echo object : $(OBJECTS)
+	@echo ==============================================================
 	@echo "# Linking $@ because of $?"
-	$(LD) $(LDFLAGS) $(OBJECTS) $(USER_OBJECTS) -o $@
+	$(LD) $(LDFLAGS) $(OBJECTS) $(USER_OBJECTS) -o $@ 
+#$(FLUENT_INC)/fluent$(RELEASE)/$(ARCH)/$(VERSION)/fluent$(RELEASE)
 
 $(UDFDATA): makefile_linux $(SOURCES)
+	@echo $(SOURCES)
 	@echo '# Generating $@ because of $?'
 	@echo '/* This file generated automatically. */' > $@
 	@echo '/*          Do not modify.            */' >> $@

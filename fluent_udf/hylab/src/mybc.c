@@ -117,7 +117,7 @@ DEFINE_PROFILE(HTC_profile, t, i)
 
 #ifndef TOTAL_SMP_POINTS
   #include "config.h"
-#endif // TOTAL_SMP_POINTS
+#endif /* TOTAL_SMP_POINTS */
 
 #define DX_SIZE TOTAL_SMP_POINTS
 
