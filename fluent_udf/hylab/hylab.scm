@@ -702,6 +702,8 @@
 (define hy-test-udf
   (lambda ()
     (hy-run-udf-proc "hy_test_fluent_pointer" "libhylab")
+    (hy-run-udf-proc "hy_test_myudf_func" "libhylab")
+    (hy-run-udf-proc "hy_test_myvector" "libhylab")
     (newline)
   )
 )

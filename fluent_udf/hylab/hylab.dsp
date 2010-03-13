@@ -229,6 +229,14 @@ SOURCE=.\src\myprop.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\mysolver.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\mysource.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\myturb.c
 # End Source File
 # Begin Source File
@@ -238,6 +246,10 @@ SOURCE=.\src\myudf.c
 # Begin Source File
 
 SOURCE=.\src\myuns.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\myvector.c
 # End Source File
 # End Group
 # End Target

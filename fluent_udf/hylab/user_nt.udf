@@ -8,6 +8,10 @@ SOURCES =  $(SRC)myudf.c   \
            $(SRC)myhack.c  \
            $(SRC)mymodels.c\
            $(SRC)myturb.c  \
+           $(SRC)myvector.c\
+           $(SRC)mysource.c\
+           $(SRC)mypost.c  \
+           $(SRC)mydpm.c   \
 
 VERSION = 3ddp
 PARALLEL_NODE = none
