@@ -52,11 +52,11 @@ DEFINE_DPM_SCALAR_UPDATE(store_path,c,t,in,p)
 }
 
 
-DEFINE_ON_DEMAND(on_demand_exec)
+DEFINE_ON_DEMAND(hy_dpm_exec)
 {
     int j,jc,kc=0,kc1=0,counter=0;
     real avg[100],sum[100],avg_glob,t_sum=0.0,sum_time[100];
-    
+
     for(jc=0;jc<k;jc++)
     {
         sum[jc]=0.0;

@@ -24,12 +24,12 @@ DEFINE_CG_MOTION(piston, dt, vel, omega, time, dtime)
         force += F_P (f, t) * NV_MAG (A);
     }
     end_f_loop (f, t)
-    
+
     /* compute change in velocity, i.e., dv= F * dt/ mass;
        velocity update using explicit eulerformula */
     dv= dtime* force / 50.0;
     v_prev+= dv;
-    
+
     CX_Message ("time = %f, x_vel= %f, force = %f\n", time, v_prev, force);
     /* set x-component of velocity */
     vel[0] = v_prev;
