@@ -7,6 +7,7 @@ DEFINE_ON_DEMAND(hy_test_fluent_pointer)
     Pointer p;
     //char buf[1024];
     //char *str;
+    int i;
 
     p = CX_Interpret_String("(newline)");
 
@@ -41,4 +42,32 @@ DEFINE_ON_DEMAND(hy_test_fluent_pointer)
     default:
         CX_Message("Type unknown: %d \n", p->type);
     }
+
+    /*                */
+    if (root_domain)
+    {
+        CX_Message("===========================\n");
+        CX_Message("Root Domain \n");
+        CX_Message("id: %d \n", root_domain->id);
+        CX_Message("index: %d \n", root_domain->index);
+        CX_Message("level: %d\n", root_domain->level);
+        CX_Message("sub_domains: %d\n", root_domain->n_domains);
+        CX_Message("name: %s\n", root_domain->name);
+        CX_Message("material name: %s\n", root_domain->material_name);
+        CX_Message("***res:\n");
+        for (i=0; i<MAX_EQNS && root_domain->res[i]; ++i)
+            CX_Message("equ %d  -- %s : %f\n", i, root_domain->equation_labels[i], *root_domain->res[i]);
+        CX_Message("===========================\n");
+
+        if (root_domain->f)
+        {
+            CX_Message("id: %d \n", root_domain->f->id);
+            CX_Message("flag: %d \n", root_domain->f->flags);
+            CX_Message("name: %s\n", root_domain->f->name);
+            CX_Message("element_type: %d\n", root_domain->f->element_type);
+        }
+
+    }
+
+
 }
