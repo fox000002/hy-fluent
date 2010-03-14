@@ -8,4 +8,6 @@ rm -vf res/*.res
 
 rm -vf *.XML *.log *.sdf
 
+rm -rvf x64
+
 @pause

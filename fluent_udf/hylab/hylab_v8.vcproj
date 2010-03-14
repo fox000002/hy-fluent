@@ -11,6 +11,9 @@
 		<Platform
 			Name="Win32"
 		/>
+		<Platform
+			Name="x64"
+		/>
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
@@ -36,9 +39,49 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="Debug|x64"
+			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="0"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="nmake /f &quot;hylab.mak&quot; FLUENT_ARCH=Win64"
+				ReBuildCommandLine=""
+				CleanCommandLine="clean.bat"
+				Output="hylab_v8.exe"
+				PreprocessorDefinitions="WIN32;_DEBUG"
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine=""
+				ReBuildCommandLine=""
+				CleanCommandLine=""
+				Output="hylab_v8.exe"
+				PreprocessorDefinitions="WIN32;NDEBUG"
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="0"
 			>
 			<Tool
@@ -109,7 +152,47 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\mydpm.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\myhack.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\mymisc.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\mymodels.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\mymphase.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\mypost.c"
+				>
+			</File>
+			<File
 				RelativePath=".\src\myprop.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\myscheme.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\myscheme.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\mysource.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\myturb.c"
 				>
 			</File>
 			<File
@@ -117,7 +200,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\myudf.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\myuns.c"
+				>
+			</File>
+			<File
+				RelativePath=".\src\myvector.c"
 				>
 			</File>
 		</Filter>
