@@ -62,11 +62,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\mydialog.c" />
+    <ClCompile Include="src\mydpm.c" />
     <ClCompile Include="src\myext.cpp" />
+    <ClCompile Include="src\myhack.c" />
+    <ClCompile Include="src\mymisc.c" />
+    <ClCompile Include="src\mymodels.c" />
+    <ClCompile Include="src\mymphase.c" />
+    <ClCompile Include="src\mypost.c" />
+    <ClCompile Include="src\myprop.c" />
+    <ClCompile Include="src\myscheme.c" />
+    <ClCompile Include="src\mysolver.c" />
+    <ClCompile Include="src\mysource.c" />
+    <ClCompile Include="src\myturb.c" />
     <ClCompile Include="src\myudf.c" />
+    <ClCompile Include="src\myuns.c" />
+    <ClCompile Include="src\myvector.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\mydialog.h" />
+    <ClInclude Include="src\myscheme.h" />
+    <ClInclude Include="src\myudf.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="res\mydialog.rc" />

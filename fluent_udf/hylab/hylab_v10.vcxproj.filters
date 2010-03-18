@@ -13,21 +13,69 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="UDF Files">
+      <UniqueIdentifier>{c3168679-d163-4c9d-865a-d092c1a35070}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\mydialog.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\mydpm.c">
+      <Filter>UDF Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\myext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\myhack.c">
+      <Filter>UDF Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mymisc.c">
+      <Filter>UDF Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mymodels.c">
+      <Filter>UDF Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mymphase.c">
+      <Filter>UDF Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mypost.c">
+      <Filter>UDF Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\myprop.c">
+      <Filter>UDF Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\myscheme.c">
+      <Filter>UDF Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mysolver.c">
+      <Filter>UDF Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mysource.c">
+      <Filter>UDF Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\myturb.c">
+      <Filter>UDF Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\myudf.c">
-      <Filter>Source Files</Filter>
+      <Filter>UDF Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\myuns.c">
+      <Filter>UDF Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\myvector.c">
+      <Filter>UDF Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\mydialog.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\myscheme.h">
+      <Filter>UDF Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\myudf.h">
+      <Filter>UDF Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

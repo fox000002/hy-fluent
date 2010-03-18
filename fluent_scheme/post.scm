@@ -116,6 +116,43 @@
   )
 )
 
+(define hy-process-data-list
+  (lambda (l)
+    (let ((j 0) (lcc '()))
+      (do ((i  0 (+ i 2)))
+        ((>= i (length l)))
+        (begin
+          (if (or (equal? (length lcc) 0) (not (equal? (list-ref l i) (list-ref llc j))))
+            (begin
+              (set! lcc (list lcc (list-ref l i) (list-ref l (+ i 1)))
+              (set! j (+ j 2))
+              lcc
+            )
+            (begin
+              (set! lcc
+                (list
+                  (list-head lcc (- (length lcc) 1))
+                  (list
+                    (/ 
+                      (+
+                        (list-ref l (+ i 1))
+                        (list-ref llc (+ j 1))
+                      )
+                      2
+                    )
+                  )
+                )
+              )
+              lcc
+            )
+          )
+          
+        )
+      )
+    )
+  )
+)
+
 (define hy-write-list-tec-file
   (lambda (fname ll tt)
     (let ((p (open-output-file (format #f "~a" fname))))

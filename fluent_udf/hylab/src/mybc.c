@@ -466,5 +466,21 @@ DEFINE_PROFILE(FST_r_mod, t, i)
   end_f_loop(f, t)
 }
 
+/* Wall Roughness */
+DEFINE_PROFILE(hy_wall_roughness, t, i)
+{
+    /*  */
+  real x[ND_ND];
+  real pos_x;
+  face_t f;
 
+  begin_f_loop(f, t)
+  {
+      F_CENTROID(x,f,t);
+      pos_x = x[0];
+
+      F_PROFILE(f, t, i) = 0.001;
+  }
+  end_f_loop(f, t)
+}
 

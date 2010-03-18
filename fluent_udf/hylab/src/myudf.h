@@ -26,4 +26,7 @@ int is_dpm_on();
 int is_turb_on();
 int is_ke_on();
 
+/************************************/
+int is_seg_solver();
+
 #endif /*  HU_MYUDF_H */
