@@ -12,6 +12,8 @@ SOURCES =  $(SRC)myudf.c   \
            $(SRC)mysource.c\
            $(SRC)mypost.c  \
            $(SRC)mydpm.c   \
+           $(SRC)mysolver.c\
+           $(SRC)myuds.c   \
 
 VERSION = 3ddp
 PARALLEL_NODE = none

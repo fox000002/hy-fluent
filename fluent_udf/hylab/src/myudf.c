@@ -407,8 +407,8 @@ DEFINE_DPM_PROPERTY(coal_emissivity, c, t, p)
 
     /* get the material char and volatile fractions and store them */
     /* in vf and cf                                               */
-    vf=DPM_VOLATILE_FRACTION(p);
-    cf=DPM_CHAR_FRACTION(p);
+    vf = DPM_VOLATILE_FRACTION(p);
+    cf = DPM_CHAR_FRACTION(p);
 
     if (!(((mp/mp0) >= 1) || ((mp/mp0) <= 0)))
     {

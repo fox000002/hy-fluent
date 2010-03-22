@@ -96,6 +96,18 @@ DEFINE_GRID_MOTION(beam,domain,dt,time,dtime)
   end_f_loop(f,tf);
 }
 
+/************************************************************
+Simple example of a SDOF property UDF for a moving body
+**************************************************************/
+DEFINE_SDOF_PROPERTIES(stage, prop, dt,time,dtime)
+{
+    prop[SDOF_MASS]=800.0;
+    prop[SDOF_IXX]=200.0;
+    prop[SDOF_IYY]=100.0;
+    prop[SDOF_IZZ]=100.0;
+    CX_Message("\nstage:updated 6DOF properties");
+}
+
 /*******************************************************
 SDOF property compiled UDF with external forces/moments
 *******************************************************/

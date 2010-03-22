@@ -319,22 +319,3 @@ DEFINE_DELTAT(mydeltat, d)
     return time_step;
 }
 
-/***********************************************************************/
-/* UDF for specifying user-defined scalar time derivatives             */
-/***********************************************************************/
-DEFINE_UDS_UNSTEADY(uns_time, c, t, i, apu, su)
-{
-    real physical_dt;
-    real vol;
-    real rho;
-    real phi_old;
-
-    physical_dt = RP_Get_Real("physical-time-step");
-    vol = C_VOLUME(c,t);
-
-    rho = C_R_M1(c,t);
-    *apu = -rho*vol / physical_dt;/*implicit part*/
-    phi_old = C_STORAGE_R(c,t,SV_UDSI_M1(i));
-    *su  = rho*vol*phi_old/physical_dt;/*explicit part*/
-}
-
