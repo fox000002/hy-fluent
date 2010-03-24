@@ -60,36 +60,6 @@ DEFINE_ADJUST(my_adjust, d)
     printf("Volume integral of turbulent dissipation: %g\n", sum_diss);
 }
 
-
-
-/***********************************************************************
-UDF for initializing flow field variables
-************************************************************************/
-DEFINE_INIT(my_init_func, d)
-{
-    cell_t c;
-    Thread *t;
-    real xc[ND_ND];
-
-    /* loop over all cell threads in the domain  */
-    thread_loop_c(t,d)
-    {
-
-        /* loop over all cells  */
-        begin_c_loop_all(c,t)
-        {
-            C_CENTROID(xc,c,t);
-            if (sqrt(ND_SUM(pow(xc[0] - 0.5,2.),
-                pow(xc[1] - 0.5,2.),
-                pow(xc[2] - 0.5,2.))) < 0.25)
-                C_T(c,t) = 400.;
-            else
-                C_T(c,t) = 300.;
-        }
-        end_c_loop_all(c,t)
-    }
-}
-
 /***********************************************************************
 UDFs that increment a variable, write it to a data file
 and read it back in
