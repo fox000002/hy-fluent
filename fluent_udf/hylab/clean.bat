@@ -1,6 +1,6 @@
 @echo off
 
-rm -vf *.obj *.dll *.c *.opt *.exp *.lib *.plg *.ncb *.user *.suo
+rm -vf *.obj *.o *.dll *.c *.opt *.exp *.lib *.plg *.ncb *.user *.suo *.so
 
 rm -rvf Debug Release _UpgradeReport_Files hylab_*Debug*
 

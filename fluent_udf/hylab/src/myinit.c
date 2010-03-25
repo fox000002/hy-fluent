@@ -28,6 +28,7 @@ DEFINE_INIT(my_init_func, d)
     }
 }
 
+/* Initialize solid cells' temperature */
 DEFINE_INIT(my_init_temperature, d)
 {
     cell_t c;

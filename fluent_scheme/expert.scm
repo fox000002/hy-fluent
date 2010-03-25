@@ -14,33 +14,7 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-;; The function for reading the report file
-(define (read-report-file filename)
-  (let
-    ((p (open-input-file (format #f "~a" filename))))
-    (do
-      ((x (read p) (read p)))
-      (
-        (or (number? x) (eof-object? x))
-        (close-input-port p)
-        (if (number? x) x #f)
-      )
-    )
-  )
+(define (hy-turn-on-misc-turb-model)
+  (ti-menu-load-string "/define/models/viscous/turbulence-expert/low-re-ke? yes")
+  (set! allow-v2f-model? #t)
 )
-
-(define pfile (open-output-file "favg.dat"))
-
-(do ((i  0 (+ i 5))(x 0.0)(y 0.0))
-  ((> i 340))
-  (begin
-    (newline)
-    (set! x (/ i 1000))
-    (set! y (read-report-file (format #f "favg~03d.srp" i)))
-    (display (format #f "~a     ~a" x  y) pfile)
-    (newline pfile)
-  )
-)
-
-(close-input-port pfile)
-

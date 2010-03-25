@@ -13,8 +13,8 @@
 ;; Global variables
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(if 
-  (symbol-bound? 'hy-menu-load? (the-environment)) 
+(if
+  (symbol-bound? 'hy-menu-load? (the-environment))
   (display (format #f "hy-menu-load? : ~a" hy-menu-load?))
   (define hy-menu-load? #f)
 )
@@ -495,12 +495,12 @@
 ;Also, for all type of monitors(surface,residuals....etc),
 ;first set the monitor parameters and then define the animation monitor
 ;Animation Name ["sequence-7"] "myanime"
-;Enter Window ID [0] 
-;set animation window? [no] 
-;Every Timestep? [no] 
+;Enter Window ID [0]
+;set animation window? [no]
+;Every Timestep? [no]
 ;Frequency [1] 5
 ;Animation Of: (grid contour pathline ptracks vector monitor xy-plot)
-;Enter Name [contour] 
+;Enter Name [contour]
 ;Storage Type: (memory hmf ppm)
 ;Enter Storage Type [hmf] ppm
 ;Storage Path Name [""] "C:"
@@ -530,7 +530,7 @@
 
 ;;; Animation stuff
 ;; (ani-monitor-update)
-;; (set-animon-active?) 
+;; (set-animon-active?)
 ;; (animon->active?)
 ;; (ani-monitor-delete)
 ;; (build-ani-monitor-list-element)
@@ -540,7 +540,7 @@
 ;; (ani-monitor-active?)
 ;; (ani-monitor-name->seq)
 ;; (ani-monitor-seq->name)
-;; (ani-monitor-deactivate) 
+;; (ani-monitor-deactivate)
 ;; (ani-monitor-activate)
 ;; (ani-monitor-change-freq)
 ;; (ani-monitor-rename)
@@ -549,7 +549,7 @@
 ;; (run-ani-monitors)
 ;; (animation-init)
 
- 
+
 
 (define hy-create-animation
   (lambda (datafilename imagefile-prefix first-index last-index delta disp-proc)
@@ -563,7 +563,7 @@
       ;;;;   hpgl
       ;;;;   options
       ;;;;   tiff
-      ;;;;   image 
+      ;;;;   image
       ;;;    vrml
       (hy-exec-command "/display/set/hardcopy/driver/tiff")
       ;;; options:
@@ -664,7 +664,7 @@
 )
 
 (define gui-my-input-panel
-  (let 
+  (let
     ((panel #f) (mybox) (my-int-entry) (my-real-entry) (my-text-entry))
     ;;;
     (define (update-cb . args)
@@ -721,7 +721,7 @@
   (begin
     ;;;
     (hy-add-mainmenu hy-menu-name)
-    
+
     (hy-add-menuitem hy-menu-name "SayHello" hy-hello)
 
     (hy-add-menuitem hy-menu-name "TestUDF" hy-test-udf)
@@ -735,7 +735,7 @@
     (hy-add-menuitem hy-menu-name "ShowDialog" (lambda () (hy-panel hy-hello (lambda () (hy-run-udf-proc "showMsg" "libhylab")))))
 
     (hy-add-menuitem hy-menu-name "About" (lambda () (hy-run-udf-proc "showMsg" "libhylab")))
-    
+
     (set! hy-menu-load? #t)
   )
 )
