@@ -319,3 +319,41 @@ DEFINE_DELTAT(mydeltat, d)
     return time_step;
 }
 
+
+DEFINE_PROFILE(hy_ex_wall_heat_flux, t, i)
+{
+    real x[ND_ND];
+    face_t f;
+    real pos_x;
+    real pos_y;
+    real pos_z;
+    real flow_time = CURRENT_TIME;
+    real flux;
+    
+    /* CX_Message("!!! flow_time!!! :  %f\n", flow_time); */
+    
+    begin_f_loop(f,t)
+    {
+        /* CX_Message("!!!\n");*/
+    
+        F_CENTROID(x,f,t);
+        pos_x = x[0];
+        pos_y = x[1];
+        pos_z = x[2];
+            
+        if (flow_time  <= 10.0)
+        {
+            /*  angle   */            
+            F_PROFILE(f,t,i) = (1.0 - flow_time / 10.0) * (-625 * pos_x + 1.25e6);
+            
+            flux = (1.0 - flow_time / 10.0) * (-625 * pos_x + 1.25e6);
+            /* CX_Message("!!! Heat Flux!!! :  %f\n", flux); */
+        }
+        else
+        {
+            F_PROFILE(f,t,i) = 0.0;
+            /* CX_Message("!!! Heat Flux!!! :  %f\n", 0.0); */
+        }
+    }
+    end_f_loop(f,t)
+}

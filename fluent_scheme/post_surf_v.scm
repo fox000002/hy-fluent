@@ -86,15 +86,22 @@
   )
 )
 
-(define (hy-do-export-regcool-total)
-  (do ((i  0 (+ i 2)))
+(define (hy-do-export-regcool-total varname)
+  (do ((i  0 (+ i 1)))
     ((> i 360))
     (begin
       (newline)
       ;(hy-create-plane-surface-z (format #f "surf_~03d" i) (/ i 1000))
-      (hy-export-report-favg (format #f "favg~03d.srp" i) (format #f "surf_~03d" i) "density")
+      ;(hy-export-report-favg (format #f "favg~03d.srp" i) (format #f "surf_~03d" i) "density")
+      (hy-export-report-favg (format #f "~a_favg~03d.srp" varname i) (format #f "surf_~03d" i) varname)
     )
   )
 )
 
+(for-each
+  hy-do-export-regcool-total
+  '(
+      density total-pressure total-temperature gamma mach-number mean-molecular-weight
+  )
+)
 

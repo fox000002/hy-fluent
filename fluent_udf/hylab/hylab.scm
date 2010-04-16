@@ -489,6 +489,18 @@
   )
 )
 
+;; profile
+; (list-profiles)
+; (list-profile-fields) 
+; (write-profiles) 
+; (pick-profile) 
+; (profile-name) 
+; (update-profiles) 
+; (delete-profile)
+; (read-profile)
+; (ti-profile)
+
+
 ;/solve/animate/define> define-monitor
 ;First display the post processing results and then define
 ;the animation sequence.
@@ -611,6 +623,8 @@
   )
 )
 
+;;
+;;
 ;;
 (define hy-display-contour
   (lambda (var min max)

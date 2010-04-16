@@ -3,6 +3,25 @@
 
 static real v_prev= 0.0;
 
+real hy_get_face_force(int tid)
+{
+    Thread *t;
+    face_t f;
+    real force;
+    real NV_VEC (A);
+
+    t = Lookup_Thread(root_domain, tid);
+    force = 0.0;
+    begin_f_loop (f, t)
+    {
+        F_AREA (A, f, t);
+        force += F_P (f, t) * NV_MAG (A);
+    }
+    end_f_loop (f, t)
+
+    return force;
+}
+
 DEFINE_CG_MOTION(piston, dt, vel, omega, time, dtime)
 {
     Thread *t;
