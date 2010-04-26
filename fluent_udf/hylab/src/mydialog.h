@@ -3,4 +3,4 @@
 
 void showMyMessage(char *msg);
 
-#endif // U_MYDIALOG_H
+#endif /* U_MYDIALOG_H */

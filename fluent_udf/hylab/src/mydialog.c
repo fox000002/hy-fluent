@@ -11,20 +11,20 @@ BOOL APIENTRY DllMain(HMODULE hModule,
     {
     case DLL_PROCESS_ATTACH:
         g_hModule = hModule;
-        //LOG_STRING("UHook DLL_PROCESS_ATTACH!");
+        /* LOG_STRING("UHook DLL_PROCESS_ATTACH!"); */
         break;
     case DLL_THREAD_ATTACH:
         g_hModule = hModule;
-        //LOG_STRING("UHook DLL_THREAD_ATTACH!");
+        /* LOG_STRING("UHook DLL_THREAD_ATTACH!"); */
         break;
     case DLL_THREAD_DETACH:
-        // Do thread-specific cleanup.
-        //LOG_STRING("UHook DLL_THREAD_DETACH!");
+        /* Do thread-specific cleanup.*/
+        /* LOG_STRING("UHook DLL_THREAD_DETACH!");*/
         break;
 
     case DLL_PROCESS_DETACH:
-        // Perform any necessary cleanup.
-        //LOG_STRING("UHook DLL_PROCESS_DETACH!");
+        /* Perform any necessary cleanup.*/
+        /*LOG_STRING("UHook DLL_PROCESS_DETACH!");*/
         break;
     }
     return TRUE;

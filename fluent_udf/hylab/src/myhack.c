@@ -1,27 +1,29 @@
 #include "udf.h"
 
-//FLUENT_EXPORT char* CX_Interpret_String_To_String(char *);
+/*FLUENT_EXPORT char* CX_Interpret_String_To_String(char *);*/
+
+extern FLUENT_EXPORT Domain *root_domain;
 
 DEFINE_ON_DEMAND(hy_test_fluent_pointer)
 {
     Pointer p;
-    //char buf[1024];
-    //char *str;
+    /*char buf[1024];*/
+    /*char *str;*/
     int i;
 
     p = CX_Interpret_String("(newline)");
 
     CX_Message("Type: %d \n", p->type);
 
-    //str = CX_Interpret_String_To_String("(+ 1 1)");
-    //CX_Message(str);
+    /*str = CX_Interpret_String_To_String("(+ 1 1)");*/
+    /*CX_Message(str);*/
 
 
     if (SYMBOLP(p))
     {
         CX_Message("Symbol\n");
     }
-    //CX_Message(" %ld . %ld\n", FIXNM(CAR(p)), FIXNM(CDR(p)));
+    /*CX_Message(" %ld . %ld\n", FIXNM(CAR(p)), FIXNM(CDR(p)));*/
     switch (p->type)
     {
     case 0:

@@ -11,10 +11,11 @@ SOURCES =  $(SRC)myudf.c   \
            $(SRC)myvector.c\
            $(SRC)mysource.c\
            $(SRC)mypost.c  \
-           $(SRC)mydpm.c   \
            $(SRC)mysolver.c\
            $(SRC)myuds.c   \
            $(SRC)myinit.c  \
+#           $(SRC)mydpm.c   \
+
 
 VERSION = 3ddp
 PARALLEL_NODE = none

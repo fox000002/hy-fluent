@@ -97,11 +97,11 @@ DEFINE_ON_DEMAND(INIT)
     int thread_ID;
     Thread *t;
     int i;
-    face_t f;       // index of face of wall
-    cell_t c0;      // index of cell which is adjacent to wall.
+    face_t f;        /*  index of face of wall */
+    cell_t c0;      /*  index of cell which is adjacent to wall. */
     Domain *domain;
 
-    thread_ID = 8;  //
+    thread_ID = 8;  /*  */
     count=0;
     i=0;
 
@@ -109,7 +109,7 @@ DEFINE_ON_DEMAND(INIT)
     domain = Get_Domain(1);  /* returns fluid domain pointer */
     t = Lookup_Thread(domain, thread_ID);
 
-    //
+    /*  */
     begin_f_loop(f,t)
     {
         c0 = F_C0(f,t);
@@ -119,7 +119,7 @@ DEFINE_ON_DEMAND(INIT)
 
     g_sgrid = (int *) malloc(count * sizeof(int));
     g_ssize = count;
-    //
+    /*  */
     begin_f_loop(f,t)
     {
         c0 = F_C0(f,t);
@@ -129,12 +129,12 @@ DEFINE_ON_DEMAND(INIT)
     end_f_loop(f,t)
 }
 
-//
+/*  */
 int cellTest(int d)
 {
     int iResult;
     int i;
-    // if d is within array g_sgrid return 1, otherwise return 0.
+    /*  if d is within array g_sgrid return 1, otherwise return 0. */
     iResult = 0;
 
     for (i=0; i<g_ssize; ++i)
@@ -151,30 +151,31 @@ int cellTest(int d)
 
 real g_hy_face_t_avg = 0.0;
 
-// Fetch the average temperature of a specific face
+/*  Fetch the average temperature of a specific face */
 DEFINE_ON_DEMAND(hy_face_temp_avg)
 {
     real temperature = 0.0f;
     real area  = 0.0f;
     int num = 0;
     int thread_ID = 8;
-    //
+    /*  */
     face_t f;
     Thread *t;
     int n;
     Node *node;
     Domain *domain;
-    //
+    /*  */
     real NV_VEC(A);
     real x[ND_ND];
 
     domain = Get_Domain(1);  /* returns fluid domain pointer */
     t = Lookup_Thread(domain, thread_ID);
 
-    //CX_Message("There are %d nodes in Face.\n", F_NNODES(f,t));
+    /*
+    CX_Message("There are %d nodes in Face.\n", F_NNODES(f,t));
+    */
 
-
-    //area = A[0];
+    /* area = A[0]; */
 
     begin_f_loop(f, t)    /* loops over faces in a face thread  */
     {
@@ -183,14 +184,14 @@ DEFINE_ON_DEMAND(hy_face_temp_avg)
 #ifdef DEBUG
         CX_Message("area : %f\n", -A[1]);
         CX_Message("temperature : %f  %f\n", x[0], F_T(f, t));
-#endif // DEBUG
+#endif /*  DEBUG */
         temperature -= F_T(f,t) * A[1];
         area -= A[1];
     }
     end_f_loop(f, t)
 
     g_hy_face_t_avg  = temperature / area;
-    //
+    /*  */
     CX_Message("Total area of Face %d : %f\n", THREAD_ID(t), area);
     CX_Message("The average temperature of the Face : %f\n", g_hy_face_t_avg);
 }
@@ -225,7 +226,7 @@ DEFINE_ON_DEMAND(get_coords)
 }
 
 
-// Source Term
+/*  Source Term */
 DEFINE_SOURCE(MySourceTerm, c, t, dS, eqn)
 {
     real source;
@@ -270,11 +271,11 @@ DEFINE_SOURCE(xmom_source, c, t, dS, eqn)
 
 #ifndef P_CELL
 #define       P_CELL(P) RP_CELL(&((P)->cCell))           /* Non-standard macros */
-#endif // P_CELL
+#endif /*  P_CELL */
 
 #ifndef P_CELL_THREAD
 #define       P_CELL_THREAD(P) RP_THREAD(&((P)->cCell))
-#endif // P_CELL_THREAD
+#endif /*  P_CELL_THREAD */
 
 real contact_area(cell_t c, Thread *t, int s_id, int *n);
 

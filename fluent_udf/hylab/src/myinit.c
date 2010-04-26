@@ -38,7 +38,7 @@ DEFINE_INIT(my_init_temperature, d)
     thread_loop_c(t,d)
     {
         if (!FLUID_THREAD_P(t))
-        //if (9 == THREAD_ID(t))
+        /* if (9 == THREAD_ID(t)) */
         {
             /* loop over all cells  */
             begin_c_loop_all(c,t)

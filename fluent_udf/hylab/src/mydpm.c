@@ -4,7 +4,7 @@
 #define NMAX 100000
 
 static int last_id = -1;
-int count =-1;
+static int count =-1;
 int i=-1,k=0;
 real x0,x1,x2,time_p[100],time_pinit[100];
 real len[NMAX];
@@ -13,13 +13,14 @@ char so[100]="";
 char sn[100]="";
 int no_of_tries[100];
 
-DEFINE_DPM_SCALAR_UPDATE(store_path,c,t,in,p)
+DEFINE_DPM_SCALAR_UPDATE(hy_dpm_store_path,c,t,in,p)
 {
     real xn0,xn1,xn2;
     int id_n = p->part_id;
 
-    sprintf(sn,p->injection->name);
-    if(strcmp(sn,so)!=0 || k==0){
+    sprintf(sn, p->injection->name);
+    if(strcmp(sn,so)!=0 || k==0)
+    {
         count1[k]=p->injection->n_particles;
         no_of_tries[k]=1;
         if(p->injection->stochastic_p !=0)
@@ -52,7 +53,6 @@ DEFINE_DPM_SCALAR_UPDATE(store_path,c,t,in,p)
     sprintf(so,sn);
 }
 
-
 DEFINE_ON_DEMAND(hy_dpm_exec)
 {
     int j,jc,kc=0,kc1=0,counter=0;
@@ -70,8 +70,8 @@ DEFINE_ON_DEMAND(hy_dpm_exec)
             sum[jc] += len[j];
             sum_time[jc] +=(time_p[j]-time_pinit[j]);
         }
-        Message("avg path length from injection-%d is %f\n",jc,sum[jc]/(count1[jc]*no_of_tries[jc]));
-        Message("avg res time from injection-%d is %f\n",jc,sum_time[jc]/(no_of_tries[jc]*count1[jc]));
+        CX_Message("avg path length from injection-%d is %f\n",jc,sum[jc]/(count1[jc]*no_of_tries[jc]));
+        CX_Message("avg res time from injection-%d is %f\n",jc,sum_time[jc]/(no_of_tries[jc]*count1[jc]));
     }
 }
 
