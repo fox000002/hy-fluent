@@ -52,7 +52,7 @@ DEFINE_EXECUTE_ON_LOADING(hy_on_lib_loading,libname)
         udm_offset = Reserve_User_Memory_Vars(NUM_UDM);
         if(udm_offset==UDM_UNRESERVED)
         {
-            CX_Message("\nYou need to define up to %d extra UDMs in GUI and then reload current library%s\n", NUM_UDM, libname);
+            CX_Message("\nYou need to define up to %d extra UDMs in GUI and then reload current library %s\n", NUM_UDM, libname);
         }
         else
         {

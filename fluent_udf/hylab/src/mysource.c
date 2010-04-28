@@ -100,10 +100,10 @@ boolean check(void)
 }
 
 
-DEFINE_ON_DEMAND(mark_reset)
+DEFINE_ON_DEMAND(hy_mark_reset)
 {
-    Domain*d = Get_Domain(1);
-    Thread*t;
+    Domain *d = Get_Domain(1);
+    Thread *t;
     cell_t c;
 
     if (!check()) return;
@@ -112,15 +112,14 @@ DEFINE_ON_DEMAND(mark_reset)
     {
         begin_c_loop(c,t)
         {
-            C_UDMI(c,t,UDM_SOURCE) = 0.0;
+            C_UDMI(c, t, UDM_SOURCE) = 0.0;
         }
         end_c_loop(c,t);
     }
 }
 
-DEFINE_ON_DEMAND(mark)
+DEFINE_ON_DEMAND(hy_mark)
 {
-
 #if !RP_HOST
     Domain *d = Get_Domain(1);
     cell_t c;
@@ -188,15 +187,10 @@ DEFINE_ON_DEMAND(mark)
         return;
     }
 
-
     /* Close input file */
     fclose(input);
 
-
-
 #endif
-
-
 
     /* FIND COORDINATES IN CELLS */
 
@@ -250,13 +244,11 @@ label: continue;
 
 
 
-DEFINE_SOURCE(mass_source,c,t,dS,eqn)
+DEFINE_SOURCE(hy_mass_source, c, t, dS, eqn)
 {
-
     real source = 0.0;
     real mdot = 1.0;
     source = (C_UDMI(c,t,UDM_SOURCE) == 1.0) ? (mdot/C_VOLUME(c,t)) : 0.0;
     dS[eqn] = 0.0;
     return source;
-
 }

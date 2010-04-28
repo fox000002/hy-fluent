@@ -5,12 +5,18 @@
 
 static int last_id = -1;
 static int count =-1;
-int i=-1,k=0;
-real x0,x1,x2,time_p[100],time_pinit[100];
+int i=-1;
+int k=0;
+real x0;
+real x1;
+real x2;
+real time_p[100];
+real time_pinit[100];
 real len[NMAX];
-int count1[100],count_check=0;
-char so[100]="";
-char sn[100]="";
+int count1[100];
+int count_check=0;
+char so[100];
+char sn[100];
 int no_of_tries[100];
 
 DEFINE_DPM_SCALAR_UPDATE(hy_dpm_store_path,c,t,in,p)
@@ -24,7 +30,9 @@ DEFINE_DPM_SCALAR_UPDATE(hy_dpm_store_path,c,t,in,p)
         count1[k]=p->injection->n_particles;
         no_of_tries[k]=1;
         if(p->injection->stochastic_p !=0)
-        no_of_tries[k]=p->injection->ntries;
+        {
+            no_of_tries[k]=p->injection->ntries;
+        }
         k++;
     }
 
@@ -55,18 +63,30 @@ DEFINE_DPM_SCALAR_UPDATE(hy_dpm_store_path,c,t,in,p)
 
 DEFINE_ON_DEMAND(hy_dpm_exec)
 {
-    int j,jc,kc=0,kc1=0,counter=0;
-    real avg[100],sum[100],avg_glob,t_sum=0.0,sum_time[100];
+    int j;
+    int jc;
+    int kc=0;
+    int kc1=0;
+    int counter=0;
+
+    real avg[100];
+    real sum[100];
+    real avg_glob;
+    real t_sum=0.0;
+    real sum_time[100];
 
     for(jc=0;jc<k;jc++)
     {
         sum[jc]=0.0;
         sum_time[jc]=0.0;
         if(jc>0)
-        kc += count1[jc-1]* no_of_tries[jc-1];
+        {
+            kc += count1[jc-1]* no_of_tries[jc-1];
+        }
         kc1 += count1[jc] * no_of_tries[jc];
-        for(j=kc;j<kc1;j++){
-            Message("Path length for particle- %d in injection-%d is %f\n",j,jc,len[j]);
+        for(j=kc;j<kc1;j++)
+        {
+            CX_Message("Path length for particle- %d in injection-%d is %f\n",j,jc,len[j]);
             sum[jc] += len[j];
             sum_time[jc] +=(time_p[j]-time_pinit[j]);
         }
@@ -101,7 +121,7 @@ DEFINE_DPM_TIMESTEP(limit_to_fifth_of_prt, p, dt)
         drag_factor=1.;
     }
     p_relax_time=1./drag_factor;
-    /*check the condition and return the timestep*/
+    /*check the condition and return the time step*/
     if(dt>p_relax_time/5.)
     {
         return p_relax_time/5.;

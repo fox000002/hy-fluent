@@ -1,3 +1,15 @@
+/********************************************************************
+    created:    2010/04/28
+    created:    28:4:2010   18:18
+    filename:     mydialog.c
+    file path:    hy-fluent/fluent_udf/hylab/src
+    file base:    mydialog
+    file ext:    c
+    author:        hu
+
+    purpose:    A simple about dialog.
+*********************************************************************/
+
 #include <windows.h>
 
 #include "mydialog.h"
