@@ -12,6 +12,8 @@ include user_nt.udf
 # These need to be updated for each release.
 LIB_RELEASE = 6326
 RELEASE = 6.3.26
+#LIB_RELEASE = 1212
+#RELEASE = 12.1.2
 
 # it is assumed $(FLUENT_INC)is already set.
 ifndef FLUENT_INC
@@ -92,7 +94,7 @@ INCLUDES= -I$(FLUENT_INC)\fluent$(RELEASE)\$(FLUENT_ARCH)\$(VERSION) \
           -I$(FLUENT_INC)\fluent$(RELEASE)\tgrid\src \
           -I$(FLUENT_INC)\fluent$(RELEASE)\multiport\src
 
-LIBS = -Llib\$(FLUENT_ARCH)\$(VERSION) -l$(FLUENT_LIB)
+LIBS = -Llib\fluent$(RELEASE)\$(FLUENT_ARCH)\$(VERSION) -l$(FLUENT_LIB)
 
 
 default:   $(TARGET)

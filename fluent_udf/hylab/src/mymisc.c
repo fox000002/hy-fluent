@@ -34,7 +34,7 @@ static int release=2;
 
 DEFINE_EXECUTE_ON_LOADING(hy_report_lib_version,libname)
 {
-    CX_Message("\nLoading%sversion%d.%d\n",libname,version,release);
+    CX_Message("\nLoading %s version %d.%d\n",libname,version,release);
 }
 
 /**********************************************************************
@@ -44,6 +44,7 @@ and an on-demand UDF that sets the initial value of the UDMs.
 **********************************************************************/
 #define NUM_UDM 3
 static int udm_offset = UDM_UNRESERVED;
+
 DEFINE_EXECUTE_ON_LOADING(hy_on_lib_loading,libname)
 {
     if(udm_offset==UDM_UNRESERVED)

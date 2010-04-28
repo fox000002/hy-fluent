@@ -10,6 +10,18 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
+;; Version check
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define is-fluent-release?
+  (lambda (r)
+    (equal? r (car (inquire-release)))
+  )
+)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Global variables
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -162,12 +174,24 @@
 ;;
 ;; UDF
 ;;
+;; libname:
+;;   6   -- <libname> 
+;;   12  -- <libname>.dll
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define hy-libname-conv
+  (lambda (libname)
+    (if (is-fluent-release? 6)
+      (format #f "~a" libname)
+      (format #f "~a.dll" libname)
+    )
+  )
+)
+
 
 (define hy-open-udf-library
   (lambda (libname)
     (if (file-exists? (format #f "~a.dll" libname))
-      (open-udf-library libname)
+      (open-udf-library (hy-libname-conv libname))
       (begin
         (newline)
         (display "Failed to open the library")
@@ -179,13 +203,13 @@
 
 (define hy-close-udf-library
   (lambda (libname)
-    (close-udf-library libname)
+    (close-udf-library (hy-libname-conv libname))
   )
 )
 
 (define hy-run-udf-proc
   (lambda (procname libname)
-    (%udf-on-demand (format #f "~a::~a" procname libname))
+    (%udf-on-demand (format #f "~a::~a" procname (hy-libname-conv libname)))
   )
 )
 
