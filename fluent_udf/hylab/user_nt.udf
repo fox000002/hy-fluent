@@ -15,10 +15,11 @@ SOURCES =  $(SRC)myudf.c   \
            $(SRC)myuds.c   \
            $(SRC)myinit.c  \
            $(SRC)myreaction.c \
+           $(SRC)myflow.c  \
 #           $(SRC)mydpm.c   \
 
 
 VERSION = 3ddp
 PARALLEL_NODE = none
-FLUENT_INC = D:\GS\Fluent.Inc
-#FLUENT_INC = E:\Progs\ANSYS_Inc\v121\fluent
+#FLUENT_INC = D:\GS\Fluent.Inc
+FLUENT_INC = E:\Progs\ANSYS_Inc\v121\fluent

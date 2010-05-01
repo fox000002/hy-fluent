@@ -124,6 +124,24 @@
   )
 )
 
+(define hy-get-report-t-value
+  (lambda (t f)
+    (let ((l) (s (hy-exec-command-ex (format #f "/report/surface-integrals/~a ~a () no" t f))))
+      (set! l (string-split s "\n"))
+      (display (list-ref  l (- (length l) 1)))
+    )
+  )
+)
+
+(define hy-get-report-tfv-value
+  (lambda (t f v)
+    (let ((l) (s (hy-exec-command-ex (format #f "/report/surface-integrals/~a ~a () ~a no" t f v))))
+      (set! l (string-split s "\n"))
+      (display (list-ref  l (- (length l) 1)))
+    )
+  )
+)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Grid
@@ -763,6 +781,10 @@
     (hy-add-menuitem hy-menu-name "SayHello" hy-hello)
 
     (hy-add-menuitem hy-menu-name "TestUDF" hy-test-udf)
+    
+    (hy-add-menuitem hy-menu-name "TestFlow" (lambda ()(hy-run-udf-proc "hy_test_fluent_flow" "libhylab")))
+    
+    (hy-add-menuitem hy-menu-name "Post" (lambda () (hy-display-contour "velocity" 0 2)))
 
     (hy-add-menuitem hy-menu-name "ExportBC" hy-test-export-bc)
 

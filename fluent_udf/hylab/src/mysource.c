@@ -20,10 +20,10 @@ DEFINE_SOURCE(cell_cold, cell, thread, dS, eqn)
     /* Get axis of fluid region */
     NV_V (axis, =, THREAD_VAR(thread).cell.axis);
 
-    /* Store the 3 cartesian velocity components in vector V */ 
+    /* Store the 3 cartesian velocity components in vector V */
     N3V_D(V, =, C_U(cell,thread), C_V(cell,thread), C_W(cell,thread));
 
-    /* Get current cell coordinate */ 
+    /* Get current cell coordinate */
     C_CENTROID(xc,cell,thread);
 
     /* Calculate (R) = (Xc)-(Origin) */
@@ -54,7 +54,7 @@ DEFINE_SOURCE(cell_cold, cell, thread, dS, eqn)
         ur = 0.0;
         ut = 0.0;
         ua = NV_DOT(V,axis);
-    } 
+    }
 
     /*source term */
     source = SCOLD * ur;
@@ -69,7 +69,7 @@ DEFINE_SOURCE(cell_cold, cell, thread, dS, eqn)
 #define MAXPOINTS 20000
 #define UDM_SOURCE 0
 
-boolean check(void);
+static boolean check(void);
 
 static int np = 0;
 real coordinates[MAXPOINTS][ND_ND] = {{0.}};
@@ -85,18 +85,19 @@ struct interpolation_point point_list[MAXPOINTS];
 
 boolean check(void)
 {
-    boolean ret = TRUE;
     if (sg_udm < 1)
     {
-        ret = FALSE;
-        Message("Error: You must define at least 1 UDM\n");
+        Error("Error: You must define at least 1 UDM\n");
+        return FALSE;
     }
+
     if (!Data_Valid_P())
     {
-        ret = FALSE;
-        Message("Error: You must initialize the data field\n");
+        Error("Error: You must initialize the data field\n");
+        return FALSE;
     }
-    return ret;
+
+    return TRUE;
 }
 
 
@@ -243,12 +244,27 @@ label: continue;
 }
 
 
-
+/* Volume Heat Sink */
 DEFINE_SOURCE(hy_mass_source, c, t, dS, eqn)
 {
     real source = 0.0;
     real mdot = 1.0;
     source = (C_UDMI(c,t,UDM_SOURCE) == 1.0) ? (mdot/C_VOLUME(c,t)) : 0.0;
     dS[eqn] = 0.0;
+    return source;
+}
+
+/* Volume Heat Sink */
+#define TOTAL_VOL 1.507388
+#define TOTAL_Q   56000
+
+DEFINE_SOURCE(hy_vol_heat_sink, c, t, dS, eqn)
+{
+    real source;
+
+    source = - TOTAL_Q * C_VOLUME(c,t) / TOTAL_VOL;
+
+    dS[eqn] = 0.0;
+
     return source;
 }
