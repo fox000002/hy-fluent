@@ -100,6 +100,8 @@ CFLAGS = /c /Za /DUDF_EXPORTING
 
 
 TARGET = libhylab.dll
+TARGET_DIR = $(TARGET:.dll=) 
+
 UDFDATA = udf_names.c
 
 # generate object names from source names
@@ -135,6 +137,10 @@ LIBS = /Libpath:$(FLUENT_INC)\fluent$(RELEASE)\$(FLUENT_ARCH)\$(VERSION) user32.
 
 
 default:   $(TARGET)
+	@if not exist $(TARGET_DIR) mkdir $(TARGET_DIR)
+	@if not exist $(TARGET_DIR)\$(FLUENT_ARCH) mkdir $(TARGET_DIR)\$(FLUENT_ARCH)
+	@if not exist $(TARGET_DIR)\$(FLUENT_ARCH)\$(VERSION) mkdir $(TARGET_DIR)\$(FLUENT_ARCH)\$(VERSION)
+	@copy /B /Y $(TARGET) $(TARGET_DIR)\$(FLUENT_ARCH)\$(VERSION)\libudf.dll
 
 $(UDF_OBJECT): $(UDFDATA)
 	$(CC) $(CFLAGS) $(INCLUDES)  $**
@@ -153,8 +159,7 @@ $(RES_FILE) : $(RC_FILE)
 	
 $(TARGET): hylab.mak user_nt.udf $(UDF_OBJECT) $(SRC_OBJECT) $(MISC_OBJS) $(CPP_OBJS) $(RES_FILE)
 	@echo # Linking $@ because of $?
-	link  /nologo $(LIBS) /dll   /out:$(TARGET) \
-	      $(OBJECTS)  $(FLUENT_LIB) $(RES_FILE)
+	link  /nologo $(LIBS) /dll   /out:$(TARGET) $(OBJECTS)  $(FLUENT_LIB) $(RES_FILE)
 	
 $(UDFDATA): hylab.mak $(SRC_OBJECT)
 	@echo # Generating $@ because of $?

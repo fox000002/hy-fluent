@@ -10,10 +10,10 @@ SRC = ./src/
 include user_nt.udf
 
 # These need to be updated for each release.
-#LIB_RELEASE = 6326
-#RELEASE = 6.3.26
-LIB_RELEASE = 1212
-RELEASE = 12.1.2
+LIB_RELEASE = 6326
+RELEASE = 6.3.26
+#LIB_RELEASE = 1212
+#RELEASE = 12.1.2
 
 # it is assumed $(FLUENT_INC)is already set.
 ifndef FLUENT_INC
@@ -64,6 +64,7 @@ CFLAGS = -c -fpic -ansi -Wall -DUDF_EXPORTING
 
 LDFLAGS = -shared
 TARGET = libhylab.dll
+TARGET_DIR = $(TARGET:.dll=)
 UDFDATA = udf_names.c
 
 # generate object names from source names
@@ -99,6 +100,11 @@ LIBS = -Llib\fluent$(RELEASE)\$(FLUENT_ARCH)\$(VERSION) -l$(FLUENT_LIB)
 
 default:   $(TARGET)
 	echo $(UDF_OBJECT) $(SRC_OBJECT) $(USER_OBJECTS) $(MISC_OBJS) $(CPP_OBJS)
+	@if not exist $(TARGET_DIR) mkdir $(TARGET_DIR)
+	@if not exist $(TARGET_DIR)\$(FLUENT_ARCH) mkdir $(TARGET_DIR)\$(FLUENT_ARCH)
+	@if not exist $(TARGET_DIR)\$(FLUENT_ARCH)\$(VERSION) mkdir $(TARGET_DIR)\$(FLUENT_ARCH)\$(VERSION)
+	@copy /B /Y $(TARGET) $(TARGET_DIR)\$(FLUENT_ARCH)\$(VERSION)\libudf.dll
+    
 
 $(UDF_OBJECT): $(UDFDATA)
 	$(CC) $(CFLAGS) $(INCLUDES) $^

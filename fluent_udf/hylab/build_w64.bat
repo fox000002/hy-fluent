@@ -8,6 +8,6 @@ set VS8_DIR="D:\\Progs\\VS8"
 
 call %VS8_DIR%\VC\bin\amd64\vcvarsamd64.bat
 
-nmake /f hylab.mak VERSION=3ddp FLUENT_ARCH=Win64
+nmake /f hylab.mak VERSION=2d FLUENT_ARCH=Win64
 
 @pause

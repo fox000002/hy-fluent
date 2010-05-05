@@ -1,8 +1,8 @@
 @echo off
 
-REM set FLUENT_DIR=D:\GS\Fluent.Inc
+set FLUENT_DIR=D:\GS\Fluent.Inc
 
-set FLUENT_DIR=E:\Progs\ANSYS_Inc\v121\fluent
+REM set FLUENT_DIR=E:\Progs\ANSYS_Inc\v121\fluent
 
 start %FLUENT_DIR%\ntbin\ntx86\fluent 2d -i load.scm
 

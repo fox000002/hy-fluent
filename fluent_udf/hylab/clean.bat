@@ -10,4 +10,6 @@ rm -vf *.XML *.log *.sdf
 
 rm -rvf x64
 
+rm -rvf libhylab
+
 @pause
