@@ -52,14 +52,14 @@ DEFINE_EXECUTE_ON_LOADING(hy_on_lib_loading,libname)
         udm_offset = Reserve_User_Memory_Vars(NUM_UDM);
         if(udm_offset==UDM_UNRESERVED)
         {
-            CX_Message("\nYou need to define up to %d extra UDMs in GUI and then reload current library %s\n", NUM_UDM, libname);
+            CX_Message("\nYou need to define up to %d extra UDMs in GUI and then reload current library: %s\n", NUM_UDM, libname);
         }
         else
         {
             CX_Message("%d UDMs have been  reserved by the current library %s\n", NUM_UDM, libname);
-            Set_User_Memory_Name(udm_offset, "lib1-UDM-0");
-            Set_User_Memory_Name(udm_offset+1, "lib1-UDM-1");
-            Set_User_Memory_Name(udm_offset+2, "lib1-UDM-2");
+            Set_User_Memory_Name(udm_offset, "libhylab-UDM-0");
+            Set_User_Memory_Name(udm_offset+1, "libhylab-UDM-1");
+            Set_User_Memory_Name(udm_offset+2, "libhylab-UDM-2");
         }
         CX_Message("\nUDM Offset for Current Loaded Library=%d\n", udm_offset);
     }
@@ -71,12 +71,14 @@ DEFINE_ON_DEMAND(hy_set_lib_udms)
     Thread *ct;
     cell_t c;
     int i;
-    
-    d=Get_Domain(1);
+
+    /* root domain (fluid) */
+    d = Get_Domain(1);
+
     if (udm_offset!=UDM_UNRESERVED)
     {
-        CX_Message("Setting UDMs\n");
-        for(i=0;i<NUM_UDM;i++)
+        CX_Message("Setting UDMs.\n");
+        for(i=0; i<NUM_UDM; i++)
         {
             thread_loop_c(ct,d)
             {

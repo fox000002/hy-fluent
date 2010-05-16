@@ -79,6 +79,15 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
+;; Toolbar
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  cx-add-button-to-toolbar
+;;  cx-refresh-toolbar
+;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; TUI Command
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -182,10 +191,68 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;;
+;; reactions
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; %list-reactions
+;; client-list-reactions
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; profile
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; write-profiles
+;; pick-profile
+;; profile-name
+;; update-profiles
+;; delete-profile
+;; list-profile-fields
+;; list-profiles
+;; profile-list
+;; gui-write-existing-profile
+;; ti-write-existing-profile
+;; write-existing-profile
+;; gui-read-profile
+;; ti-read-profile
+;; read-profile
+;; %display-profile-points
+;; %write-fan-profile
+;; %profile-list
+;; %delete-profile
+;; %create-oriented-profile
+;; %any-thread-has-profile?
+;; %write-profile-section
+;; %read-profile-file
+;; %read-profile-section
+;; ti-profile
+;; profile-options
+;; profile
+;; display-profile-points
+;; ti-write-profiles
+;; gui-write-profiles
+;; gui-profiles-manage
+;; gui-profile-orient
+;; axial-profile-to-xy
+;; radial-profile-to-xy
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; UDM
+;;
+;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ti-udm
+;; set-udm-defaults
+;; gui-user-memory
+;;
+(define hy-set-udm-num
+  (lambda (n)
+    (hy-exec-command-ex (format #f "(ti-udm) ~a" n))
+  )
+)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -196,6 +263,23 @@
 ;;   6   -- <libname> 
 ;;   12  -- <libname>.dll
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; latest-udf-name
+;; udf-from-lib?
+;; udf-latest-lib-part
+;; udf-lib-part
+;; udf-fcn-part
+;; split-udf-name
+;; ti-open-udf-library
+;; ti-udf-compile
+;; gui-udf-compile
+;; close-udf-library
+;; open-udf-library
+;; load-udf-scm-file
+;; open-udf-libraries
+;; load-udf-scm-files
+;; udf-compile
+
+
 (define hy-libname-conv
   (lambda (libname)
     (if (is-fluent-release? 6)
@@ -531,16 +615,20 @@
   )
 )
 
-;; profile
-; (list-profiles)
-; (list-profile-fields) 
-; (write-profiles) 
-; (pick-profile) 
-; (profile-name) 
-; (update-profiles) 
-; (delete-profile)
-; (read-profile)
-; (ti-profile)
+;; bc-map-thread-ids?
+;; check-bc-compat
+;; set-bc
+;; list-bc
+;; read-bc
+;; write-bc
+;; iread-bc
+;; iwrite-bc
+;; ti-copy-bc
+;; copy-thread-bc
+;; check-bcs
+;; update-bcs
+;; bcs-changed
+;; client-inquire-bc-name
 
 
 ;/solve/animate/define> define-monitor
@@ -778,6 +866,10 @@
     ;;;
     (hy-add-mainmenu hy-menu-name)
 
+    (hy-add-menuitem hy-menu-name "Reload" (lambda () (load "hylab.scm")))
+    
+    (hy-add-menuitem hy-menu-name "SetUDM" (lambda () (hy-set-udm-num 3)))
+    
     (hy-add-menuitem hy-menu-name "SayHello" hy-hello)
 
     (hy-add-menuitem hy-menu-name "TestUDF" hy-test-udf)

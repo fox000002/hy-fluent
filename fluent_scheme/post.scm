@@ -133,7 +133,7 @@
                 (list
                   (list-head lcc (- (length lcc) 1))
                   (list
-                    (/ 
+                    (/
                       (+
                         (list-ref l (+ i 1))
                         (list-ref llc (+ j 1))
@@ -146,7 +146,7 @@
               lcc
             )
           )
-          
+
         )
       )
     )
