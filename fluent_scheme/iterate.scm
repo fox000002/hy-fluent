@@ -20,16 +20,13 @@
 ;;
 (define casename "coal_inj_00")
 (define iternum  1000)
-(define casename-iw
-  (format #f "~a-i~a" casename iternum)
-)
+(define casename-iw (format #f "~a-i~a" casename iternum))
 
-;
+;;
 (define hy-start-transcript
   (lambda (filename)
     (if (file-exists? filename)
       (remove-file filename)
-      #t
     )
     (ti-start-transcript filename #t)
     #t
@@ -40,7 +37,6 @@
 (define (hy-stop-transcript)
   (if transcript-open?
     (stop-transcript #t)
-    #t
   )
   #t
 )

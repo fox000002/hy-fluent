@@ -12,4 +12,6 @@ rm -rvf x64
 
 rm -rvf libhylab
 
+rm -vf err
+
 @pause
