@@ -1,5 +1,7 @@
 #include "udf.h"
 
+#include "myudf.h"
+
 DEFINE_ON_DEMAND(hy_my_udm)
 {
     Domain * domain;
@@ -8,6 +10,11 @@ DEFINE_ON_DEMAND(hy_my_udm)
 
     real phi;
 
+    if (!is_udm_on())
+    {
+        Error("You shoud set UDM number before execute this function!");
+    }
+    
     domain = Get_Domain(1);
 
     thread_loop_c(t,domain)

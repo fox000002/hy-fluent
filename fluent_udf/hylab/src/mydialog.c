@@ -14,7 +14,7 @@
 
 #include "mydialog.h"
 
-
+#define IDI_HYLAB  1
 
 /** 
  * @brief 
@@ -77,6 +77,9 @@ BOOL CALLBACK DialogProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
     switch (message)
     {
     case WM_INITDIALOG:
+        {
+        SendMessage(hwndDlg, WM_SETICON, ICON_BIG, LoadIcon(g_hModule, MAKEINTRESOURCE(IDI_HYLAB)));
+        }
         return TRUE;
     case WM_COMMAND:
         switch (LOWORD(wParam))

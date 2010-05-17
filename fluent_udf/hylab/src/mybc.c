@@ -21,7 +21,7 @@
 /**********************************************************************
 UDF for specifying a steady-state velocity profile boundary condition
 **********************************************************************/
-DEFINE_PROFILE(x_velocity, thread, index)
+DEFINE_PROFILE(hy_x_velocity, thread, index)
 {
     real x[ND_ND];
     real y;
@@ -41,7 +41,7 @@ DEFINE_PROFILE(x_velocity, thread, index)
 UDF for specifying steady-state parabolic pressure profile boundary
 profile for a turbine vane
 ************************************************************************/
-DEFINE_PROFILE(pressure_profile, t, i)
+DEFINE_PROFILE(hy_pressure_profile, t, i)
 {
     real x[ND_ND];
     real y;

@@ -17,9 +17,7 @@ DEFINE_INIT(my_init_func, d)
         begin_c_loop_all(c,t)
         {
             C_CENTROID(xc,c,t);
-            if (sqrt(ND_SUM(pow(xc[0] - 0.5,2.),
-                pow(xc[1] - 0.5,2.),
-                pow(xc[2] - 0.5,2.))) < 0.25)
+            if (sqrt(ND_SUM(pow(xc[0] - 0.5, 2.), pow(xc[1] - 0.5,2.), pow(xc[2] - 0.5,2.))) < 0.25)
                 C_T(c,t) = 400.;
             else
                 C_T(c,t) = 300.;

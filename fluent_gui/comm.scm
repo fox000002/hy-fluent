@@ -20,6 +20,7 @@
 ;;  cx-add-item
 ;;  cx-enable-item
 ;;  cx-activate-item
+;;  cx-hide-item
 
 ;; Execute the menu command.
 (cx-gui-do cx-activate-item "MenuBar*HyLabMenu*About")

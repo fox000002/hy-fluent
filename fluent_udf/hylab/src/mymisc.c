@@ -4,7 +4,7 @@
   UDF for integrating turbulent dissipation and printing it to
   console window at the end of the current iteration or time step
 *********************************************************************/
-DEFINE_EXECUTE_AT_END(execute_at_end)
+DEFINE_EXECUTE_AT_END(hy_execute_at_end)
 {
     Domain *d;
     Thread *t;
