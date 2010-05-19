@@ -48,7 +48,14 @@
 ;; GUI Menu
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;;
+;; syntax:
+;;   (hy-restore-mainmenu)
+;;   (hy-add-mainmenu name)
+;;   (hy-add-menuitem nemuname itemname myproc)
+;;   (hy-delete-menuitem itemname)
+;;
+  
 ;;;
 (define hy-restore-mainmenu
   (lambda ()
@@ -59,18 +66,21 @@
   )
 )
 
+;;;
 (define hy-add-mainmenu
   (lambda (name)
     (cx-add-menu name #\H)
   )
 )
 
+;;;
 (define hy-add-menuitem
   (lambda (menuname itemname myproc)
     (cx-add-item menuname itemname #\H #f cx-client? myproc)
   )
 )
 
+;;;
 (define hy-delete-menuitem
   (lambda (itemname)
     (cx-delete-item itemname)
@@ -887,6 +897,10 @@
     (hy-add-menuitem hy-menu-name "ShowDialog" (lambda () (hy-panel hy-hello (lambda () (hy-run-udf-proc "showMsg" "libhylab")))))
 
     (hy-add-menuitem hy-menu-name "About" (lambda () (hy-run-udf-proc "showMsg" "libhylab")))
+    
+    (hy-add-menuitem hy-menu-name "Ext" (lambda () ()))
+    
+    ;;(hy-add-menuitem "HyLabMenu*Ext" "Test" (lambda () ()))
 
     (set! hy-menu-load? #t)
   )

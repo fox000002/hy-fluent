@@ -3,6 +3,7 @@
 #
 #
 #
+SHELL = cmd.exe
 
 SRC = ./src/
 
