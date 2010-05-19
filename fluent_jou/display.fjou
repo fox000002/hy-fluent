@@ -1,0 +1,5 @@
+;;/display/set/colors/list
+;;Available colors:
+;;  ("background" "black" "blue" "cyan" "dark blue" "dark gray" "dark green"
+;;   "dark red" "foreground" "green" "light blue" "light gray" "light green"
+;;   "light red" "light yellow" "magenta" "maroon" "orange" "pink" "red" "tan" "white" "yellow")
