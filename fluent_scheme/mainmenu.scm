@@ -1,6 +1,158 @@
 ("" 
   (
-  (#[compound-procedure] "adapt/" ("adapt" ((#[compound-procedure] "adapt-to-register" #[compound-procedure] "Adapt grid to specified adaption register.") (#[compound-procedure] "adapt-to-gradients" #[compound-procedure] "Adapt grid to flow gradients.") (#[compound-procedure] "adapt-to-ref-lev" #[compound-procedure] "Adapt cells based on refinement level differences.") (#[compound-procedure] "adapt-to-y+" #[compound-procedure] "Adapt grid at walls to y+ (used in the k-e wall function).") (#[compound-procedure] "adapt-to-y+-zones" #[compound-procedure] "Adapt grid to y+ (used in the k-e wall function) based on list of wall zones.") (#[compound-procedure] "adapt-to-y*" #[compound-procedure] "Adapt grid at walls to y* (used in the k-e wall function).") (#[compound-procedure] "adapt-to-y*-zones" #[compound-procedure] "Adapt grid to y* (used in the k-e wall function) based on list of wall zones.") (#[compound-procedure] "change-register-type" #[compound-procedure] "Toggle specified register between refinement and mask.") (#[compound-procedure] "combine-registers" #[compound-procedure] "Combine a list of adaption registers.") (#[compound-procedure] "delete-register" #[compound-procedure] "Delete an adaption register.") (#[compound-procedure] "display-register" #[compound-procedure] "Display the cells marked for adaption in the specified adaption register.") (#[compound-procedure] "exchange-marks" #[compound-procedure] "Exchange the refinement and coarsening marks of the specified adaption register.") (#[compound-procedure] "fill-crsn-register" #[compound-procedure] "Mark all cells to coarsen that are not marked for refinement in the adaption register.") (#[compound-procedure] "free-registers" #[compound-procedure] "Delete all adaption registers.") (#[compound-procedure] "free-parents" #[compound-procedure] "Delete the hanging node face and cell hierarchy.") (#[compound-procedure] "invert-mask" #[compound-procedure] "Negate specified mask adaption register.") (#[compound-procedure] "limit-register" #[compound-procedure] "Apply limits to adaption register.") (#[compound-procedure] "list-registers" #[compound-procedure] "List the ID, name & type of adaption registers.") (#[compound-procedure] "mark-boundary-cells" #[compound-procedure] "Mark boundary cells based on a list of zones for refinement.") (#[compound-procedure] "mark-boundary-normal" #[compound-procedure] "Mark cells for refinement based on target boundary normal distance.") (#[compound-procedure] "mark-boundary-vol" #[compound-procedure] "Mark cells for refinement based on target boundary volume.") (#[compound-procedure] "mark-inout-circle" #[compound-procedure] "Mark cells for refinement inside/outside a circle defined by text or mouse input.") (#[compound-procedure] "mark-inout-cylinder" #[compound-procedure] "Mark cells for refinement inside/outside a cylinder defined by text and/or mouse input.") (#[compound-procedure] "mark-inout-hexahedron" #[compound-procedure] "Mark cells for refinement inside/outside a hexahedron defined by text or mouse input.") (#[compound-procedure] "mark-inout-iso-range" #[compound-procedure] "Mark cells for refinement inside/outside the specified isovalue range.") (#[compound-procedure] "mark-inout-rectangle" #[compound-procedure] "Mark cells for refinement inside/outside a rectangle defined by text input or mouse input.") (#[compound-procedure] "mark-inout-sphere" #[compound-procedure] "Mark cells for refinement inside/outside a sphere defined by text or mouse input.") (#[compound-procedure] "mark-percent-of-ncells" #[compound-procedure] "Mark percent of total cell count for adaption based on gradient or isovalue.") (#[compound-procedure] "mark-with-gradients" #[compound-procedure] "Mark cells for adaption based on flow gradients for refinement.") (#[compound-procedure] "mark-with-max-volume" #[compound-procedure] "Mark cells for adaption based on maximum allowed volume.") (#[compound-procedure] "mark-with-ref-lev" #[compound-procedure] "Mark cells based on refinement level differences.") (#[compound-procedure] "mark-with-vol-change" #[compound-procedure] "Mark cells with large changes in cell volume for refinement.") (#[compound-procedure] "mark-with-y+" #[compound-procedure] "Mark cells at walls based on y+ (used in the k-e wall function).") (#[compound-procedure] "mark-with-y+-zones" #[compound-procedure] "Mark cells based on y+ and a list of wall zones.") (#[compound-procedure] "mark-with-y*" #[compound-procedure] "Mark cells at walls based on y* (used in the k-e wall function).") (#[compound-procedure] "mark-with-y*-zones" #[compound-procedure] "Mark cells based on y* and a list of wall zones.") (#[compound-procedure] "refine-bndry-cells" #[compound-procedure] "Refine boundary cells based on a list of face zones.") (#[compound-procedure] "refine-large-cells" #[compound-procedure] "Refine cells that are larger than prescribed volume.") (#[compound-procedure] "refine-to-vol-change" #[compound-procedure] "Refine cells with large changes in cell volume.") (#[compound-procedure] "set/" ("set" ((#[compound-procedure] "hanging-node?" #[compound-procedure] "Determine whether or not to adapt cells using hanging nodes.") (#[compound-procedure] "coarsen-grid?" #[compound-procedure] "Determine whether or not to coarsen the grid.") (#[compound-procedure] "refine-grid?" #[compound-procedure] "Determine whether or not to refine the grid.") (#[compound-procedure] "cell-zones" #[compound-procedure] "Set cell zones to be used for marking adaption.") (#[compound-procedure] "grad-vol-weight" #[compound-procedure] "Set cell volume weight") (#[compound-procedure] "min-cell-volume" #[compound-procedure] "Set limit on the minimum volume of the cells in the grid.") (#[compound-procedure] "max-number-cells" #[compound-procedure] "Set limit on the number of cells in the grid.") (#[compound-procedure] "init-node-flags" #[compound-procedure] "Initialize the node flags.") (#[compound-procedure] "orig-node-settings" #[compound-procedure] "Toggle permissions to remove original nodes when coarsening grid.") (#[compound-procedure] "refn-node-settings" #[compound-procedure] "Toggle permissions to remove refinement generated nodes.") (#[compound-procedure] "display-node-flags" #[compound-procedure] "Display color coded markers at the nodes of specified type.") (#[compound-procedure] "display-crsn-settings" #[compound-procedure] "Set parameters used for displaying cells marked for coarsening.") (#[compound-procedure] "display-refn-settings" #[compound-procedure] "Set parameters used for displaying cells marked for refinement.") (#[compound-procedure] "reconstruct-geometry" #[compound-procedure] "Enable/Disable geometry based adaption.") (#[compound-procedure] "set-geometry-controls" #[compound-procedure] "Set geometry controls for wall zones."))) "Enter the adaption set menu.") (#[compound-procedure] "smooth-grid" #[compound-procedure] "Smooth the grid using Laplace or skewness methods.") (#[compound-procedure] "swap-grid-faces" #[compound-procedure] "Swap grid faces."))) "Enter the adapt menu.") (#[compound-procedure] "display/" ("display" ((#[compound-procedure] "add-custom-vector" #[compound-procedure] "Add new custom vector definition.") (#[compound-procedure] "annotate" #[compound-procedure] "Add a text annotation string to the active graphics window.") (#[compound-procedure] "clear-annotations" #[compound-procedure] "Delete all annotation text.") (#[compound-procedure] "close-window" #[compound-procedure] "Close a graphics window.") (#[compound-procedure] "contour" #[compound-procedure] "Display contours of a flow variable.") (#[compound-procedure] "display-custom-vector" #[compound-procedure] "Display custom vector.") (#[compound-procedure] "flamelet-data/" ("flamelet-carpet-plots" ((#[compound-procedure] "draw-number-box?" #[compound-procedure] "Enable/disable display of the numbers box.") (#[compound-procedure] "plot-1d-slice?" #[compound-procedure] "Enable/disable plot of the 1D-slice.") (#[compound-procedure] "write-to-file?" #[compound-procedure] "Enable/disable writing the 1D-slice to file instead of plot.") (#[compound-procedure] "carpet-plot" #[compound-procedure] "Enable/disable display of carpet plot of a property."))) "Display flamelet data.") (#[compound-procedure] "grid" #[compound-procedure] "Display the grid.") (#[compound-procedure] "grid-outline" #[compound-procedure] "Display the grid boundaries.") (#[compound-procedure] "grid-partition-boundary" #[compound-procedure] "Display grid partition boundaries.") (#[compound-procedure] "hard-copy" #[compound-procedure] "Generate a "hardcopy" of the active window.") (#[compound-procedure] "multigrid-coarsening" #[compound-procedure] "Display a coarse grid level from the last multigrid coarsening.") (#[compound-procedure] "open-window" #[compound-procedure] "Open a graphics window.") (#[compound-procedure] "particle-tracks/" ("particle-tracks" ((#[compound-procedure] "particle-tracks" #[compound-procedure] "Calculate and display particle tracks from defined injections.") (#[compound-procedure] "plot-write-xy-plot" #[compound-procedure] "Plot or write XY plot of particle tracks."))) "Enter the particle tracks menu.") (#[compound-procedure] "path-lines/" ("path-lines" ((#[compound-procedure] "path-lines" #[compound-procedure] "Display pathlines from a surface.") (#[compound-procedure] "plot-write-xy-plot" #[compound-procedure] "Plot or write XY plot of pathline.") (#[compound-procedure] "write-to-files" #[compound-procedure] "Write Pathlines to a File."))) "Enter the pathlines menu.") (#[compound-procedure] "pdf-data/" ("pdf-carpet-plots" ((#[compound-procedure] "draw-number-box?" #[compound-procedure] "Enable/disable the display of the numbers box.") (#[compound-procedure] "plot-1d-slice?" #[compound-procedure] "Enable/disable a plot of the 1D-slice.") (#[compound-procedure] "write-to-file?" #[compound-procedure] "Enable/disable writing the 1D-slice to file instead of plot.") (#[compound-procedure] "carpet-plot" #[compound-procedure] "Enable/disable the display of a carpet plot of a property."))) "Enter the PDF data menu.") (#[compound-procedure] "profile" #[compound-procedure] "Display profiles of a flow variable.") (#[compound-procedure] "re-render" #[compound-procedure] "Re-render the last contour, profile, or velocity vector plot
+  (
+   #[compound-procedure] "adapt/"
+    ("adapt" 
+      (
+      (
+       #[compound-procedure] "adapt-to-register"
+       #[compound-procedure] "Adapt grid to specified adaption register."
+      ) 
+      (
+       #[compound-procedure] "adapt-to-gradients"
+       #[compound-procedure] "Adapt grid to flow gradients."
+      )
+      (
+       #[compound-procedure] "adapt-to-ref-lev"
+       #[compound-procedure] "Adapt cells based on refinement level differences."
+      )
+      (
+       #[compound-procedure] "adapt-to-y+"
+       #[compound-procedure] "Adapt grid at walls to y+ (used in the k-e wall function).")
+       (
+        #[compound-procedure] "adapt-to-y+-zones"
+        #[compound-procedure] "Adapt grid to y+ (used in the k-e wall function) based on list of wall zones."
+       )
+       (
+        #[compound-procedure] "adapt-to-y*"
+        #[compound-procedure] "Adapt grid at walls to y* (used in the k-e wall function)."
+       )
+       (
+        #[compound-procedure] "adapt-to-y*-zones"
+        #[compound-procedure] "Adapt grid to y* (used in the k-e wall function) based on list of wall zones."
+       )
+       (
+        #[compound-procedure] "change-register-type"
+        #[compound-procedure] "Toggle specified register between refinement and mask."
+       )
+       (
+        #[compound-procedure] "combine-registers"
+        #[compound-procedure] "Combine a list of adaption registers."
+       )
+       (
+        #[compound-procedure] "delete-register"
+        #[compound-procedure] "Delete an adaption register."
+       )
+       (
+        #[compound-procedure] "display-register"
+        #[compound-procedure] "Display the cells marked for adaption in the specified adaption register."
+       )
+       (
+        #[compound-procedure] "exchange-marks"
+        #[compound-procedure] "Exchange the refinement and coarsening marks of the specified adaption register."
+       )
+       (
+        #[compound-procedure] "fill-crsn-register"
+        #[compound-procedure] "Mark all cells to coarsen that are not marked for refinement in the adaption register."
+       )
+       (
+        #[compound-procedure] "free-registers"
+        #[compound-procedure] "Delete all adaption registers."
+       )
+       (
+        #[compound-procedure] "free-parents"
+        #[compound-procedure] "Delete the hanging node face and cell hierarchy."
+       )
+       (
+        #[compound-procedure] "invert-mask"
+        #[compound-procedure] "Negate specified mask adaption register."
+       )
+       (
+        #[compound-procedure] "limit-register"
+        #[compound-procedure] "Apply limits to adaption register."
+       )
+       (
+        #[compound-procedure] "list-registers"
+        #[compound-procedure] "List the ID, name & type of adaption registers."
+       )
+       (
+        #[compound-procedure] "mark-boundary-cells"
+        #[compound-procedure] "Mark boundary cells based on a list of zones for refinement."
+       )
+       (
+        #[compound-procedure] "mark-boundary-normal"
+        #[compound-procedure] "Mark cells for refinement based on target boundary normal distance."
+       )
+       (
+        #[compound-procedure] "mark-boundary-vol"
+        #[compound-procedure] "Mark cells for refinement based on target boundary volume."
+       )
+       (
+        #[compound-procedure] "mark-inout-circle"
+        #[compound-procedure] "Mark cells for refinement inside/outside a circle defined by text or mouse input."
+       )
+       (
+        #[compound-procedure] "mark-inout-cylinder"
+        #[compound-procedure] "Mark cells for refinement inside/outside a cylinder defined by text and/or mouse input."
+       )
+       (
+        #[compound-procedure] "mark-inout-hexahedron"
+        #[compound-procedure] "Mark cells for refinement inside/outside a hexahedron defined by text or mouse input."
+       )
+       (
+        #[compound-procedure] "mark-inout-iso-range"
+        #[compound-procedure] "Mark cells for refinement inside/outside the specified isovalue range."
+       )
+       (
+        #[compound-procedure] "mark-inout-rectangle"
+        #[compound-procedure] "Mark cells for refinement inside/outside a rectangle defined by text input or mouse input."
+       )
+       (
+        #[compound-procedure] "mark-inout-sphere"
+        #[compound-procedure] "Mark cells for refinement inside/outside a sphere defined by text or mouse input."
+       )
+       (
+        #[compound-procedure] "mark-percent-of-ncells"
+        #[compound-procedure] "Mark percent of total cell count for adaption based on gradient or isovalue."
+       )
+       (
+        #[compound-procedure] "mark-with-gradients"
+        #[compound-procedure] "Mark cells for adaption based on flow gradients for refinement."
+       )
+       (
+        #[compound-procedure] "mark-with-max-volume"
+        #[compound-procedure] "Mark cells for adaption based on maximum allowed volume."
+       )
+       (
+        #[compound-procedure] "mark-with-ref-lev"
+        #[compound-procedure] "Mark cells based on refinement level differences."
+       )
+       (
+        #[compound-procedure] "mark-with-vol-change"
+        #[compound-procedure] "Mark cells with large changes in cell volume for refinement."
+       )
+       (
+        #[compound-procedure] "mark-with-y+"
+        #[compound-procedure] "Mark cells at walls based on y+ (used in the k-e wall function)."
+       )
+       (
+        #[compound-procedure] "mark-with-y+-zones"
+        #[compound-procedure] "Mark cells based on y+ and a list of wall zones."
+       )
+       (
+        #[compound-procedure] "mark-with-y*"
+        #[compound-procedure] "Mark cells at walls based on y* (used in the k-e wall function)."
+       )
+       (
+        #[compound-procedure] "mark-with-y*-zones"
+        #[compound-procedure] "Mark cells based on y* and a list of wall zones."
+       )
+       (
+        #[compound-procedure] "refine-bndry-cells"
+        #[compound-procedure] "Refine boundary cells based on a list of face zones."
+       )
+       (
+        #[compound-procedure] "refine-large-cells" #[compound-procedure] "Refine cells that are larger than prescribed volume.") (#[compound-procedure] "refine-to-vol-change" #[compound-procedure] "Refine cells with large changes in cell volume.") (#[compound-procedure] "set/" ("set" ((#[compound-procedure] "hanging-node?" #[compound-procedure] "Determine whether or not to adapt cells using hanging nodes.") (#[compound-procedure] "coarsen-grid?" #[compound-procedure] "Determine whether or not to coarsen the grid.") (#[compound-procedure] "refine-grid?" #[compound-procedure] "Determine whether or not to refine the grid.") (#[compound-procedure] "cell-zones" #[compound-procedure] "Set cell zones to be used for marking adaption.") (#[compound-procedure] "grad-vol-weight" #[compound-procedure] "Set cell volume weight") (#[compound-procedure] "min-cell-volume" #[compound-procedure] "Set limit on the minimum volume of the cells in the grid.") (#[compound-procedure] "max-number-cells" #[compound-procedure] "Set limit on the number of cells in the grid.") (#[compound-procedure] "init-node-flags" #[compound-procedure] "Initialize the node flags.") (#[compound-procedure] "orig-node-settings" #[compound-procedure] "Toggle permissions to remove original nodes when coarsening grid.") (#[compound-procedure] "refn-node-settings" #[compound-procedure] "Toggle permissions to remove refinement generated nodes.") (#[compound-procedure] "display-node-flags" #[compound-procedure] "Display color coded markers at the nodes of specified type.") (#[compound-procedure] "display-crsn-settings" #[compound-procedure] "Set parameters used for displaying cells marked for coarsening.") (#[compound-procedure] "display-refn-settings" #[compound-procedure] "Set parameters used for displaying cells marked for refinement.") (#[compound-procedure] "reconstruct-geometry" #[compound-procedure] "Enable/Disable geometry based adaption.") (#[compound-procedure] "set-geometry-controls" #[compound-procedure] "Set geometry controls for wall zones."))) "Enter the adaption set menu.") (#[compound-procedure] "smooth-grid" #[compound-procedure] "Smooth the grid using Laplace or skewness methods.") (#[compound-procedure] "swap-grid-faces" #[compound-procedure] "Swap grid faces."))) "Enter the adapt menu.") (#[compound-procedure] "display/" ("display" ((#[compound-procedure] "add-custom-vector" #[compound-procedure] "Add new custom vector definition.") (#[compound-procedure] "annotate" #[compound-procedure] "Add a text annotation string to the active graphics window.") (#[compound-procedure] "clear-annotations" #[compound-procedure] "Delete all annotation text.") (#[compound-procedure] "close-window" #[compound-procedure] "Close a graphics window.") (#[compound-procedure] "contour" #[compound-procedure] "Display contours of a flow variable.") (#[compound-procedure] "display-custom-vector" #[compound-procedure] "Display custom vector.") (#[compound-procedure] "flamelet-data/" ("flamelet-carpet-plots" ((#[compound-procedure] "draw-number-box?" #[compound-procedure] "Enable/disable display of the numbers box.") (#[compound-procedure] "plot-1d-slice?" #[compound-procedure] "Enable/disable plot of the 1D-slice.") (#[compound-procedure] "write-to-file?" #[compound-procedure] "Enable/disable writing the 1D-slice to file instead of plot.") (#[compound-procedure] "carpet-plot" #[compound-procedure] "Enable/disable display of carpet plot of a property."))) "Display flamelet data.") (#[compound-procedure] "grid" #[compound-procedure] "Display the grid.") (#[compound-procedure] "grid-outline" #[compound-procedure] "Display the grid boundaries.") (#[compound-procedure] "grid-partition-boundary" #[compound-procedure] "Display grid partition boundaries.") (#[compound-procedure] "hard-copy" #[compound-procedure] "Generate a "hardcopy" of the active window.") (#[compound-procedure] "multigrid-coarsening" #[compound-procedure] "Display a coarse grid level from the last multigrid coarsening.") (#[compound-procedure] "open-window" #[compound-procedure] "Open a graphics window.") (#[compound-procedure] "particle-tracks/" ("particle-tracks" ((#[compound-procedure] "particle-tracks" #[compound-procedure] "Calculate and display particle tracks from defined injections.") (#[compound-procedure] "plot-write-xy-plot" #[compound-procedure] "Plot or write XY plot of particle tracks."))) "Enter the particle tracks menu.") (#[compound-procedure] "path-lines/" ("path-lines" ((#[compound-procedure] "path-lines" #[compound-procedure] "Display pathlines from a surface.") (#[compound-procedure] "plot-write-xy-plot" #[compound-procedure] "Plot or write XY plot of pathline.") (#[compound-procedure] "write-to-files" #[compound-procedure] "Write Pathlines to a File."))) "Enter the pathlines menu.") (#[compound-procedure] "pdf-data/" ("pdf-carpet-plots" ((#[compound-procedure] "draw-number-box?" #[compound-procedure] "Enable/disable the display of the numbers box.") (#[compound-procedure] "plot-1d-slice?" #[compound-procedure] "Enable/disable a plot of the 1D-slice.") (#[compound-procedure] "write-to-file?" #[compound-procedure] "Enable/disable writing the 1D-slice to file instead of plot.") (#[compound-procedure] "carpet-plot" #[compound-procedure] "Enable/disable the display of a carpet plot of a property."))) "Enter the PDF data menu.") (#[compound-procedure] "profile" #[compound-procedure] "Display profiles of a flow variable.") (#[compound-procedure] "re-render" #[compound-procedure] "Re-render the last contour, profile, or velocity vector plot
 with updated surfaces, grids, lights, colormap, rendering options, etc.,
 without recalculating the contour data.") (#[compound-procedure] "re-scale" #[compound-procedure] "Re-render the last contour, profile, or velocity vector plot
 with updated scale, surfaces, grids, lights, colormap, rendering options, etc.,

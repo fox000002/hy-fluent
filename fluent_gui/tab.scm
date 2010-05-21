@@ -1,4 +1,4 @@
-(define hy-panel
+(define hy-panel-tab
   (let ((panel #f)(hy-value))
     (define (update-cb)
         ()
@@ -11,7 +11,7 @@
       (if (not panel)
         (let ((table) (tframe) (ttab1) (ttab2))
           ;
-          (set! panel (cx-create-panel "Hello Panel" 'update-callback update-cb 'apply-callback hello-cb))
+          (set! panel (cx-create-panel "Tab Panel" 'update-callback update-cb 'apply-callback hello-cb))
           ;
           (set! tframe (cx-create-frame-tabbed panel "Tabs" 'border #t 'below 0 'right-of 0))
           (set! ttab1 (cx-create-tab tframe "tab1"))
@@ -39,6 +39,14 @@
   )
 )
 
-(cx-add-menu "HyLab" #\H)
-(cx-add-item "HyLab" "hello" #\H #f cx-client? hy-panel)
+(if (not (cx-get-menu-id "HyLab"))
+  (cx-add-menu "HyLab" #\H)
+)
+
+(if (not (cx-get-item-id "HyLab" "tab"))
+  (begin
+    (cx-add-separator "HyLab")
+    (cx-add-item "HyLab" "tab" #\H #f cx-client? hy-panel-tab)
+  )
+)
 

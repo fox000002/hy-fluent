@@ -22,4 +22,4 @@
 ;;  cx-open-window
 ;;  cx-use-new-window?
 ;;  resize-other-windows
-;;  
+;;

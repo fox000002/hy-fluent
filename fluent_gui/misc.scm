@@ -9,3 +9,5 @@
 ;;   (get-pwd)
 ;;   (who-am-i)
 ;;
+;;   alias
+;;   alias-table
