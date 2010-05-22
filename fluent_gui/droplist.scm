@@ -1,4 +1,4 @@
-(define hy-panel
+(define hy-panel-list
   (let ((panel #f)(hy-value))
     (define (update-cb)
         ()
@@ -32,7 +32,7 @@
           )
           (cx-create-button panel "show" 'panel-button #t 'activate-callback
             (lambda ()
-              (display (cx-get-list-selections tdroplist))
+              (display (cx-show-symbol-list-selections tdroplist))
             )
           )
           ;
@@ -43,6 +43,15 @@
   )
 )
 
-(cx-add-menu "HyLab" #\H)
-(cx-add-item "HyLab" "hello" #\H #f cx-client? hy-panel)
+(if (not (cx-get-menu-id "HyLab"))
+  (cx-add-menu "HyLab" #\H)
+)
+
+(if (not (cx-get-item-id "HyLab" "list"))
+  (begin
+    (cx-add-separator "HyLab")
+    (cx-add-item "HyLab" "list" #\H #f cx-client? hy-panel-list)
+  )
+)
+
 

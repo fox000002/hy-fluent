@@ -23,12 +23,12 @@
           ;
           (cx-create-button panel "hide" 'panel-button #t 'activate-callback 
             (lambda () 
-              () 
+              (cx-activate-tab ttab1) 
             )
           )
           (cx-create-button panel "show" 'panel-button #t 'activate-callback
             (lambda ()
-              () 
+              (cx-activate-tab ttab2) 
             )
           )
           ;
