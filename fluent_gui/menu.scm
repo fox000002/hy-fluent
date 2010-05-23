@@ -35,7 +35,7 @@
 ;; enable-items
 ;; hide-items
 ;; show-items
-;; 
+;;
 ;; insert-menu-item!
 ;;
 ;; ti-menu-insert-item!
@@ -51,17 +51,37 @@
 ;; (gui-menu-insert-subitem! menuname itemname subitemname #\H #f cx-client? callback)
 ;;
 ;; (gui-menu-insert-item! menuname itemname #\H #f cx-client? callback)
-;; 
+;;
 ;; set-menu-processing
-;; 
+;;
 ;;
 ;; *ti-menu-load-delay*
 ;; *menu-prompt*
 ;; *menu-print-always*
-;;  
-;;  
+;;
+;;
 ;; menu-get
 ;; menu-do-1
 ;; menu-do
 ;; ti-menu-print
+;;
+;;
+;;=================================================================================
+;;
+;; Fluent 12.1.2
+;;
+;;=================================================================================
+;;
+;; update-popup-menus
+;; cx-add-separator-in-menu-and-popup
+;; cx-add-item-in-menu-and-popup
+;; cx-get-popup-menu-id
+;; cx-create-popup-menu-item
+;; cx-create-popup-menu
+;; cx-create-menu-item
+;; cx-create-submenu
+;; cx-create-menu
+;;
+;; cx-add-new-menu-item
+;; add-import-menu-item
 ;;

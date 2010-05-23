@@ -768,16 +768,22 @@
 ;;
 (define hy-display-contour
   (lambda (var min max)
-    (hy-exec-command
-      (format #f "/display/contour ~a ~a ~a" var min max)
+    (if (data-valid?)
+      (hy-exec-command
+        (format #f "/display/contour ~a ~a ~a" var min max)
+      )
+      #f
     )
   )
 )
 
 (define hy-display-vector-uvw
   (lambda (colorby min max scale skip)
-    (hy-exec-command
-      (format #f "/display/vector velocity ~a ~a ~a ~a ~a" colorby min max scale skip)
+    (if (data-valid?)
+      (hy-exec-command
+        (format #f "/display/vector velocity ~a ~a ~a ~a ~a" colorby min max scale skip)
+      )
+      #f
     )
   )
 )
@@ -896,11 +902,14 @@
 
     (hy-add-menuitem hy-menu-name "ShowDialog" (lambda () (hy-panel hy-hello (lambda () (hy-run-udf-proc "showMsg" "libhylab")))))
 
+    (hy-add-menuitem hy-menu-name "ShowInfoDialog" (lambda () (hy-run-udf-proc "hy_show_info_dialog" "libhylab")))
+    
     (hy-add-menuitem hy-menu-name "About" (lambda () (hy-run-udf-proc "showMsg" "libhylab")))
     
-    (hy-add-menuitem hy-menu-name "Ext" (lambda () ()))
+    (cx-add-separator hy-menu-name)
     
-    ;;(hy-add-menuitem "HyLabMenu*Ext" "Test" (lambda () ()))
+    (cx-add-hitem hy-menu-name "Ext" #\H)
+    (gui-menu-insert-subitem! hy-menu-name "Ext" "hi" #\H #f cx-client? (lambda () (display 'Hi)))
 
     (set! hy-menu-load? #t)
   )

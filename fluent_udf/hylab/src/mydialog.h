@@ -3,4 +3,6 @@
 
 void showMyMessage(char *msg);
 
+void showInfoDialog();
+
 #endif /* U_MYDIALOG_H */

@@ -29,4 +29,14 @@ int is_ke_on();
 /************************************/
 int is_seg_solver();
 
+/*************************************/
+double rp_get_var_real(char *name);
+int rp_get_var_int(char *name);
+char* rp_get_var_string(char *name);
+int rp_get_var_boolean(char *name);
+
+void rp_set_var_real(char *name, double v);
+void rp_set_var_int(char *name, int v);
+void rp_set_var_string(char *name, char *v);
+
 #endif /*  HU_MYUDF_H */

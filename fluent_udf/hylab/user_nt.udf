@@ -17,7 +17,8 @@ SOURCES =  $(SRC)myudf.c       \
            $(SRC)myreaction.c  \
            $(SRC)myflow.c      \
            $(SRC)myudm.c       \
-#           $(SRC)mydpm.c      \
+           $(SRC)mydpm.c       \
+           $(SRC)myscheme.c    \
 
 
 VERSION = 3ddp

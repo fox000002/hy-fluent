@@ -9,10 +9,13 @@
 
     purpose:    A simple about dialog.
 *********************************************************************/
+#include "resource.h"
 
 #include <windows.h>
 
 #include "mydialog.h"
+
+#include "myudf.h"
 
 #define IDI_HYLAB  1
 
@@ -78,12 +81,65 @@ BOOL CALLBACK DialogProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
     {
     case WM_INITDIALOG:
         {
-        SendMessage(hwndDlg, WM_SETICON, ICON_BIG, LoadIcon(g_hModule, MAKEINTRESOURCE(IDI_HYLAB)));
+        SendMessage(hwndDlg, WM_SETICON, (WPARAM)ICON_BIG, (LPARAM)LoadIcon(g_hModule, MAKEINTRESOURCE(IDI_HYLAB)));
         }
         return TRUE;
     case WM_COMMAND:
         switch (LOWORD(wParam))
         {
+        case IDOK:
+        case IDCANCEL:
+            EndDialog(hwndDlg, LOWORD(wParam));
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+BOOL CALLBACK InfoDialogProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    int my_int;
+    double my_real;
+    char *my_text;
+    
+    char tmp[128];
+
+    switch (message)
+    {
+    case WM_INITDIALOG:
+        {  
+        my_int = rp_get_var_int("my/int");
+        my_real = rp_get_var_real("my/real");
+        my_text = rp_get_var_string("my/text");      
+        
+        SendMessage(hwndDlg, WM_SETICON, (WPARAM)ICON_BIG, (LPARAM)LoadIcon(g_hModule, MAKEINTRESOURCE(IDI_HYLAB)));
+        
+        sprintf(tmp, "%g", my_real);
+        SetWindowText(GetDlgItem(hwndDlg, IDC_EDIT2), tmp);
+        
+        SetDlgItemInt(hwndDlg, IDC_EDIT1, my_int, TRUE);
+        
+        SetDlgItemText(hwndDlg, IDC_EDIT3, my_text);
+        }
+        return TRUE;
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
+        {
+        case IDC_BUTTON1:
+            {
+                my_int = GetDlgItemInt(hwndDlg, IDC_EDIT1, NULL, TRUE);
+                GetDlgItemText(hwndDlg, IDC_EDIT2, tmp, 128);
+                my_real = atof(tmp);
+
+                GetDlgItemText(hwndDlg, IDC_EDIT3, tmp, 128);
+                my_text = tmp;
+
+                rp_set_var_int("my/int", my_int);
+                rp_set_var_real("my/real", my_real);
+                rp_set_var_string("my/text", my_text);
+                
+                return FALSE;
+            }
         case IDOK:
         case IDCANCEL:
             EndDialog(hwndDlg, LOWORD(wParam));
@@ -105,4 +161,17 @@ void showMyMessage(char *msg)
                MAKEINTRESOURCE(5000),
                GetForegroundWindow(),
                DialogProc);
+}
+
+/**
+ * @brief Show Info Dialog
+ *
+ */
+void showInfoDialog()
+{
+    /*MessageBox(NULL, msg, "Info", MB_OK);*/
+    DialogBox( g_hModule,
+               MAKEINTRESOURCE(5001),
+               GetForegroundWindow(),
+               InfoDialogProc);
 }

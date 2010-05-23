@@ -24,11 +24,14 @@
 ;;   (surface-average surf-list)
 ;;   (surface-area surf-list)
 ;;   (surface-integrate surf-list type var) ;; (surface-integrate '(0) 'average)
-
+;;
 ;;   %surface-integrate
-
+;;
+;;   gui-surface-integrals
+;;   ti-surface-integral
+;;
 ;;   (cx-surface-get-min-max surf-list . cell-values?)
-
+;;
 ;;   inquire-surface-line-names
 ;;   inquire-surface-plane-names
 ;;   inquire-surface-group-names-of-type

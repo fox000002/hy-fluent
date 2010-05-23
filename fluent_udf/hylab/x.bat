@@ -27,4 +27,4 @@ set PATH=%FLUENT_INC%\ntbin\ntx86;%FLUENT_INC%\ntbin\ntx86\opengl;%FLUENT_INC%\f
 
 set LM_LICENSE_FILE=%FLUENT_INC%\license\license.dat
 
-%FLUENT_INC%\fluent6.3.26\ntx86\2d\fl6326s.exe
+start %FLUENT_INC%\fluent6.3.26\ntx86\2d\fl6326s.exe -i load.scm
