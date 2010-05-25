@@ -13,13 +13,22 @@
 ;;  ti-set-window
 ;;  ti-close-window
 ;;  ti-open-window
+;;  
 ;;  cx-set-small-window
 ;;  cx-set-window-size
 ;;  (close-all-open-windows)
-;;  cx-set-window
-;;  cx-close-window
+;;
+;;  (cx-set-window id)
+;;  (cx-close-window id)
 ;;  cx-display-geom-window
-;;  cx-open-window
+;;  (cx-open-window id)
 ;;  cx-use-new-window?
 ;;  resize-other-windows
 ;;
+;;  client-valid-window-owner?
+;;  client-assign-window-owner
+;;  cx-set-plot-window-id
+;;  *max-plot-window-id*
+;;
+;;  client-ti-set-window-var
+;;  ti-set-window-var
