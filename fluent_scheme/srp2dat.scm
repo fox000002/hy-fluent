@@ -32,8 +32,8 @@
 
 (define (hy-srp-to-dat varname fname)
   (let 
-    ((p (open-output-file (format #f "~a" fname))))
-    (do ((i  0 (+ i 1))(x 0.0)(y 0.0))
+    ((p (open-output-file (format #f "~a.dat" fname))))
+    (do ((i  0 (+ i 10))(x 0.0)(y 0.0))
       ((> i 360))
       (begin
         (newline)
@@ -50,12 +50,19 @@
 
 (for-each
   hy-srp-to-dat
+  ;;'(
+  ;;    density total-pressure total-temperature gamma mach-number mean-molecular-weight
+      ;total-pressure total-temperature gamma mach-number mean-molecular-weight
+  ;;)
+  ;;'(
+   ;;   density pressure temperature gamma ma molecular_weight
+ ;;)
   '(
-      density total-pressure total-temperature gamma mach-number mean-molecular-weight
+      temperature heat-transfer-coef-wall heat-flux
       ;total-pressure total-temperature gamma mach-number mean-molecular-weight
   )
   '(
-      density pressure temperature gamma ma molecular_weight
+      t h q 
   )
 )
 

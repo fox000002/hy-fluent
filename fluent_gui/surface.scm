@@ -155,5 +155,17 @@
 ;;   cx-get-surface-desc-attr
 ;;
 ;;   cleanup-case-surfaces
-
-
+;;
+;;   iiso-surface
+;;
+;;   gui-iso-surface
+;;
+;;   iso-surface
+;;
+;;   iso-srf-chk
+;;
+;;   %iso-surface
+;;
+;;   iso-surface-ancestor
+;;
+;;
