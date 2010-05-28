@@ -4583,7 +4583,8 @@
       iface.provided
       cx.provided
       *cx-disclaimer*
-      client.provided)
+      client.provided
+    )
       #[compound-procedure]
       #[compound-procedure]
       fluent
@@ -4739,4 +4740,5 @@
       #[compound-procedure]
       #[compound-procedure]
       #[compound-procedure]
-      
+  )    
+)
