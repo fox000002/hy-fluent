@@ -68,7 +68,7 @@
     (begin
       (newline)
       (if (valid-surf-name? (format #f "~a_~03d" hy_prefix i))
-        (hy-create-iso-surface-x (format #f "~a_~03d" prefix i) hy_from_surface hy_from_zone (/ i 1000))
+        (hy-create-iso-surface-x (format #f "~a_~03d" hy_prefix i) hy_from_surface hy_from_zone (/ i 1000))
       )
       (hy-export-report-favg (format #f "~a_favg~03d.srp" varname i) (format #f "~a_~03d" hy_prefix i) varname)
     )
