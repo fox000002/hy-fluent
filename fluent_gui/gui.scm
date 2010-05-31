@@ -48,3 +48,12 @@
 ;;   cx-hide-panel
 ;;   cx-create-hoops-panel
 ;;   cx-create-panel
+;;
+;;
+;;   get-profile-value
+;;   set-profile-widgets
+;;   
+;;   table-tui
+;;   table-gui
+;;
+;;
