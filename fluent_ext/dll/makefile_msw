@@ -60,6 +60,9 @@ CXX = g++
 SED_CMD = $(FLUENT_INC)\ntbin\$(FLUENT_ARCH)\sed.exe
 FLUENT_CMD = $(FLUENT_INC)\ntbin\$(FLUENT_ARCH)\fluent $version
 
+#
+LUA_DIR = 
+
 # compile flags 
 CFLAGS = -c -fpic -ansi -Wall -DUDF_EXPORTING
 
@@ -98,7 +101,7 @@ INCLUDES= -I$(FLUENT_INC)\fluent$(RELEASE)\$(FLUENT_ARCH)\$(VERSION) \
           -I$(FLUENT_INC)\fluent$(RELEASE)\multiport\src \
           -I$(RES_DIR)
 
-LIBS = -Llib\fluent$(RELEASE)\$(FLUENT_ARCH)\$(VERSION) -l$(FLUENT_LIB)
+LIBS = -L..\..\fluent_udf\hylab\lib\fluent$(RELEASE)\$(FLUENT_ARCH)\$(VERSION) -l$(FLUENT_LIB)
 
 
 default:   $(TARGET)

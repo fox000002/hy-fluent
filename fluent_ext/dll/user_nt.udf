@@ -1,4 +1,5 @@
-SOURCES =  $(SRC)myext.c       \
+SOURCES =  $(SRC)myudf.c       \
+#           $(SRC)myext.c       \
 
 
 VERSION = 3ddp

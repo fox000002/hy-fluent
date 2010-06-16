@@ -55,7 +55,7 @@
 ;;   (hy-add-menuitem nemuname itemname myproc)
 ;;   (hy-delete-menuitem itemname)
 ;;
-  
+
 ;;;
 (define hy-restore-mainmenu
   (lambda ()
@@ -252,7 +252,7 @@
 ;;
 ;; UDM
 ;;
-;; 
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ti-udm
 ;; set-udm-defaults
@@ -270,7 +270,7 @@
 ;; UDF
 ;;
 ;; libname:
-;;   6   -- <libname> 
+;;   6   -- <libname>
 ;;   12  -- <libname>.dll
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; latest-udf-name
@@ -883,15 +883,15 @@
     (hy-add-mainmenu hy-menu-name)
 
     (hy-add-menuitem hy-menu-name "Reload" (lambda () (load "hylab.scm")))
-    
+
     (hy-add-menuitem hy-menu-name "SetUDM" (lambda () (hy-set-udm-num 3)))
-    
+
     (hy-add-menuitem hy-menu-name "SayHello" hy-hello)
 
     (hy-add-menuitem hy-menu-name "TestUDF" hy-test-udf)
-    
+
     (hy-add-menuitem hy-menu-name "TestFlow" (lambda ()(hy-run-udf-proc "hy_test_fluent_flow" "libhylab")))
-    
+
     (hy-add-menuitem hy-menu-name "Post" (lambda () (hy-display-contour "velocity" 0 2)))
 
     (hy-add-menuitem hy-menu-name "ExportBC" hy-test-export-bc)
@@ -903,11 +903,11 @@
     (hy-add-menuitem hy-menu-name "ShowDialog" (lambda () (hy-panel hy-hello (lambda () (hy-run-udf-proc "showMsg" "libhylab")))))
 
     (hy-add-menuitem hy-menu-name "ShowInfoDialog" (lambda () (hy-run-udf-proc "hy_show_info_dialog" "libhylab")))
-    
+
     (hy-add-menuitem hy-menu-name "About" (lambda () (hy-run-udf-proc "showMsg" "libhylab")))
-    
+
     (cx-add-separator hy-menu-name)
-    
+
     (cx-add-hitem hy-menu-name "Ext" #\H)
     (gui-menu-insert-subitem! hy-menu-name "Ext" "hi" #\H #f cx-client? (lambda () (display 'Hi)))
 
