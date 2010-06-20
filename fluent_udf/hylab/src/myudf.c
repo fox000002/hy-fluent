@@ -1,3 +1,21 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  myudf.c
+ *
+ *    Description:  Implement for my UDF wrappers
+ *
+ *        Version:  1.0
+ *        Created:  2010-2-23 12:01:23
+ *       Revision:  none
+ *       Compiler:  gcc/msc
+ *
+ *         Author:  huys (hys), huys03@gmail.com
+ *        Company:  hu
+ *
+ * =====================================================================================
+ */
+
 #include "udf.h"
 
 #include "mydialog.h"
@@ -297,3 +315,4 @@ DEFINE_DIFFUSIVITY(mean_age_diff,c,t,i)
 {
     return C_R(c,t) * 2.88e-05 + C_MU_EFF(c,t) / 0.7;
 }
+

@@ -1,3 +1,21 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  myudf.h
+ *
+ *    Description:  Declaration for my UDF wrappers
+ *
+ *        Version:  1.0
+ *        Created:  2010-2-23 12:01:23
+ *       Revision:  none
+ *       Compiler:  gcc/msc
+ *
+ *         Author:  huys (hys), huys03@gmail.com
+ *        Company:  hu
+ *
+ * =====================================================================================
+ */
+
 #ifndef HU_MYUDF_H
 #define  HU_MYUDF_H
 
@@ -40,3 +58,4 @@ void rp_set_var_int(char *name, int v);
 void rp_set_var_string(char *name, char *v);
 
 #endif /*  HU_MYUDF_H */
+

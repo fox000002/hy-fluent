@@ -1,3 +1,21 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  myvector.c
+ *
+ *    Description:  UDF for vectors
+ *
+ *        Version:  1.0
+ *        Created:  2010-2-23 12:01:23
+ *       Revision:  none
+ *       Compiler:  gcc/msc
+ *
+ *         Author:  huys (hys), huys03@gmail.com
+ *        Company:  hu
+ *
+ * =====================================================================================
+ */
+
 #include "udf.h"
 
 DEFINE_ON_DEMAND(hy_test_myvector)
@@ -60,3 +78,4 @@ DEFINE_ON_DEMAND(hy_test_myvector)
     CX_Message("Vector Magnitude ^2: %f\n",  NV_MAG2(vec[0]));
     CX_Message("Dot Product: %f\n", NV_DOT(vec[0], vec[1]));
 }
+

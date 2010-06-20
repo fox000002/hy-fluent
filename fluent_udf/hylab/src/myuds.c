@@ -1,3 +1,21 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  myuds.c
+ *
+ *    Description:  UDF for UDS
+ *
+ *        Version:  1.0
+ *        Created:  2010-2-23 12:01:23
+ *       Revision:  none
+ *       Compiler:  gcc/msc
+ *
+ *         Author:  huys (hys), huys03@gmail.com
+ *        Company:  hu
+ *
+ * =====================================================================================
+ */
+
 #include "udf.h"
 
 /**********************************************************************/
@@ -79,3 +97,4 @@ DEFINE_UDS_UNSTEADY(uns_time, c, t, i, apu, su)
 
     *su  = rho * vol * phi_old/physical_dt; /*explicit part*/
 }
+

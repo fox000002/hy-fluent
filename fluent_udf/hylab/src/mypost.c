@@ -1,3 +1,21 @@
+/*
+* =====================================================================================
+*
+*       Filename:  mypost.c
+*
+*    Description:  UDF for postprocessing.
+*
+*        Version:  1.0
+*        Created:  2010-2-23 12:01:23
+*       Revision:  none
+*       Compiler:  gcc/msc
+*
+*         Author:  huys (hys), huys03@gmail.com
+*        Company:  hu
+*
+* =====================================================================================
+*/
+
 #include "udf.h"
 
 void hy_report_temp_diff_shadow(int wall_id)

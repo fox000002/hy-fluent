@@ -1,3 +1,21 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  myuns.c
+ *
+ *    Description:  UDF for unsteady
+ *
+ *        Version:  1.0
+ *        Created:  2010-2-23 12:01:23
+ *       Revision:  none
+ *       Compiler:  gcc/msc
+ *
+ *         Author:  huys (hys), huys03@gmail.com
+ *        Company:  hu
+ *
+ * =====================================================================================
+ */
+
 #include "udf.h"
 
 #include "myudf.h"
@@ -361,3 +379,4 @@ DEFINE_PROFILE(hy_ex_wall_heat_flux, t, i)
     }
     end_f_loop(f,t)
 }
+
