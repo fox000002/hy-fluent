@@ -60,7 +60,8 @@
           ;
           ;(set! tframe (cx-create-frame panel "frame" 'tabbed #t 'border #t 'width 20 'below table))
           ;
-          (set! tdroplist (cx-create-drop-down-list panel "dropdownlist" 'multiple-selections #f 'width 20 'editable #f 'below table))
+          ;(set! tdroplist (cx-create-drop-down-list panel "dropdownlist" 'multiple-selections #f 'width 20 'editable #f 'below table))
+          (set! tdroplist (cx-create-drop-down-list panel "dropdownlist" 'width 20 'editable #f 'below table))
           (cx-set-list-items tdroplist (list "xxx" "yyy"))
           ;
           (set! tscale (cx-create-scale panel "scale" 'below tdroplist 'value 33 'minimum 0 'maximum 100))
@@ -71,7 +72,8 @@
           ;;
           (set! buttonbox (cx-create-button-box panel "buttonbox" 'below tframe 'panel-buttons #t 'right-of tdroplist))
           ;;
-          (cx-create-button buttonbox "-" 'icon-button #t)
+          ;(cx-create-button buttonbox "-" 'icon-button #t)
+          (cx-create-button buttonbox "-")
           ;;
           (cx-create-text buttonbox "Text:" 'border #f)
           ;;
@@ -91,8 +93,8 @@
           (cx-add-check-buttons tchecks "ccc" (list "jeee" 1 "jecc" 2 "jvvecc" 3) (list (cons "www" 22) (cons "jvvecc" 3)))
           ;;
           (cx-add-radio-buttons tchecks "ccc" (list "jeee" 1 "jecc" 2 "jvvecc" 3) (list (cons "www" 22) (cons "jvvecc" 3)))
-          
-          
+
+
           ;
           (cx-create-button panel "hide" 'panel-button #t 'activate-callback
             (lambda ()

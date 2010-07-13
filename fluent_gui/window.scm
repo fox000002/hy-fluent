@@ -14,7 +14,7 @@
 ;;  (ti-set-window)  << wid
 ;;  (ti-close-window) << wid
 ;;  (ti-open-window) << wid
-;;  
+;;
 ;;  cx-set-small-window
 ;;  cx-set-window-size
 ;;  (close-all-open-windows)

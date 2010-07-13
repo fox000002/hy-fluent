@@ -119,7 +119,8 @@ CPP_OBJS = $(CPP_SRCS2:.cpp=.obj)
 
 RCC = rc /V /X /I"D:\GS\VC6\VC98\Include"
 
-RC_FILE = .\res\mydialog.rc
+RESDIR = .\res
+RC_FILE = $(RESDIR)\mydialog.rc
 #RC_FILE2 = $(RC_FILE:.\src\=)
 RES_FILE = $(RC_FILE:.rc=.res)
 
@@ -131,7 +132,8 @@ INCLUDES= -I$(FLUENT_INC)\fluent$(RELEASE)\$(FLUENT_ARCH)\$(VERSION) \
           -I$(FLUENT_INC)\fluent$(RELEASE)\client\src \
           -I$(FLUENT_INC)\fluent$(RELEASE)\tgrid\src \
           -I$(FLUENT_INC)\fluent$(RELEASE)\multiport\src \
-          -I$(FLUENT_INC)\fluent$(RELEASE)\$(FLUENT_ARCH)\$(VERSION)
+          -I$(FLUENT_INC)\fluent$(RELEASE)\$(FLUENT_ARCH)\$(VERSION) \
+          -I$(RESDIR)
 
 LIBS = /Libpath:$(FLUENT_INC)\fluent$(RELEASE)\$(FLUENT_ARCH)\$(VERSION) user32.lib
 
@@ -149,7 +151,7 @@ $(SRC_OBJECT): $(SOURCES)
 	$(CC) $(CFLAGS) $(INCLUDES)  $**
     
 $(MISC_OBJS) : $(MISC_SRCS)
-	$(CC) /c $**
+	$(CC) /c $(INCLUDES) $**
 
 $(CPP_OBJS) : $(CPP_SRCS)
 	$(CC) /c  $(INCLUDES) $**

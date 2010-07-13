@@ -76,7 +76,9 @@ DEFINE_ON_DEMAND(hy_test_fluent_pointer)
         CX_Message("material name: %s\n", root_domain->material_name);
         CX_Message("***res:\n");
         for (i=0; i<MAX_EQNS && root_domain->res[i]; ++i)
+        {
             CX_Message("equ %d  -- %s : %f\n", i, root_domain->equation_labels[i], *root_domain->res[i]);
+        }
         CX_Message("===========================\n");
 
         if (root_domain->f)

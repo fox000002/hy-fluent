@@ -32,7 +32,7 @@ DEFINE_ON_DEMAND(hy_my_udm)
     {
         Error("You shoud set UDM number before execute this function!");
     }
-    
+
     domain = Get_Domain(1);
 
     thread_loop_c(t,domain)

@@ -22,7 +22,8 @@
           ;
           (cx-add-radio-buttons ttab2 "ccc" (list "jeee" 1 "jecc" 2 "jvvecc" 3) (list (cons "www" 22) (cons "jvvecc" 3)))
           ;
-          (set! tdroplist (cx-create-drop-down-list ttab3 "dropdownlist" 'multiple-selections #f 'width 20 'editable #f))
+          ;(set! tdroplist (cx-create-drop-down-list ttab3 "dropdownlist" 'multiple-selections #f 'width 20 'editable #f))
+          (set! tdroplist (cx-create-drop-down-list ttab3 "dropdownlist" 'width 20 'editable #f))
           (cx-set-list-items tdroplist (list "xxx" "yyy"))
           ;
           (cx-create-button panel "hide" 'panel-button #t 'activate-callback

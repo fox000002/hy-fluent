@@ -180,15 +180,13 @@ DEFINE_ON_DEMAND(hy_mark)
         n++;
 #if RP_DOUBLE
 #if RP_3D
-        fscanf(input,"%lg %lg %lg", &coordinates[n][0], &coordinates[n][1], &coordinates[n][2])
-        ;
+        fscanf(input,"%lg %lg %lg", &coordinates[n][0], &coordinates[n][1], &coordinates[n][2]);
 #else
         fscanf(input,"%lg %lg", &coordinates[n][0], &coordinates[n][1]);
 #endif
 #else
 #if RP_3D
-        fscanf(input,"%g %g %g", &coordinates[n][0], &coordinates[n][1], &coordinates[n][2])
-        ;
+        fscanf(input,"%g %g %g", &coordinates[n][0], &coordinates[n][1], &coordinates[n][2]);
 #else
         fscanf(input,"%g %g", &coordinates[n][0], &coordinates[n][1]);
 #endif
@@ -201,8 +199,7 @@ DEFINE_ON_DEMAND(hy_mark)
     /* Check np with MAXPOINTS */
     if (np > MAXPOINTS)
     {
-        Message0("ERROR: You must recompile interpolate UDF with MAXPOINTS at least %i\n", np)
-        ;
+        Message0("ERROR: You must recompile interpolate UDF with MAXPOINTS at least %i\n", np);
         return;
     }
 
@@ -262,7 +259,7 @@ label: continue;
 }
 
 
-/* Volume Heat Sink */
+/* Volume Mass Source */
 DEFINE_SOURCE(hy_mass_source, c, t, dS, eqn)
 {
     real source = 0.0;

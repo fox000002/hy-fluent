@@ -25,7 +25,8 @@
 #define T_SAT 373.15 /*  evaporating temperature(100¡æ)       */
 #define LAT_HT 1.e3  /*  latent heat of evaporation in J/Kg  */
 
-DEFINE_SOURCE(liq_src, cell, pri_th, dS, eqn) /* mass source term of liquid phase */
+/* mass source term of liquid phase */
+DEFINE_SOURCE(liq_src, cell, pri_th, dS, eqn)
 {
   Thread *mix_th;
   Thread *sec_th;
@@ -47,7 +48,8 @@ DEFINE_SOURCE(liq_src, cell, pri_th, dS, eqn) /* mass source term of liquid phas
   return m_dot_l;
 }
 
-DEFINE_SOURCE(vap_src, cell, sec_th, dS, eqn) /* mass source term of gas phase */
+/* mass source term of gas phase */
+DEFINE_SOURCE(vap_src, cell, sec_th, dS, eqn) 
 {
 
   Thread * mix_th;
@@ -71,7 +73,8 @@ DEFINE_SOURCE(vap_src, cell, sec_th, dS, eqn) /* mass source term of gas phase *
   return m_dot_v;
 }
 
-DEFINE_SOURCE(enrg_src, cell, mix_th, dS, eqn) /* source term of mixture's energy */
+/* source term of mixture's energy */
+DEFINE_SOURCE(enrg_src, cell, mix_th, dS, eqn)
 {
   Thread *pri_th;
   Thread *sec_th;

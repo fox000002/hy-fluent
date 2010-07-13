@@ -20,6 +20,8 @@
 
 /**********************************************************************
 UDF for specifying a steady-state velocity profile boundary condition
+******************
+  U = U(y)
 **********************************************************************/
 DEFINE_PROFILE(hy_x_velocity, thread, index)
 {
@@ -36,10 +38,11 @@ DEFINE_PROFILE(hy_x_velocity, thread, index)
     end_f_loop(f, thread)
 }
 
-
 /***********************************************************************
 UDF for specifying steady-state parabolic pressure profile boundary
 profile for a turbine vane
+*******************
+  p = p(y)
 ************************************************************************/
 DEFINE_PROFILE(hy_pressure_profile, t, i)
 {
@@ -51,7 +54,7 @@ DEFINE_PROFILE(hy_pressure_profile, t, i)
       {
         F_CENTROID(x, f, t);
         y = x[1];
-        F_PROFILE(f, t, i) = 1.1e5 - y * y /(.0745 * 0.0745) * 0.1e5;
+        F_PROFILE(f, t, i) = 1.1e5 - y * y /(.0745*0.0745) * 0.1e5;
       }
     end_f_loop(f, t)
 
@@ -61,7 +64,12 @@ DEFINE_PROFILE(hy_pressure_profile, t, i)
 UDF for specifying boundary for regenerative cooling
 ************************************************************************/
 
-/* Free Stream Temperature */
+/***********************************************************************
+--Free Stream Temperature
+*******************
+  T = T(x)
+************************************************************************/
+
 DEFINE_PROFILE(FST_profile, t, i)
 {
   real x[ND_ND];
@@ -76,7 +84,6 @@ DEFINE_PROFILE(FST_profile, t, i)
     }
   end_f_loop(f, t)
 }
-
 
 /* Heat Transfer Coefficient */
 DEFINE_PROFILE(HTC_profile, t, i)
@@ -132,7 +139,7 @@ real g_Ps[DX_SIZE];
 real g_Gamma[DX_SIZE];
 real g_Mol_Weight[DX_SIZE];
 
-int read_data(char *filename, real *ppos, real *pval, int size)
+static int read_data(char *filename, real *ppos, real *pval, int size)
 {
     FILE *fp = 0;
     int i;
@@ -153,37 +160,37 @@ int read_data(char *filename, real *ppos, real *pval, int size)
     return 0;
 }
 
-int read_static_ts(real *ppos, real *pval, int size)
+static int read_static_ts(real *ppos, real *pval, int size)
 {
     read_data("temperature.dat", ppos, pval, size);
     return 0;
 }
 
-int read_static_ps(real *ppos, real *pval, int size)
+static int read_static_ps(real *ppos, real *pval, int size)
 {
     read_data("pressure.dat", ppos, pval, size);
     return 0;
 }
 
-int read_Ma_x(real *ppos, real *pval, int size)
+static int read_Ma_x(real *ppos, real *pval, int size)
 {
     read_data("ma.dat", ppos, pval, size);
     return 0;
 }
 
-int read_gammna(real *ppos, real *pval, int size)
+static int read_gammna(real *ppos, real *pval, int size)
 {
     read_data("gamma.dat", ppos, pval, size);
     return 0;
 }
 
-int read_mol_weight(real *ppos, real *pval, int size)
+static int read_mol_weight(real *ppos, real *pval, int size)
 {
     read_data("molecular_weight.dat", ppos, pval, size);
     return 0;
 }
 
-void read_all()
+static void read_all()
 {
     int i;
 
@@ -203,7 +210,7 @@ void read_all()
 }
 
 
-void write_all()
+static void write_all()
 {
     int i;
     FILE *fp = 0;
@@ -227,7 +234,7 @@ void write_all()
     /*return 0;*/
 }
 
-real search_value(real *ppos, real *pval, int size, real pos)
+static real search_value(real *ppos, real *pval, int size, real pos)
 {
     int i;
     real tp;
@@ -255,12 +262,13 @@ real search_value(real *ppos, real *pval, int size, real pos)
 
     return tp;
 }
-real search_ts(real pos)
+
+static real search_ts(real pos)
 {
     return search_value(g_pos_x, g_Ts, DX_SIZE, pos);
 }
 
-real search_ma(real pos)
+static real search_ma(real pos)
 {
     return search_value(g_pos_x, g_Ma, DX_SIZE, pos);
 }
@@ -470,17 +478,15 @@ DEFINE_PROFILE(FST_r_mod, t, i)
 DEFINE_PROFILE(hy_wall_roughness, t, i)
 {
     /*  */
-  real x[ND_ND];
-  real pos_x;
-  face_t f;
+    real x[ND_ND];
+    real pos_x;
+    face_t f;
 
-  begin_f_loop(f, t)
-  {
-      F_CENTROID(x,f,t);
-      pos_x = x[0];
-
-      F_PROFILE(f, t, i) = 0.001;
-  }
-  end_f_loop(f, t)
+    begin_f_loop(f, t)
+      {
+        F_CENTROID(x,f,t);
+        pos_x = x[0];
+        F_PROFILE(f, t, i) = 0.001;
+      }
+    end_f_loop(f, t)
 }
-
