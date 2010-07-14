@@ -23,6 +23,14 @@ class UExt
 {
 public:
     UExt();
+    
+    ~UExt();
+    
+private:
+    unsigned int _pid;
+
+private:
+
 };
 
 #endif // U_EXT_H

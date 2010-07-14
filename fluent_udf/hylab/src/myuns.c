@@ -361,8 +361,9 @@ DEFINE_PROFILE(hy_ex_wall_heat_flux, t, i)
         F_CENTROID(x,f,t);
         pos_x = x[0];
         pos_y = x[1];
+#if RP_3D
         pos_z = x[2];
-            
+#endif     
         if (flow_time  <= 10.0)
         {
             /*  angle   */            
