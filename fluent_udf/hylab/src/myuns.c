@@ -351,24 +351,24 @@ DEFINE_PROFILE(hy_ex_wall_heat_flux, t, i)
     real pos_z;
     real flow_time = CURRENT_TIME;
     real flux;
-    
+
     /* CX_Message("!!! flow_time!!! :  %f\n", flow_time); */
-    
+
     begin_f_loop(f,t)
     {
         /* CX_Message("!!!\n");*/
-    
+
         F_CENTROID(x,f,t);
         pos_x = x[0];
         pos_y = x[1];
 #if RP_3D
         pos_z = x[2];
-#endif     
+#endif
         if (flow_time  <= 10.0)
         {
-            /*  angle   */            
+            /*  angle   */
             F_PROFILE(f,t,i) = (1.0 - flow_time / 10.0) * (-625 * pos_x + 1.25e6);
-            
+
             flux = (1.0 - flow_time / 10.0) * (-625 * pos_x + 1.25e6);
             /* CX_Message("!!! Heat Flux!!! :  %f\n", flux); */
         }
