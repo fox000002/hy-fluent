@@ -178,6 +178,10 @@ DEFINE_SDOF_PROPERTIES(delta_missile, prop, dt, time, dtime)
    printf ("\ndelta_missile: updated 6DOF properties");
 }
 
+
+/*******************************************************
+SDOF property compiled UDF with external forces/moments
+*******************************************************/
 /*                                        */
 static real G = 9.80; /* 重力*/
 static real valve_M = 0.1; /* 质量*/

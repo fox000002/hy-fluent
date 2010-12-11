@@ -44,8 +44,10 @@
 !INCLUDE user_nt.udf
 
 # These need to be updated for each release.
-LIB_RELEASE = 6326
-RELEASE = 6.3.26
+#LIB_RELEASE = 6326
+#RELEASE = 6.3.26
+LIB_RELEASE = 1212
+RELEASE = 12.1.2
 
 # it is assumed $(FLUENT_INC)is already set.
 !IF !DEFINED(FLUENT_INC)

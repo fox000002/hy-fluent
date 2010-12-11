@@ -23,5 +23,5 @@ SOURCES =  $(SRC)myudf.c       \
 
 VERSION = 3ddp
 PARALLEL_NODE = none
-FLUENT_INC = D:\GS\Fluent.Inc
-#FLUENT_INC = E:\Progs\ANSYS_Inc\v121\fluent
+#FLUENT_INC = D:\GS\Fluent.Inc
+FLUENT_INC = D:\Progs\ANSYS.Inc\v121\fluent
