@@ -143,20 +143,72 @@
   )
 )
 
-(define hy-get-report-t-value
-  (lambda (t f)
-    (let ((l) (s (hy-exec-command-ex (format #f "/report/surface-integrals/~a ~a () no" t f))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; area                    flow-rate               sum
+; area-weighted-avg       integral                vertex-avg
+; facet-avg               mass-flow-rate          vertex-max
+; facet-max               mass-weighted-avg       vertex-min
+; facet-min               standard-deviation      volume-flow-rate
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; absolute-pressure       existing-value          temperature
+; adaption-curvature      face-handedness         thermal-conductivity-eff
+; adaption-function       face-squish-index       thermal-conductivity-lam
+; adaption-iso-value      grid-x-velocity         total-energy
+; adaption-space-gradient grid-y-velocity         total-enthalpy
+; axial-coordinate        heat-flux               total-enthalpy-deviation
+; boundary-cell-dist      heat-transfer-coef      total-pressure
+; boundary-normal-dist    heat-transfer-coef-wall total-temperature
+; boundary-volume-dist    interface-wall-zone     turb-diss-rate
+; cell-children           internal-energy         turb-intensity
+; cell-element-type       mass-imbalance          turb-kinetic-energy
+; cell-equiangle-skew     nusselt-number          velocity-angle
+; cell-equivolume-skew    partition-neighbors     velocity-magnitude
+; cell-partition          prandtl-number-eff      viscosity-eff
+; cell-refine-level       prandtl-number-lam      viscosity-lam
+; cell-reynolds-number    pressure                viscosity-ratio
+; cell-squish-index       pressure-coefficient    viscosity-turb
+; cell-surface-area       production-of-k         vorticity-mag
+; cell-type               rad-heat-flux           wall-shear
+; cell-volume             radial-coordinate       wall-temp-in-surf
+; cell-volume-change      radial-velocity         wall-temp-out-surf
+; cell-wall-distance      rel-tangential-velocity x-coordinate
+; cell-warp               rel-total-pressure      x-face-area
+; cell-zone               rel-total-temperature   x-surface-area
+; density                 rel-velocity-magnitude  x-velocity
+; density-all             relative-velocity-angle x-wall-shear
+; dp-dx                   relative-x-velocity     y-coordinate
+; dp-dy                   relative-y-velocity     y-face-area
+; dx-velocity-dx          rothalpy                y-plus
+; dx-velocity-dy          skin-friction-coef      y-star
+; dy-velocity-dx          specific-heat-cp        y-surface-area
+; dy-velocity-dy          stanton-number          y-velocity
+; dynamic-pressure        strain-rate-mag         y-wall-shear
+; enthalpy                stream-function
+; entropy                 tangential-velocity
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define hy-get-report-fv-value
+  (lambda (f v)
+    (let ((l) (value) (s (hy-exec-command-ex (format #f "/report/surface-integrals/facet-avg ~a () ~a no" f v))))
       (set! l (string-split s "\n"))
-      (display (list-ref  l (- (length l) 1)))
+      (set! value (list-ref  l (- (length l) 1)))
+	  ;(display (format #f "~a : ~a\n" v value))
+	  value
     )
   )
 )
 
 (define hy-get-report-tfv-value
   (lambda (t f v)
-    (let ((l) (s (hy-exec-command-ex (format #f "/report/surface-integrals/~a ~a () ~a no" t f v))))
+    (let ((l) (value) (s (hy-exec-command-ex (format #f "/report/surface-integrals/~a ~a () ~a no" t f v))))
       (set! l (string-split s "\n"))
-      (display (list-ref  l (- (length l) 1)))
+      (set! value (list-ref  l (- (length l) 1)))
+	  ;(display (format #f "~a : ~a\n" v value))
+	  value
     )
   )
 )

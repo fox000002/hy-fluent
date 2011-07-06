@@ -22,7 +22,7 @@ FONT 8,"MS Shell Dlg",400,0,0
 BEGIN
     CONTROL         5000,IDC_STATIC,WC_STATIC,SS_BITMAP,75,25,232,66
     LTEXT           "Copyright (c) 2010 Huys",IDC_STATIC,135,105,125,10
-    LTEXT           "HyLab is my extension of  Fluent.\r\nEmail: huys03@gmail.com",IDC_STATIC,75,130,255,85,SS_SUNKEN | SS_CENTER | SS_CENTERIMAGE
+    LTEXT           "HyLab is my extension of  Fluent.\nEmail: huys03@gmail.com",IDC_INFO,75,130,255,85,SS_SUNKEN | SS_CENTER | SS_CENTERIMAGE
 END
 
 

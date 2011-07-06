@@ -14,6 +14,11 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; hidden turbulence models in fluent
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define (hy-turn-on-misc-turb-model)
   (ti-menu-load-string "/define/models/viscous/turbulence-expert/low-re-ke? yes")
   (set! allow-v2f-model? #t)

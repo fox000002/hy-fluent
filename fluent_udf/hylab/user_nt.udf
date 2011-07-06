@@ -5,7 +5,6 @@ SOURCES =  $(SRC)myudf.c       \
            $(SRC)myprop.c      \
            $(SRC)mymphase.c    \
            $(SRC)mymisc.c      \
-           $(SRC)myhack.c      \
            $(SRC)mymodels.c    \
            $(SRC)myturb.c      \
            $(SRC)myvector.c    \
@@ -19,9 +18,11 @@ SOURCES =  $(SRC)myudf.c       \
            $(SRC)myudm.c       \
            $(SRC)mydpm.c       \
            $(SRC)myscheme.c    \
+#          $(SRC)myhack.c      \
 
 
 VERSION = 3ddp
 PARALLEL_NODE = none
-#FLUENT_INC = D:\GS\Fluent.Inc
-FLUENT_INC = D:\Progs\ANSYS.Inc\v121\fluent
+FLUENT_INC = D:\GS\Fluent.Inc
+#FLUENT_INC = D:\Progs\ANSYS_Inc\v130\fluent
+

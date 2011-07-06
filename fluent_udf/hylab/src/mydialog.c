@@ -81,7 +81,12 @@ BOOL CALLBACK DialogProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
     {
     case WM_INITDIALOG:
         {
-        SendMessage(hwndDlg, WM_SETICON, (WPARAM)ICON_BIG, (LPARAM)LoadIcon(g_hModule, MAKEINTRESOURCE(IDI_HYLAB)));
+        SendMessage(hwndDlg, WM_SETICON, (WPARAM)ICON_BIG, 
+            (LPARAM)LoadIcon(g_hModule, MAKEINTRESOURCE(IDI_HYLAB)));
+        
+        HWND hLabel = GetDlgItem(hwndDlg, IDC_INFO);
+        SetWindowText(hLabel, "HyLab is my extension of  Fluent.\r\nEmail: huys03@gmail.com");
+        
         }
         return TRUE;
     case WM_COMMAND:
@@ -112,7 +117,8 @@ BOOL CALLBACK InfoDialogProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM l
         my_real = rp_get_var_real("my/real");
         my_text = rp_get_var_string("my/text");      
         
-        SendMessage(hwndDlg, WM_SETICON, (WPARAM)ICON_BIG, (LPARAM)LoadIcon(g_hModule, MAKEINTRESOURCE(IDI_HYLAB)));
+        SendMessage(hwndDlg, WM_SETICON, (WPARAM)ICON_BIG, 
+            (LPARAM)LoadIcon(g_hModule, MAKEINTRESOURCE(IDI_HYLAB)));
         
         sprintf(tmp, "%g", my_real);
         SetWindowText(GetDlgItem(hwndDlg, IDC_EDIT2), tmp);

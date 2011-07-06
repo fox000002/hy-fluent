@@ -9,3 +9,5 @@
 #define IDC_EDIT3   10003
 
 #define IDC_BUTTON1 20000
+
+#define IDC_INFO    20001
