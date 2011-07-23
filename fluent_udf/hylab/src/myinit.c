@@ -21,21 +21,24 @@
 /***********************************************************************
 UDF for initializing flow field variables
 ************************************************************************/
-DEFINE_INIT(my_init_func, d)
+DEFINE_INIT(my_init_func, dom)
 {
     cell_t c;
     Thread *t;
     real xc[ND_ND];
-
+    real d;
+    
     /* loop over all cell threads in the domain  */
-    thread_loop_c(t,d)
+    thread_loop_c(t,dom)
     {
-
         /* loop over all cells  */
         begin_c_loop_all(c,t)
         {
             C_CENTROID(xc,c,t);
-            if (sqrt(ND_SUM(pow(xc[0] - 0.5, 2.), pow(xc[1] - 0.5,2.), pow(xc[2] - 0.5,2.))) < 0.25)
+            
+            d = sqrt(ND_SUM(pow(xc[0] - 0.5, 2.), pow(xc[1] - 0.5,2.), pow(xc[2] - 0.5,2.)));
+            
+            if ( d < 0.25)
                 C_T(c,t) = 400.;
             else
                 C_T(c,t) = 300.;

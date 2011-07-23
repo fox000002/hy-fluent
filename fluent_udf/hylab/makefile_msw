@@ -11,10 +11,10 @@ SRC = ./src/
 include user_nt.udf
 
 # These need to be updated for each release.
-#LIB_RELEASE = 6326
-#RELEASE = 6.3.26
-LIB_RELEASE = 1212
-RELEASE = 12.1.2
+LIB_RELEASE = 6326
+RELEASE = 6.3.26
+#LIB_RELEASE = 1212
+#RELEASE = 12.1.2
 
 #LIB_RELEASE = 1300
 #RELEASE = 13.0.0
